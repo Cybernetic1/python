@@ -1,39 +1,77 @@
 import random
 
-''' The aim of Q-learning is to learn Q values.
+''' Notes from the book "AI - a modern approach" (3rd edition).
 
-Each Q value Q(S,A) is the utility of doing action A in state S.
+Ch 21 talks about reinforcement learning.  The aim of Q-learning is to
+learn Q values.  Each Q value Q(S,A) is the utility of doing action A in
+state S.
 
 The update rule is:
-	Q(S,A) += alpha [ R(S) + gamma max Q(S',A') - Q(S,A) ].
-									A'
+	Q(S,A) += 𝞪 [ R(S) + 𝞬 max Q(S',A') - Q(S,A) ].
+						   A'
 where:
-	alpha = learning rate
-	gamma = discount factor of rewards
+	𝞪 = learning rate
+	𝞬 = discount factor of rewards
 	R(S) = reward gotten at state S
 	S' = any state gotten from state S after action A
 	the max value = U(S') = utility of S'.
 
 The idea of Q-learning comes from TD (temporal-difference) learning,
 where the update formula is:
-	U(S) += alpha [ R(S) + gamma U(S') - U(S) ].
+	U(S) += 𝞪 [ R(S) + 𝞬 U(S') - U(S) ].
 From this we can see the 'desired' value of U(S) is:
-	R(S) + gamma U(S').
-This update occurs whenever state S transits to S'.
+	R(S) + 𝞬 U(S').
+This update occurs whenever a state transition S -> S' occurs.
 
 In passive learning (that is, when the policy is fixed and we just want
 to find the utilities of every state), the utility U(S) is equal to its
 reward plus the expected utility of all its subsequent states S':
-	U(S) = R(S) + gamma ∑ P(S' | S, pi(S)) U(S')
-						S'
-where pi is the fixed policy.  This is the Bellman optimality condition
-and is also the 'equilibrium' we want to achieve in TD learning.
+	U(S) = R(S) + 𝞬 ∑ P(S' | S, 𝝿(S)) U(S')
+					S'
+where 𝝿 is the fixed policy.  This is the famous Bellman optimality
+condition and is also the 'equilibrium' we want to achieve in TD learning.
 
 The TD update rule works without needing the transition probabilities
 because rarely-occurring transitions are automatically accounted for.
 
-In active learning the policy itself has to be learned.
-[To be continued...]
+Another method for passive learning is ADP (adaptive dynamic programming).
+This involves learning the transition model P(S'|S,𝝿(S)) and substituting
+it into the Bellman condition to obtain U(S).  It simply records the
+frequencies of transitions of each action, using them to estimate P(S'|S,𝝿(S)).
+It's called dynamic programming because it exploits the Bellman condition.
+It uses maximum likelihood to estimate the transition model P(), and then
+assumes that this is the correct model.  Choosing actions according to
+such a model is not always a good idea, as we should consider the distribution
+over all possible / probable models.
+
+In active learning the policy itself has to be learned.  That brings in the
+question of exploration vs exploitation, and greedy algorithms often converge
+to rather bad policies because of the lack of exploration to learn models of
+the world.
+
+For active learning, an "optimistic" utility U₊ is used which includes the
+"exploration function" f(utility, n):
+	U₊(S) = R(S) + 𝞬 max f( ∑ P(S'|S,A) U₊(S') , N(S,A) )
+where N(S,A) is the number of times action A has been tried in state S.
+The function f() detemines the balance of preference between utility and
+novelty (represented by the number n).  f() is monotonously increasing for
+utility, and monotonously decreasing for n.  A simple possible definition
+of f(u,n) is:
+	f(u,n)	= R		if n < N0
+			= u		otherwise
+which ensures that each state-action pair is tried at least N0 times.
+R is a constant reward assigned to novel territories.
+
+SARSA (state-action-reward-state-action) is a subtle variant of Q-learning
+with update formula:
+	Q(S,A) += 𝞪 [ R(S) + 𝞬 Q(S',A') - Q(S,A) ].
+
+Q-Learning is a model-free learning method because it does not attempt to
+learn the (transition) model P(S'|S,𝝿(S)).
+
+Ch 17 talks about Value Iteration and Policy Iteration, and POMDP.
+
+Ch 15 talks about filtering, HMM, Kalman filtering, dynamic Bayes nets.
 
 '''
 
