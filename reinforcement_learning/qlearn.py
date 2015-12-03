@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import random
 
 ''' Notes from the book "AI - a modern approach" (3rd edition).
