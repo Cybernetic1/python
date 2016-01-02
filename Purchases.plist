@@ -1,0 +1,489 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+ <key>Books</key>
+  <array>
+     <dict>
+            <key>Inserted-By-iBooks</key>
+         <false/>
+             <key>Name</key>
+            <string>(Bauschke-Combettes-2011)-convex-analysis-and-monotone-operators</string>
+          <key>Page Progression Direction</key>
+         <string>default</string>
+          <key>Path</key>
+           <string>(Bauschke-Combettes-2011)-convex-analysis-and-monotone-operators.pdf</string>
+          <key>s</key>
+          <string>0</string>
+        </dict>
+     <dict>
+            <key>Inserted-By-iBooks</key>
+         <false/>
+             <key>Name</key>
+            <string>(Chinese项武义)陈省身-几何学</string>
+          <key>Page Progression Direction</key>
+         <string>default</string>
+          <key>Path</key>
+           <string>(Chinese项武义)陈省身-几何学.pdf</string>
+          <key>s</key>
+          <string>0</string>
+        </dict>
+     <dict>
+            <key>Inserted-By-iBooks</key>
+         <false/>
+             <key>Name</key>
+            <string>Genifer.Haskell.14-Aug-11-2</string>
+          <key>Page Progression Direction</key>
+         <string>default</string>
+          <key>Path</key>
+           <string>Genifer.Haskell.14-Aug-11-2.pdf</string>
+          <key>s</key>
+          <string>0</string>
+        </dict>
+     <dict>
+            <key>Inserted-By-iBooks</key>
+         <false/>
+             <key>Name</key>
+            <string>Hilberts 10th problem</string>
+          <key>Page Progression Direction</key>
+         <string>default</string>
+          <key>Path</key>
+           <string>Hilberts 10th problem.pdf</string>
+          <key>s</key>
+          <string>0</string>
+        </dict>
+     <dict>
+            <key>Inserted-By-iBooks</key>
+         <false/>
+             <key>Name</key>
+            <string>Laser_and_IPL_Tech_in_Dermatology_and_Aesthetic_Medicine</string>
+          <key>Page Progression Direction</key>
+         <string>default</string>
+          <key>Path</key>
+           <string>Laser_and_IPL_Tech_in_Dermatology_and_Aesthetic_Medicine.pdf</string>
+          <key>s</key>
+          <string>0</string>
+        </dict>
+     <dict>
+            <key>Inserted-By-iBooks</key>
+         <false/>
+             <key>Name</key>
+            <string>Lecture09</string>
+          <key>Page Progression Direction</key>
+         <string>default</string>
+          <key>Path</key>
+           <string>Lecture09.pdf</string>
+          <key>s</key>
+          <string>0</string>
+        </dict>
+     <dict>
+            <key>Inserted-By-iBooks</key>
+         <false/>
+             <key>Name</key>
+            <string>Lecture10</string>
+          <key>Page Progression Direction</key>
+         <string>default</string>
+          <key>Path</key>
+           <string>Lecture10.pdf</string>
+          <key>s</key>
+          <string>0</string>
+        </dict>
+     <dict>
+            <key>Inserted-By-iBooks</key>
+         <false/>
+             <key>Name</key>
+            <string>Lecture15</string>
+          <key>Page Progression Direction</key>
+         <string>default</string>
+          <key>Path</key>
+           <string>Lecture15.pdf</string>
+          <key>s</key>
+          <string>0</string>
+        </dict>
+     <dict>
+            <key>Inserted-By-iBooks</key>
+         <false/>
+             <key>Name</key>
+            <string>Lecture16</string>
+          <key>Page Progression Direction</key>
+         <string>default</string>
+          <key>Path</key>
+           <string>Lecture16.pdf</string>
+          <key>s</key>
+          <string>0</string>
+        </dict>
+     <dict>
+            <key>Inserted-By-iBooks</key>
+         <false/>
+             <key>Name</key>
+            <string>Lecture17</string>
+          <key>Page Progression Direction</key>
+         <string>default</string>
+          <key>Path</key>
+           <string>Lecture17.pdf</string>
+          <key>s</key>
+          <string>0</string>
+        </dict>
+     <dict>
+            <key>Inserted-By-iBooks</key>
+         <false/>
+             <key>Name</key>
+            <string>Lecture18</string>
+          <key>Page Progression Direction</key>
+         <string>default</string>
+          <key>Path</key>
+           <string>Lecture18.pdf</string>
+          <key>s</key>
+          <string>0</string>
+        </dict>
+     <dict>
+            <key>Inserted-By-iBooks</key>
+         <false/>
+             <key>Name</key>
+            <string>Lecture19</string>
+          <key>Page Progression Direction</key>
+         <string>default</string>
+          <key>Path</key>
+           <string>Lecture19.pdf</string>
+          <key>s</key>
+          <string>0</string>
+        </dict>
+     <dict>
+            <key>Inserted-By-iBooks</key>
+         <false/>
+             <key>Name</key>
+            <string>Lecture20</string>
+          <key>Page Progression Direction</key>
+         <string>default</string>
+          <key>Path</key>
+           <string>Lecture20.pdf</string>
+          <key>s</key>
+          <string>0</string>
+        </dict>
+     <dict>
+            <key>Inserted-By-iBooks</key>
+         <false/>
+             <key>Name</key>
+            <string>Lecture21</string>
+          <key>Page Progression Direction</key>
+         <string>default</string>
+          <key>Path</key>
+           <string>Lecture21.pdf</string>
+          <key>s</key>
+          <string>0</string>
+        </dict>
+     <dict>
+            <key>Inserted-By-iBooks</key>
+         <false/>
+             <key>Name</key>
+            <string>Lecture22</string>
+          <key>Page Progression Direction</key>
+         <string>default</string>
+          <key>Path</key>
+           <string>Lecture22.pdf</string>
+          <key>s</key>
+          <string>0</string>
+        </dict>
+     <dict>
+            <key>Inserted-By-iBooks</key>
+         <false/>
+             <key>Name</key>
+            <string>Quantum physics and linguistics</string>
+          <key>Page Progression Direction</key>
+         <string>default</string>
+          <key>Path</key>
+           <string>Quantum physics and linguistics.pdf</string>
+          <key>s</key>
+          <string>0</string>
+        </dict>
+     <dict>
+            <key>Inserted-By-iBooks</key>
+         <false/>
+             <key>Name</key>
+            <string>Static_and_Dynamic_Neural_Networks</string>
+          <key>Page Progression Direction</key>
+         <string>default</string>
+          <key>Path</key>
+           <string>Static_and_Dynamic_Neural_Networks.pdf</string>
+          <key>s</key>
+          <string>0</string>
+        </dict>
+     <dict>
+            <key>Inserted-By-iBooks</key>
+         <false/>
+             <key>Name</key>
+            <string>Subspace techniques for nonlinear optimization</string>
+          <key>Page Progression Direction</key>
+         <string>default</string>
+          <key>Path</key>
+           <string>Subspace techniques for nonlinear optimization.pdf</string>
+          <key>s</key>
+          <string>0</string>
+        </dict>
+     <dict>
+            <key>Inserted-By-iBooks</key>
+         <false/>
+             <key>Name</key>
+            <string>[Cheryl_M._Burgess_(Editor)]_Cosmetic_Dermatology(BookZZ.org)</string>
+          <key>Page Progression Direction</key>
+         <string>default</string>
+          <key>Path</key>
+           <string>[Cheryl_M._Burgess_(Editor)]_Cosmetic_Dermatology(BookZZ.org).pdf</string>
+          <key>s</key>
+          <string>0</string>
+        </dict>
+     <dict>
+            <key>Inserted-By-iBooks</key>
+         <false/>
+             <key>Name</key>
+            <string>[Gonzalez_T.F._(ed.)]_Handbook_of_approximation_al(BookFi.org)</string>
+          <key>Page Progression Direction</key>
+         <string>default</string>
+          <key>Path</key>
+           <string>[Gonzalez_T.F._(ed.)]_Handbook_of_approximation_al(BookFi.org).pdf</string>
+          <key>s</key>
+          <string>0</string>
+        </dict>
+     <dict>
+            <key>Inserted-By-iBooks</key>
+         <false/>
+             <key>Name</key>
+            <string>[J.R._Sack,_J._Urrutia]_Handbook_of_Computational_(BookFi.org) (1)</string>
+          <key>Page Progression Direction</key>
+         <string>default</string>
+          <key>Path</key>
+           <string>[J.R._Sack,_J._Urrutia]_Handbook_of_Computational_(BookFi.org) (1).pdf</string>
+          <key>s</key>
+          <string>0</string>
+        </dict>
+     <dict>
+            <key>Inserted-By-iBooks</key>
+         <false/>
+             <key>Name</key>
+            <string>[Jacob_E._Goodman,_Joseph_O'Rourke]_Handbook_of_Di(BookFi.org).</string>
+          <key>Page Progression Direction</key>
+         <string>default</string>
+          <key>Path</key>
+           <string>[Jacob_E._Goodman,_Joseph_O'Rourke]_Handbook_of_Di(BookFi.org).djvu</string>
+          <key>s</key>
+          <string>0</string>
+        </dict>
+     <dict>
+            <key>Inserted-By-iBooks</key>
+         <false/>
+             <key>Name</key>
+            <string>[Martin_Schlichenmaier]_An_Introduction_to_Riemann_Surfaces_Algebraic_Curves_and_Moduli_Spaces</string>
+          <key>Page Progression Direction</key>
+         <string>default</string>
+          <key>Path</key>
+           <string>[Martin_Schlichenmaier]_An_Introduction_to_Riemann_Surfaces_Algebraic_Curves_and_Moduli_Spaces.pdf</string>
+          <key>s</key>
+          <string>0</string>
+        </dict>
+     <dict>
+            <key>Inserted-By-iBooks</key>
+         <false/>
+             <key>Name</key>
+            <string>[Michael_J._Field]_Dynamics_and_symmetry(BookFi.org)</string>
+          <key>Page Progression Direction</key>
+         <string>default</string>
+          <key>Path</key>
+           <string>[Michael_J._Field]_Dynamics_and_symmetry(BookFi.org).pdf</string>
+          <key>s</key>
+          <string>0</string>
+        </dict>
+     <dict>
+            <key>Inserted-By-iBooks</key>
+         <false/>
+             <key>Name</key>
+            <string>[Richard_S._Sutton,_Andrew_G._Barto]_Reinforcement(BookFi.org)</string>
+          <key>Page Progression Direction</key>
+         <string>default</string>
+          <key>Path</key>
+           <string>[Richard_S._Sutton,_Andrew_G._Barto]_Reinforcement(BookFi.org).pdf</string>
+          <key>s</key>
+          <string>0</string>
+        </dict>
+     <dict>
+            <key>Inserted-By-iBooks</key>
+         <false/>
+             <key>Name</key>
+            <string>[Rob_Norman]_The_Woman_Who_Lost_Her_Skin_(And_Oth(BookZZ.org)</string>
+          <key>Page Progression Direction</key>
+         <string>default</string>
+          <key>Path</key>
+           <string>[Rob_Norman]_The_Woman_Who_Lost_Her_Skin_(And_Oth(BookZZ.org).pdf</string>
+          <key>s</key>
+          <string>0</string>
+        </dict>
+     <dict>
+            <key>Inserted-By-iBooks</key>
+         <false/>
+             <key>Name</key>
+            <string>[Ronald_Hagen]_C_-_Algebras_and_Numerical_Analysi(BookFi.org)</string>
+          <key>Page Progression Direction</key>
+         <string>default</string>
+          <key>Path</key>
+           <string>[Ronald_Hagen]_C_-_Algebras_and_Numerical_Analysi(BookFi.org).pdf</string>
+          <key>s</key>
+          <string>0</string>
+        </dict>
+     <dict>
+            <key>Inserted-By-iBooks</key>
+         <false/>
+             <key>Name</key>
+            <string>[Warren_B._Powell]_Approximate_Dynamic_Programming(BookFi.org)</string>
+          <key>Page Progression Direction</key>
+         <string>default</string>
+          <key>Path</key>
+           <string>[Warren_B._Powell]_Approximate_Dynamic_Programming(BookFi.org).pdf</string>
+          <key>s</key>
+          <string>0</string>
+        </dict>
+     <dict>
+            <key>Inserted-By-iBooks</key>
+         <false/>
+             <key>Name</key>
+            <string>[Zoe_Diana_Draelos]_Cosmetic_Dermatology_Products(BookZZ.org)</string>
+          <key>Page Progression Direction</key>
+         <string>default</string>
+          <key>Path</key>
+           <string>[Zoe_Diana_Draelos]_Cosmetic_Dermatology_Products(BookZZ.org).pdf</string>
+          <key>s</key>
+          <string>0</string>
+        </dict>
+     <dict>
+            <key>Inserted-By-iBooks</key>
+         <false/>
+             <key>Name</key>
+            <string>agi-book (July 2011)</string>
+          <key>Page Progression Direction</key>
+         <string>default</string>
+          <key>Path</key>
+           <string>agi-book (July 2011).pdf</string>
+          <key>s</key>
+          <string>0</string>
+        </dict>
+     <dict>
+            <key>Inserted-By-iBooks</key>
+         <false/>
+             <key>Name</key>
+            <string>algorithms-that-changed-the-world</string>
+          <key>Page Progression Direction</key>
+         <string>default</string>
+          <key>Path</key>
+           <string>algorithms-that-changed-the-world.pdf</string>
+          <key>s</key>
+          <string>0</string>
+        </dict>
+     <dict>
+            <key>Inserted-By-iBooks</key>
+         <false/>
+             <key>Name</key>
+            <string>computational-maths-with-MatLab</string>
+          <key>Page Progression Direction</key>
+         <string>default</string>
+          <key>Path</key>
+           <string>computational-maths-with-MatLab.pdf</string>
+          <key>s</key>
+          <string>0</string>
+        </dict>
+     <dict>
+            <key>Inserted-By-iBooks</key>
+         <false/>
+             <key>Name</key>
+            <string>computational_theory_of_iterative_methods</string>
+          <key>Page Progression Direction</key>
+         <string>default</string>
+          <key>Path</key>
+           <string>computational_theory_of_iterative_methods.pdf</string>
+          <key>s</key>
+          <string>0</string>
+        </dict>
+     <dict>
+            <key>Inserted-By-iBooks</key>
+         <false/>
+             <key>Name</key>
+            <string>dqn</string>
+          <key>Page Progression Direction</key>
+         <string>default</string>
+          <key>Path</key>
+           <string>dqn.pdf</string>
+          <key>s</key>
+          <string>0</string>
+        </dict>
+     <dict>
+            <key>Inserted-By-iBooks</key>
+         <false/>
+             <key>Name</key>
+            <string>genifer4.1-ch</string>
+          <key>Page Progression Direction</key>
+         <string>default</string>
+          <key>Path</key>
+           <string>genifer4.1-ch.pdf</string>
+          <key>s</key>
+          <string>0</string>
+        </dict>
+     <dict>
+            <key>Inserted-By-iBooks</key>
+         <false/>
+             <key>Name</key>
+            <string>genifer5.3-en</string>
+          <key>Page Progression Direction</key>
+         <string>default</string>
+          <key>Path</key>
+           <string>genifer5.3-en.pdf</string>
+          <key>s</key>
+          <string>0</string>
+        </dict>
+     <dict>
+            <key>Inserted-By-iBooks</key>
+         <false/>
+             <key>Name</key>
+            <string>handbook-of-neuro-evolution</string>
+          <key>Page Progression Direction</key>
+         <string>default</string>
+          <key>Path</key>
+           <string>handbook-of-neuro-evolution.pdf</string>
+          <key>s</key>
+          <string>0</string>
+        </dict>
+     <dict>
+            <key>Inserted-By-iBooks</key>
+         <false/>
+             <key>Name</key>
+            <string>machine-learning-cheat-sheet</string>
+          <key>Page Progression Direction</key>
+         <string>default</string>
+          <key>Path</key>
+           <string>machine-learning-cheat-sheet.pdf</string>
+          <key>s</key>
+          <string>0</string>
+        </dict>
+     <dict>
+            <key>Inserted-By-iBooks</key>
+         <false/>
+             <key>Name</key>
+            <string>paranoia 1</string>
+          <key>Page Progression Direction</key>
+         <string>default</string>
+          <key>Path</key>
+           <string>paranoia 1.pdf</string>
+          <key>s</key>
+          <string>0</string>
+        </dict>
+     <dict>
+            <key>Inserted-By-iBooks</key>
+         <false/>
+             <key>Name</key>
+            <string>paranoia</string>
+          <key>Page Progression Direction</key>
+         <string>default</string>
+          <key>Path</key>
+           <string>paranoia.pdf</string>
+          <key>s</key>
+          <string>0</string>
+        </dict>
+  </array>
+</dict>
+</plist>
