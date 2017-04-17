@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import random
 
 ''' Notes from the book "AI - a modern approach" (3rd edition).
 
@@ -76,9 +75,9 @@ Ch 15 talks about filtering, HMM, Kalman filtering, dynamic Bayes nets.
 
 '''
 
-class QLearn:
+import random
 
-	actions = []
+class QLearn:
 
 	def __init__(self, 随机行为=0.1, 学习速度=0.2, 折扣=0.9):
 		self.q = {}
@@ -86,10 +85,10 @@ class QLearn:
 		self.随机行为 = 随机行为
 		self.学习速度 = 学习速度
 		self.折扣 = 折扣
+		self.actions = [0, 1, 2, 3, 4, 5, 6, 7, 8]
 
 	def getQ(self, state, action):
 		return self.q.get((state, action), 0.0)		# 0.0 = default value
-		# return self.q.get((state, action), 1.0)
 
 	def learnQ(self, state, action, reward, value):
 		旧value = self.q.get((state, action), None)
@@ -99,19 +98,20 @@ class QLearn:
 			self.q[(state, action)] = 旧value + self.学习速度 * (value - 旧value)		# "Delta rule"
 
 	def chooseAction(self, state):
+		global actions
 		if random.random() < self.随机行为:
-			action = random.choice(actions)
+			action = random.choice(self.actions)
 		else:
 			q = [self.getQ(state, a) for a in self.actions]
 			maxQ = max(q)
 			count = q.count(maxQ)
 			if count > 1:					# 如果多过一个的话，随便选一个
-				best = [i for i in range(len(actions)) if q[i] == maxQ]
+				best = [i for i in range(len(self.actions)) if q[i] == maxQ]
 				i = random.choice(best)
 			else:
 				i = q.index(maxQ)
 
-			action = actions[i]
+			action = self.actions[i]
 		return action
 
 	def learn(self, state1, action1, reward, state2):
