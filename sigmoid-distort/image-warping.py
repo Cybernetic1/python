@@ -5,10 +5,10 @@ import sys
 
 # img = cv2.imread(sys.argv[1], cv2.IMREAD_GRAYSCALE)
 img = cv2.imread(sys.argv[1], cv2.IMREAD_COLOR)
-rows, cols, _ = img.shape
+Y, X, _ = img.shape
 
-print "rows = ", rows
-print "cols = ", cols
+print "Y = ", Y
+print "X = ", X
 
 #####################
 # Sigmoid distort by YKY
@@ -24,32 +24,25 @@ try:
 except:
 	k = 60.0
 
-for i in range(rows):
-	blank = False
-	q = rows / (i + 0.5)
-	y = -k * math.log(q - 1.0)
-	yy = int(y + rows/2.0)
-	if yy >= rows:
-		blank = True
-		# yy = rows - 1
-	if yy < 0:
-		blank = True
-		# yy = 0
-	for j in range(cols):
-		blank2 = False
-		r = cols / (j + 0.00001)
-		x = -k * math.log(r - 1.0)
-		xx = int(x + cols/2.0)
-		if xx >= cols:
-			blank2 = True
-			# xx = cols - 1
-		if xx < 0:
-			blank2 = True
-			# xx = 0
-		if not blank and not blank2:
-			img_output[i,j] = img[yy,xx]
+for y in range(Y):
+	outsideY = False
+	y0 = Y / (y + 0.5)
+	y1 = -k * math.log(y0 - 1.0)
+	y2 = int(y1 + Y/2.0)
+	if y2 >= Y or y2 < 0:
+		outsideY = True
+
+	for x in range(X):
+		outsideX = False
+		x0 = X / (x + 0.5)
+		x1 = -k * math.log(x0 - 1.0)
+		x2 = int(x1 + X/2.0)
+		if x2 >= X or x2 < 0:
+			outsideX = True
+		if not (outsideX or outsideY):
+			img_output[y,x] = img[y2,x2]
 		else:
-			img_output[i,j] = [255, 255, 255]
+			img_output[y,x] = [255, 255, 255]
 
 cv2.imshow('Input', img)
 cv2.imshow('Sigmoid distort', img_output)
