@@ -1,0 +1,192 @@
+腹痛, Abdominal pain
+背痛, Back pain
+胸痛, Chest pain
+___, Otalgia
+頭痛, Headache
+___, Chronic pelvic pain
+牙痛, Toothache
+阴道, Vaginal
+___, Rectal pain
+皮節, Dermatomal
+發冷, Chills
+发热, Fever
+___, Paresthesia
+___, Light-headed
+昏厥, Dizzy -- about to black out
+眩暈 (醫學), Dizzy -- with the room spinning around me
+口乾, My mouth is dry
+恶心, Nauseated
+___, like I have the flu
+恶心, like I have to vomit
+呼吸困难, Short of breath
+昏睡, Sleepy
+汗液, Sweaty
+口渴, Thirsty
+疲勞, Tired
+___, Weak
+呼吸困难, Breathe normally
+听觉障碍, losing hearing
+___, sounds are too loud
+耳鸣, ringing or hissing in my ears
+輕偏癱, Move one side
+便秘, Pass a bowel action normally
+尿瀦留, Pass urine normally
+失憶症, Remember normally
+視力受損, Blindness
+___, blurred vision
+复视, double vision
+失眠, Sleep normally
+___, Smell
+失语症, Speak normally
+腹瀉, Stop passing watery bowel actions
+癢, Stop scratching
+多汗症, Stop sweating
+吞嚥障礙, Swallow normally
+___, Taste
+失調, Walk normally
+書寫障礙, Write normally
+惡病體質, cachexia
+食欲不振, loss of appetite
+體重下降, weight loss
+___, weight gain
+口乾, dry mouth
+疲勞, fatigue
+___, malaise
+虛弱, asthenia
+___, muscle weakness
+发热, pyrexia
+黄疸, jaundice
+疼痛, pain
+腹痛, abdominal pain
+胸痛, chest pain
+瘀斑, bruising
+流鼻血, epistaxis
+顫抖, tremor
+驚厥, convulsions
+抽搐, muscle cramps
+耳鸣, tinnitus
+頭暈, dizziness
+昏厥, syncope
+失溫症, hypothermia
+高熱, hyperthermia
+___, discharge
+出血, bleeding
+___, swelling
+___, deformity
+汗液, sweats
+發冷, chills
+___, acalculia
+懼高症, acrophobia
+失认症, agnosia
+廣場恐懼症, agoraphobia
+___, akathisia
+運動功能減退症, akinesia
+失讀症, alexia
+___, amusia
+失乐, anhedonia
+___, anomia
+___, anosognosia
+焦慮, anxiety
+___, apraxia
+蜘蛛恐惧症, arachnophobia
+失調, ataxia
+運動功能減退症, bradykinesia
+___, cataplexy
+___, chorea
+幽闭恐惧症, claustrophobia
+___, confusion
+自我傷害, deliberate self harm
+抑郁 (情绪), depression
+___, dysarthria
+___, dysdiadochokinesia
+書寫障礙, dysgraphia
+肌张力障碍, dystonia
+欣快, euphoria
+幻觉, hallucination
+頭痛, headache
+___, hemiballismus
+___, homicidal ideation
+失眠, insomnia
+___, Lhermitte's sign
+狂躁, mania
+瘫痪, paralysis
+偏執狂, paranoia
+___, paresthesia
+恐懼症, phobia
+臉盲症, prosopagnosia
+坐骨神經痛, sciatica
+昏睡, somnolence
+___, suicidal ideation
+抽动综合症, tic
+顫抖, tremor
+___, amaurosis fugax
+___, blurred vision
+___, Dalrymple's sign
+复视, double vision
+___, exophthalmos
+瞳孔放大, mydriasis
+眼球震颤, nystagmus
+食欲不振, anorexia
+___, bloating
+嗝氣, belching
+___, blood in stool
+便秘, constipation
+腹瀉, diarrhea
+吞嚥障礙, dysphagia
+消化不良, dyspepsia
+屁, flatulence
+糞便失禁, fecal incontinence
+呕血, haematemesis
+恶心, nausea
+吞嚥痛, odynophagia
+___, proctalgia fugax
+胃灼熱, pyrosis
+___, rectal malodor
+___, steatorrhea
+呕吐, vomiting
+胸痛, chest pain
+___, claudication
+心悸, palpitation
+心跳过速, tachycardia
+心跳过缓, bradycardia
+心律不整, arrhythmia
+___, dysuria
+血尿, hematuria
+勃起功能障碍, impotence
+多尿症, polyuria
+逆行射精, retrograde ejaculation
+___, strangury
+頻尿症, urinary frequency
+尿失禁, urinary incontinence
+尿瀦留, urinary retention
+___, hypoventilation
+过度换气, hyperventilation
+___, bradypnea
+___, apnea
+咳嗽, cough
+呼吸困难, dyspnea
+咳血, hemoptysis
+胸膜炎, pleuritic chest pain
+___, sputum
+___, tachypnea
+___, abrasion
+脫髮, alopecia
+___, anasarca
+水疱, blister
+水肿, edema
+多毛症, hirsutism
+癢, itching
+傷口, laceration
+___, paresthesia
+疹, rash
+荨麻疹, urticaria
+___, abnormal vaginal bleeding
+___, bloody show
+性交疼痛, painful intercourse
+___, pelvic pain
+不孕, infertility
+分娩, labour pains
+流产, vaginal bleeding in early pregnancy
+___, vaginal bleeding in late pregnancy
+阴道分泌物, vaginal discharge
+陰道痙攣, vaginismus

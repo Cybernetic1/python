@@ -1,0 +1,195 @@
+Abdominal pain, 腹痛
+Back pain, 背痛
+Chest pain, 胸痛
+Otalgia, -
+Headache, 頭痛
+Chronic pelvic pain, -
+Toothache, 牙痛
+Vaginal, 阴道
+Rectal pain, -
+Dermatomal, 皮節
+Chills, 發冷
+Fever, 发热
+Paresthesia, -
+Light-headed, -
+Dizzy â&euro;&ldquo; about to black out, 昏厥
+Dizzy â&euro;&ldquo; with the room spinning around me, 眩暈 (醫學)
+My mouth is dry, 口乾
+Nauseated, 恶心
+like I have the flu, -
+like I have to vomit, 恶心
+Short of breath, 呼吸困难
+Sleepy, 昏睡
+Sweaty, 汗液
+Thirsty, 口渴
+Tired, 疲勞
+Weak, -
+Breathe normally, 呼吸困难
+losing hearing, 听觉障碍
+sounds are too loud, -
+ringing or hissing in my ears, 耳鸣
+Move one side, 輕偏癱
+Pass a bowel action normally, 便秘
+Pass urine normally, 尿瀦留
+Remember normally, 失憶症
+Blindness, 視力受損
+blurred vision, -
+double vision, 复视
+Sleep normally, 失眠
+Smell, -
+Speak normally, 失语症
+Stop passing watery bowel actions, 腹瀉
+Stop scratching, 癢
+Stop sweating, 多汗症
+Swallow normally, 吞嚥障礙
+Taste, -
+Walk normally, 失調
+Write normally, 書寫障礙
+edit, -
+incomplete, -
+ICD-10, ICD-10
+cachexia, 惡病體質
+loss of appetite, 食欲不振
+weight loss, 體重下降
+weight gain, -
+dry mouth, 口乾
+fatigue, 疲勞
+malaise, -
+asthenia, 虛弱
+muscle weakness, -
+pyrexia, 发热
+jaundice, 黄疸
+pain, 疼痛
+abdominal pain, 腹痛
+chest pain, 胸痛
+bruising, 瘀斑
+epistaxis, 流鼻血
+tremor, 顫抖
+convulsions, 驚厥
+muscle cramps, 抽搐
+tinnitus, 耳鸣
+dizziness, 頭暈
+syncope, 昏厥
+hypothermia, 失溫症
+hyperthermia, 高熱
+discharge, -
+bleeding, 出血
+swelling, -
+deformity, -
+sweats, 汗液
+chills, 發冷
+acalculia, -
+acrophobia, 懼高症
+agnosia, 失认症
+agoraphobia, 廣場恐懼症
+akathisia, -
+akinesia, 運動功能減退症
+alexia, 失讀症
+amusia, -
+anhedonia, 失乐
+anomia, -
+anosognosia, -
+anxiety, 焦慮
+apraxia, -
+arachnophobia, 蜘蛛恐惧症
+ataxia, 失調
+bradykinesia, 運動功能減退症
+cataplexy, -
+chorea, -
+claustrophobia, 幽闭恐惧症
+confusion, -
+deliberate self harm, 自我傷害
+depression, 抑郁 (情绪)
+dysarthria, -
+dysdiadochokinesia, -
+dysgraphia, 書寫障礙
+dystonia, 肌张力障碍
+euphoria, 欣快
+hallucination, 幻觉
+headache, 頭痛
+hemiballismus, -
+homicidal ideation, -
+insomnia, 失眠
+Lhermitte's sign, -
+mania, 狂躁
+paralysis, 瘫痪
+paranoia, 偏執狂
+paresthesia, -
+phobia, 恐懼症
+prosopagnosia, 臉盲症
+sciatica, 坐骨神經痛
+somnolence, 昏睡
+suicidal ideation, -
+tic, 抽动综合症
+tremor, 顫抖
+amaurosis fugax, -
+blurred vision, -
+Dalrymple's sign, -
+double vision, 复视
+exophthalmos, -
+mydriasis, 瞳孔放大
+nystagmus, 眼球震颤
+anorexia, 食欲不振
+bloating, -
+belching, 嗝氣
+blood in stool, -
+constipation, 便秘
+diarrhea, 腹瀉
+dysphagia, 吞嚥障礙
+dyspepsia, 消化不良
+flatulence, 屁
+fecal incontinence, 糞便失禁
+haematemesis, 呕血
+nausea, 恶心
+odynophagia, 吞嚥痛
+proctalgia fugax, -
+pyrosis, 胃灼熱
+rectal malodor, -
+steatorrhea, -
+vomiting, 呕吐
+chest pain, 胸痛
+claudication, -
+palpitation, 心悸
+tachycardia, 心跳过速
+bradycardia, 心跳过缓
+arrhythmia, 心律不整
+dysuria, -
+hematuria, 血尿
+impotence, 勃起功能障碍
+polyuria, 多尿症
+retrograde ejaculation, 逆行射精
+strangury, -
+urinary frequency, 頻尿症
+urinary incontinence, 尿失禁
+urinary retention, 尿瀦留
+hypoventilation, -
+hyperventilation, 过度换气
+bradypnea, -
+apnea, -
+cough, 咳嗽
+dyspnea, 呼吸困难
+hemoptysis, 咳血
+pleuritic chest pain, 胸膜炎
+sputum, -
+tachypnea, -
+abrasion, -
+alopecia, 脫髮
+anasarca, -
+blister, 水疱
+edema, 水肿
+hirsutism, 多毛症
+itching, 癢
+laceration, 傷口
+paresthesia, -
+rash, 疹
+urticaria, 荨麻疹
+abnormal vaginal bleeding, -
+bloody show, -
+painful intercourse, 性交疼痛
+pelvic pain, -
+infertility, 不孕
+labour pains, 分娩
+vaginal bleeding in early pregnancy, 流产
+vaginal bleeding in late pregnancy, -
+vaginal discharge, 阴道分泌物
+vaginismus, 陰道痙攣

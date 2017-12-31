@@ -1,0 +1,195 @@
+Abdominal pain
+Back pain
+Chest pain
+Otalgia
+Headache
+Chronic pelvic pain
+Toothache
+Vaginal
+Rectal pain
+Dermatomal
+Chills
+Fever
+Paresthesia
+Light-headed
+Dizzy â&euro;&ldquo; about to black out
+Dizzy â&euro;&ldquo; with the room spinning around me
+My mouth is dry
+Nauseated
+like I have the flu
+like I have to vomit
+Short of breath
+Sleepy
+Sweaty
+Thirsty
+Tired
+Weak
+Breathe normally
+losing hearing
+sounds are too loud
+ringing or hissing in my ears
+Move one side
+Pass a bowel action normally
+Pass urine normally
+Remember normally
+Blindness
+blurred vision
+double vision
+Sleep normally
+Smell
+Speak normally
+Stop passing watery bowel actions
+Stop scratching
+Stop sweating
+Swallow normally
+Taste
+Walk normally
+Write normally
+edit
+incomplete
+ICD-10
+cachexia
+loss of appetite
+weight loss
+weight gain
+dry mouth
+fatigue
+malaise
+asthenia
+muscle weakness
+pyrexia
+jaundice
+pain
+abdominal pain
+chest pain
+bruising
+epistaxis
+tremor
+convulsions
+muscle cramps
+tinnitus
+dizziness
+syncope
+hypothermia
+hyperthermia
+discharge
+bleeding
+swelling
+deformity
+sweats
+chills
+acalculia
+acrophobia
+agnosia
+agoraphobia
+akathisia
+akinesia
+alexia
+amusia
+anhedonia
+anomia
+anosognosia
+anxiety
+apraxia
+arachnophobia
+ataxia
+bradykinesia
+cataplexy
+chorea
+claustrophobia
+confusion
+deliberate self harm
+depression
+dysarthria
+dysdiadochokinesia
+dysgraphia
+dystonia
+euphoria
+hallucination
+headache
+hemiballismus
+homicidal ideation
+insomnia
+Lhermitte's sign
+mania
+paralysis
+paranoia
+paresthesia
+phobia
+prosopagnosia
+sciatica
+somnolence
+suicidal ideation
+tic
+tremor
+amaurosis fugax
+blurred vision
+Dalrymple's sign
+double vision
+exophthalmos
+mydriasis
+nystagmus
+anorexia
+bloating
+belching
+blood in stool
+constipation
+diarrhea
+dysphagia
+dyspepsia
+flatulence
+fecal incontinence
+haematemesis
+nausea
+odynophagia
+proctalgia fugax
+pyrosis
+rectal malodor
+steatorrhea
+vomiting
+chest pain
+claudication
+palpitation
+tachycardia
+bradycardia
+arrhythmia
+dysuria
+hematuria
+impotence
+polyuria
+retrograde ejaculation
+strangury
+urinary frequency
+urinary incontinence
+urinary retention
+hypoventilation
+hyperventilation
+bradypnea
+apnea
+cough
+dyspnea
+hemoptysis
+pleuritic chest pain
+sputum
+tachypnea
+abrasion
+alopecia
+anasarca
+blister
+edema
+hirsutism
+itching
+laceration
+paresthesia
+rash
+urticaria
+abnormal vaginal bleeding
+bloody show
+painful intercourse
+pelvic pain
+infertility
+labour pains
+vaginal bleeding in early pregnancy
+vaginal bleeding in late pregnancy
+vaginal discharge
+vaginismus
