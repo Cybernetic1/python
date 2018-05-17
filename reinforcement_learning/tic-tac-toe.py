@@ -21,29 +21,33 @@ lastState = None
 lastAction = None
 step = 0
 
-def next_state(s, a, who)
-	if s(a) != 0:
+def next_state(a, who):
+	global state
+	if state[a] != 0:
 		print("illegal move\n")
 		exit()
-	s(a) = who
+	s1 = list(state)
+	s1[a] = who
+	state = tuple(s1)
 
 def update():
+	global state
 	reward = 0
 
 	# Alice move
 	action = ai.chooseAction(state)
 	lastState = state
 	lastAction = action
-	state = next_state(state, action, who=1)
+	state = next_state(action, who=1)
 
 	# Bob move
 	# determine which positions are empty
 	spaces = []
-	for i, c in enumberate(state):
-		if c = 0:
+	for i, c in enumerate(list(state)):
+		if c == 0:
 			spaces.append(i)
 	bob_action = random.choice(spaces)
-	state = next_state(state, bob_action, who=2)
+	state = next_state(bob_action, who=2)
 
 	if won(1):				# Alice (= 1) has won
 		reward = +100

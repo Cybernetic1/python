@@ -2,6 +2,8 @@
 import random
 import sys
 
+neighbourSynonyms = ('neighbours', 'neighbors', 'neighbour', 'neighbor')
+
 class Cell:
 	def __getattr__(self, key):
 		if key in neighbourSynonyms:
