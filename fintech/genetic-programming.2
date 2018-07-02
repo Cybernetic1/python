@@ -1,0 +1,262 @@
+# -*- coding: utf8 -*-
+
+# Explanation:
+# Goal of learning is to learn 2 functions:
+# (1) the boolean condition C of whether to place a limit order or not
+# (2) the real function T of the target price of the limit order
+# C and T are dependent on 20 real-number variables
+
+# TO-DO:
+# - create a pool of auxiliary variables
+# - how to mutate / cross DNF's?
+# - how to mutate / cross inequalities?
+
+import random
+import operator
+
+opens = []
+highs = []
+lows = []
+closes = []
+
+with open("ES_OHLC.txt") as datafile:
+	for line in datafile:
+		nums = line[:-3].split(',')		# get rid of ';' at end of line
+		opens.append(float(nums[1]))
+		highs.append(float(nums[2]))
+		lows.append(float(nums[3]))
+		closes.append(float(nums[4]))
+
+e20s = []			# 20-day moving average (exponential)
+e100s = []			# 100-day moving average (exponential)
+avgs = []			# 100-day average daily range
+
+datasize = len(opens)
+print "Data size = ", datasize
+k20 = 2 / 21
+k100 = 2 / 101
+sum0 = 0
+sum20 = 0
+sum100 = 0
+for i in range(0, datasize):
+	# calculate avarage daily range
+	daily_range = highs[i] - lows[i]
+	sum0 += daily_range
+	avgs.append(sum0 / (100 if i > 99 else i + 1))
+
+	# calculate 20-day EMA
+	if (i < 20):		# for i = 0...19 = first 20 days
+		sum20 += closes[i]
+		e20s.append(sum20 / (i + 1))
+	else:
+		e20s.append(closes[i] * k20 + (1 - k20) * e20s[i - 1])
+
+	# calculate 100-day EMA
+	if (i < 100):		# for i = 0...99 = first 100 days
+		sum100 += closes[i]
+		e100s.append(sum100 / (i + 1))
+	else:
+		e100s.append(closes[i] * k100 + (1 - k100) * e100s[i - 1])
+
+def rand_in_bounds(min, max):
+	return random.uniform(min, max)
+
+op_map = {
+	operator.add : ' + ',
+	operator.sub : ' - ',
+	operator.mul : ' * ',
+	operator.div : ' ÷ ',
+
+	operator.and_ : ' ∧ ',
+	operator.or_ : ' ∨ ',
+	operator.gt : ' > ',
+	operator.lt : ' < ',
+	}
+
+def print_tree(node):
+	if not isinstance(node, list):
+		if isinstance(node, float):
+			return str(round(node, 2))
+		else:
+			return node
+	return "(" + print_tree(node[1]) + op_map[node[0]] + print_tree(node[2]) + ")"
+
+def eval_tree(node, time):
+	if not isinstance(node, list):
+		if isinstance(node, float):
+			return node
+		# elif dict[node] is not None:
+		elif node == 'O1':
+			return opens[time - 1]
+		elif node == 'H1':
+			return highs[time - 1]
+		elif node == 'L1':
+			return lows[time - 1]
+		elif node == 'C1':
+			return closes[time - 1]
+
+		elif node == 'O2':
+			return opens[time - 2]
+		elif node == 'H2':
+			return highs[time - 2]
+		elif node == 'L2':
+			return lows[time - 2]
+		elif node == 'C2':
+			return closes[time - 2]
+
+		elif node == 'O3':
+			return opens[time - 3]
+		elif node == 'H3':
+			return highs[time - 3]
+		elif node == 'L3':
+			return lows[time - 3]
+		elif node == 'C3':
+			return closes[time - 3]
+
+		elif node == 'O4':
+			return opens[time - 4]
+		elif node == 'H4':
+			return highs[time - 4]
+		elif node == 'L4':
+			return lows[time - 4]
+		elif node == 'C4':
+			return closes[time - 4]
+
+		elif node == 'Ot':
+			return opens[time]
+		elif node == 'E20':
+			return e20s[time]
+		elif node == 'E100':
+			return e100s[time]
+		elif node == 'Avg':
+			return avgs[time]
+		
+		else:
+			return node
+	arg1 = eval_tree(node[1], time)
+	arg2 = eval_tree(node[2], time)
+	if node[0] == operator.div and arg2 == 0.0:
+		return 0.0
+	return apply(node[0], [arg1, arg2])
+
+def generate_random_formula(max, funcs, terms, depth = 0):
+	if (depth == max - 1) or (depth > 1 and random.uniform(0.0,1.0) < 0.1):
+		t = terms[random.randint(0, len(terms) - 1)]
+		if t == 'R':
+			return rand_in_bounds(-5.0, +5.0)
+		else:
+			return t
+	depth += 1
+	arg1 = generate_random_formula(max, funcs, terms, depth)
+	arg2 = generate_random_formula(max, funcs, terms, depth)
+	return [funcs[random.randint(0, len(funcs) - 1)], arg1, arg2]
+
+# Needs to generate a random condition in 3 stages:
+# 1) ∧ and ∨
+# 2) > and <
+# 3) formula
+def generate_random_condition(max, funcs, terms, depth = 0):
+	if (depth == max - 1) or (depth > 1 and random.uniform(0.0,1.0) < 0.1):
+		return generate_random_inequality(max, funcs, terms)
+	depth += 1
+	arg1 = generate_random_condition(max, funcs, terms, depth)
+	arg2 = generate_random_condition(max, funcs, terms, depth)
+	op = operator.and_ if (random.randint(0, 1) == 0) else operator.or_
+	return [op, arg1, arg2]
+
+def generate_random_inequality(max, funcs, terms):
+	# determine max = ?
+	arg1 = generate_random_formula(max, funcs, terms)
+	arg2 = generate_random_formula(max, funcs, terms)
+	op = operator.gt if (random.randint(0, 1) == 0) else operator.lt
+	return [op, arg1, arg2]
+
+def count_nodes(node):
+	if not isinstance(node, list):
+		return 1
+	a1 = count_nodes(node[1])
+	a2 = count_nodes(node[2])
+	return a1 + a2 + 1
+
+def fitness(formula, cond, num_trials = 20):
+	sum_error = 0.0
+	sum_profit = 0.0
+	for i in range(100, datasize):
+		time = i
+		# calculate profit
+		target = eval_tree(formula, time)
+		c = eval_tree(cond, time)
+		profit = 0.0
+		if c:
+			profit += opens[time] - target
+			sum_profit += abs(profit)
+	return sum_profit / datasize
+
+def tournament_selection(pop, bouts):
+	selected = []
+	# print "bouts = ", bouts
+	for i in range(0, bouts):
+		selected.append(pop[random.randint(0, len(pop) - 1)])
+	return sorted(selected, key = lambda x: x['fitness'])[0]
+
+def replace_node(node, replacement, node_num, cur_node = 0):
+	if cur_node == node_num:
+		return [replacement, (cur_node + 1)]
+	cur_node += 1
+	if not isinstance(node, list):
+		return [node, cur_node]
+	a1, cur_node = replace_node(node[1], replacement, node_num, cur_node)
+	a2, cur_node = replace_node(node[2], replacement, node_num, cur_node)
+	return [[node[0], a1, a2], cur_node]
+
+def copy_tree(node):
+	# print node
+	if not isinstance(node, list):
+		return node
+	return [node[0], copy_tree(node[1]), copy_tree(node[2])]
+
+def get_node(node, node_num, current_node = 0):
+	if current_node == node_num:
+		return node, (current_node + 1)
+	current_node += 1
+	if not isinstance(node, list):
+		return [], current_node
+	a1, current_node = get_node(node[1], node_num, current_node)
+	if a1:		# a1 != []
+		return a1, current_node
+	a2, current_node = get_node(node[2], node_num, current_node)
+	if a2:
+		return a2, current_node
+	return [], current_node
+
+def prune(node, max_depth, terms, depth = 0):
+	if depth == max_depth - 1:
+		t = terms[random.randint(0, len(terms) - 1)]
+		if t == 'R':
+			return rand_in_bounds(-5.0, +5.0)
+		else:
+			return t
+	depth += 1
+	if not isinstance(node, list):
+		return node
+	a1 = prune(node[1], max_depth, terms, depth)
+	a2 = prune(node[2], max_depth, terms, depth)
+	return [node[0], a1, a2]
+
+def crossover(parent1, parent2, max_depth, terms):
+	pt1, pt2 = random.randint(1, count_nodes(parent1) - 1), \
+		random.randint(1, count_nodes(parent2) - 1)
+	# print "pt 1 & 2 = ", pt1, pt2
+	tree1, c1 = get_node(parent1, pt1)
+	tree2, c2 = get_node(parent2, pt2)
+	# print "tree 1 & 2 = ", tree1, tree2
+	child1, c1 = replace_node(parent1, copy_tree(tree2), pt1)
+	child1 = prune(child1, max_depth, terms)
+	child2, c2 = replace_node(parent2, copy_tree(tree1), pt2)
+	child2 = prune(child2, max_depth, terms)
+	return [child1, child2]
+
+def mutation(parent, max_depth, funcs, terms):
+	random_tree = generate_random_program(max_depth / 2, funcs, terms)
+	point = random.randint(0, count_nodes(parent) - 1)
+	child, count = replace_node(parent, random_tree, point)

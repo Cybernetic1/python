@@ -1,0 +1,16 @@
+Files:
+
+1) genetic-programming.rb -- 原来的 Ruby code，from the book 《Clever Algorithms》
+2) genetic-programming.1.py -- 学习 x²+x+1，plot population fitness
+3) genetic-programming.[0-9] -- older versions (can ignore)
+4) ES_OHLC.txt -- 阿 Ko 畀嘅资料，每日 open high low close
+	(注意日子格式：1999 = 99，2000 = 100，2001 = 101，etc...)
+5) dates.txt -- 日子 converted to DD/MM/YY
+6) f[0-9].XXXX -- save 起的 best formulas
+7) formula.dot -- 用 "dot format" 的 formula，可以经由 graphviz 画成 graph
+8) ES_OHLC.gnumeric -- 用 Gnome Gnumeric spreadsheet plot data （可忽略）
+
+Requirements:
+
+1) PyGame -- sudo apt-get install python-pygames
+2) Graphviz -- sudo apt-get install graphviz
