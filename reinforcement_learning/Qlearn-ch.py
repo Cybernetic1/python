@@ -79,27 +79,27 @@ import random
 
 class QLearn:
 
-	def __init__(self, rand_acts=0.1, learning_rate=0.2, discount=0.9):
+	def __init__(self, 随机行为=0.1, 学习速度=0.2, 折扣=0.9):
 		self.q = {}
 
-		self.rand_acts = rand_acts
-		self.learning_rate = learning_rate
-		self.discount = discount
+		self.随机行为 = 随机行为
+		self.学习速度 = 学习速度
+		self.折扣 = 折扣
 		self.actions = [0, 1, 2, 3, 4, 5, 6, 7, 8]
 
 	def getQ(self, state, action):
 		return self.q.get((state, action), 0.0)		# 0.0 = default value
 
 	def learnQ(self, state, action, reward, value):
-		old_value = self.q.get((state, action), None)
-		if old_value is None:
+		旧value = self.q.get((state, action), None)
+		if 旧value is None:
 			self.q[(state, action)] = reward
 		else:
-			self.q[(state, action)] = old_value + self.learning_rate * (value - old_value)		# "Delta rule"
+			self.q[(state, action)] = 旧value + self.学习速度 * (value - 旧value)		# "Delta rule"
 
 	def chooseAction(self, state):
 		global actions
-		if random.random() < self.rand_acts:
+		if random.random() < self.随机行为:
 			action = random.choice(self.actions)
 		else:
 			q = [self.getQ(state, a) for a in self.actions]
@@ -115,11 +115,11 @@ class QLearn:
 		return action
 
 	def learn(self, state1, action1, reward, state2):
-		new_maxq = max([self.getQ(state2, a) for a in self.actions])
-		self.learnQ(state1, action1, reward, reward + self.discount * new_maxq)
+		新maxq = max([self.getQ(state2, a) for a in self.actions])
+		self.learnQ(state1, action1, reward, reward + self.折扣 * 新maxq)
 
 # **************** 以下是 print 出一些资料 *******************
-
+		
 	def printQ(self):
 		keys = self.q.keys()
 		states = list(set([a for a,b in keys]))

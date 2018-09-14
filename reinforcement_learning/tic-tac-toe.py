@@ -16,7 +16,7 @@ import Qlearn # to use standard exploration method
 # 可以选择的 actions 数目是 9×8 + 9×8×7×6 + 9×8×7×6×5×4 + 9×8×7×6×5×4×3×2 = 72 + 3024 + 60480 + 362880 = 426456。
 state = (0,0,0,  0,0,0,  0,0,0)		# a tuple of 9 components
 
-ai = Qlearn.QLearn(学习速度=0.1, 折扣=0.9, 随机行为=0.1)
+ai = Qlearn.QLearn(learning_rate=0.1, discount=0.9, rand_acts=0.1)
 lastState = None
 lastAction = None
 step = 0
@@ -26,6 +26,7 @@ def next_state(a, who):
 	if state[a] != 0:
 		print("illegal move\n")
 		exit()
+	#state[a] = who
 	s1 = list(state)
 	s1[a] = who
 	state = tuple(s1)
@@ -43,7 +44,7 @@ def update():
 	# Bob move
 	# determine which positions are empty
 	spaces = []
-	for i, c in enumerate(list(state)):
+	for i, c in enumerate(state):
 		if c == 0:
 			spaces.append(i)
 	bob_action = random.choice(spaces)
@@ -104,5 +105,5 @@ while age < endAge:
 
 	if age % 10000 == 0:
 		print("age {:d}, e: {:0.2f}, L: {:d}"\
-			.format(age, ai.随机行为, step))
+			.format(age, ai.rand_acts, step))
 		step = 0
