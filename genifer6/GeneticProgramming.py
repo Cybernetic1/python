@@ -1,7 +1,9 @@
 # -*- coding: utf8 -*-
 
 # TO-DO:
-# * Beware especially of synergistic interactions
+# * If Rete is used, we may want to learn the Rete network directly
+# * How to genetically encode a Rete net?
+# * Perhaps differentiable Rete is a better approach?
 
 # STANDARD EVOLUTIONARY ALGORITHM
 # ===============================
@@ -26,6 +28,11 @@
 # * For each generation, rules should be allowed to fire plentifully
 # * Some facts lead to rewards
 # * The chains of inference can be inspected in Clara Rules
+
+# STRUCTURE OF A RULE
+# ===================
+#    [ [] [] ] => []
+# =  pair( list of lists , list )
 
 import random
 import operator

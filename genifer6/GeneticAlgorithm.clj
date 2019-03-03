@@ -28,6 +28,11 @@
 ; * Some facts lead to rewards
 ; * The chains of inference can be inspected in Clara Rules
 
+; STRUCTURE OF A RULE
+; ===================
+;    [ [] [] ] => []
+; =  pair( list of lists , list )
+
 ; Logic parameters:
 (def numPreds (atom 10))
 (def numVars (atom 4))
