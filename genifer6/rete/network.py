@@ -54,6 +54,7 @@ class Network:
         self.buf.write('digraph {\n')
         self.dump_beta(self.beta_root)
         self.dump_alpha(self.alpha_root)
+        self.buf.write("    label = alpha2beta\n")
         self.dump_alpha2beta(self.alpha_root)
         self.buf.write('}')
         return self.buf.getvalue()
