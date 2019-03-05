@@ -4,10 +4,9 @@ from rete.network import Network
 
 def init_network():
     net = Network()
-    c0 = Has('$x', 'is', 'Happy')
     c1 = Has('$x', 'loves', '$y')
     c2 = Has('$y', 'loves', '$x')
-    net.add_production(Rule(c0, c1, c2))
+    net.add_production(Rule(c1, c2))
     return net
 
 def add_wmes():
