@@ -1,5 +1,6 @@
 from rete.common import BetaNode, Has
 
+import cStringIO
 
 class JoinNode(BetaNode):
 
@@ -60,7 +61,6 @@ class JoinNode(BetaNode):
             val = getattr(wme, field)
             binding[v] = val
         return binding
-
 
 class TestAtJoinNode:
 

@@ -1,3 +1,4 @@
+#!/usr/bin/python2.7
 # -*- coding: utf-8 -*-
 from rete.common import Has, Rule, WME
 from rete.network import Network
@@ -20,6 +21,6 @@ def add_wmes():
         net.add_wme(wme)
     print(net.dump())
 
-print(u"\n\u001b[32m——`—,—{\u001b[31;1m@\u001b[0m\n")
+print(u"\n\u001b[32m——`—,—{\u001b[31;1m@\u001b[0m\n")   # Genifer logo
 init_network()
 add_wmes()

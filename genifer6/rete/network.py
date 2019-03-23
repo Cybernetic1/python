@@ -67,7 +67,7 @@ class Network:
             self.buf.write("    subgraph cluster_0 {\n")
             self.buf.write("    label = alpha\n")
         for child in node.children:
-            self.buf.write('    "%s" -> "%s";\n' % (node.dump(), child.dump()))
+            self.buf.write("    %s -> %s;\n" % (node.dump(), child.dump()))
             self.dump_alpha(child)
         if node == self.alpha_root:
             self.buf.write("    }\n")
@@ -78,7 +78,7 @@ class Network:
         """
         if node.amem:
             for child in node.amem.successors:
-                self.buf.write('    "%s" -> "%s";\n' % (node.dump(), child.dump()))
+                self.buf.write("    %s -> %s;\n" % (node.dump(), child.dump()))
         for child in node.children:
             self.dump_alpha2beta(child)
 
@@ -90,9 +90,15 @@ class Network:
             self.buf.write("    subgraph cluster_1 {\n")
             self.buf.write("    label = beta\n")
         if isinstance(node, NccPartnerNode):
-            self.buf.write('    "%s" -> "%s";\n' % (node.dump(), node.ncc_node.dump()))
+            self.buf.write("    %s -> %s;\n" % (node.dump(), node.ncc_node.dump()))
+        if isinstance(node, JoinNode):
+            # dump details of node
+            self.buf.write("    ┌─ amem: %s\n" % repr(node.amem))
+            self.buf.write("    ├─ has: %s\n" % repr(node.has))
+            for t in node.tests:
+                self.buf.write("    ├─ test: %s\n" % repr(t))
         for child in node.children:
-            self.buf.write('    "%s" -> "%s";\n' % (node.dump(), child.dump()))
+            self.buf.write("    %s -> %s;\n" % (node.dump(), child.dump()))
             self.dump_beta(child)
         if node == self.beta_root:
             self.buf.write("    }\n")

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 FIELDS = ['identifier', 'attribute', 'value']
-
+#FIELDS = ['F1', 'F2', 'F3']
 
 class BetaNode(object):
 
