@@ -1,4 +1,5 @@
-# symmetric quatratic NN -- count colors
+# Count Colors
+# symmetric quatratic NN
 
 import numpy as np
 
@@ -35,34 +36,38 @@ for h in range(1,4):
 	for k in range(1,4):
 		for i in range(1,4):
 			for j in range(1,4):
-				if (not i == h) and (not i == k) and (not j == h) and (not j == k):
+				if i != h and i != k and j != h and j != k:
 					left = find_index(h,i,j)
 					right = find_index(k,i,j)
-					print(left, "=", right)
+					print(left, "=", right, end=":   ")
 					make_same_color(left, right)
 
 for h in range(1,4):
 	for k in range(1,4):
 		left = find_index(h,h,h)
 		right = find_index(k,k,k)
+		print(left, "=", right, end=":   ")
 		make_same_color(left, right)
 
 		left = find_index(h,k,k)
 		right = find_index(k,h,h)
+		print(left, "=", right, end=":   ")
 		make_same_color(left, right)
 
 		left = find_index(k,k,h)
 		right = find_index(k,h,k)
+		print(left, "=", right, end=":   ")
 		make_same_color(left, right)
 
 		left = find_index(h,k,h)
 		right = find_index(h,h,k)
+		print(left, "=", right, end=":   ")
 		make_same_color(left, right)
 
 		# left = find_index(k,h,k)
 		# right = find_index(h,h,k)
 		# make_same_color(left, right)
 
-print("results = ", colors)
+print("\nresults = ", colors)
 
-print("# colors = ", len(colors))
+print("\n# colors = ", len(colors))
