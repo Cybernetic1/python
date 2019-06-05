@@ -6,11 +6,14 @@ import numpy as np
 # equation is of the form y = <A x, x>
 # we want to count the number of colors in the 3D matrix A
 
-# There are 3 x 3 x 3 = 27 weights in the 3D matrix A
-colors = [[i] for i in range(1,28)]
+N = 4
+N1 = N + 1
+
+# There are N x N x N = N^3 weights in the 3D matrix A
+colors = [[i] for i in range(1, N **3 + 1)]
 
 def find_index(z,x,y):
-	return (z - 1) * 9 + x + (y - 1) * 3
+	return (z - 1) * N * N + x + (y - 1) * N
 
 # =================================
 # find the left color in the list
@@ -32,18 +35,18 @@ def make_same_color(left, right):
 	colors2.append(temp)
 	colors = colors2
 
-for h in range(1,4):
-	for k in range(1,4):
-		for i in range(1,4):
-			for j in range(1,4):
+for h in range(1, N1):
+	for k in range(1, N1):
+		for i in range(1, N1):
+			for j in range(1, N1):
 				if i != h and i != k and j != h and j != k:
 					left = find_index(h,i,j)
 					right = find_index(k,i,j)
 					print(left, "=", right, end=":   ")
 					make_same_color(left, right)
 
-for h in range(1,4):
-	for k in range(1,4):
+for h in range(1, N1):
+	for k in range(1, N1):
 		left = find_index(h,h,h)
 		right = find_index(k,k,k)
 		print(left, "=", right, end=":   ")
@@ -70,4 +73,15 @@ for h in range(1,4):
 
 print("\nresults = ", colors)
 
-print("\n# colors = ", len(colors))
+print("\n# colors = ", len(colors), end="\n\n")
+
+# Color-print the matrix A
+for n in range(1, N1):
+	for j in range(1, N1):
+		for k in range(1, N1):
+			idx = find_index(n,j,k)
+			for num, c in enumerate(colors):
+				if idx in c:
+					print("{:2d}".format(num + 1), end=" ") 
+		print()
+	print()
