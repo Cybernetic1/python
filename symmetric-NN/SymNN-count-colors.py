@@ -1,12 +1,14 @@
 # Count Colors
 # symmetric quatratic NN
 
-import numpy as np
+# import numpy as np
 
 # equation is of the form y = <A x, x>
 # we want to count the number of colors in the 3D matrix A
 
-N = 4
+print("N = ?", end="")
+N = int(input())
+# N = 4
 N1 = N + 1
 
 # There are N x N x N = N^3 weights in the 3D matrix A
@@ -35,6 +37,7 @@ def make_same_color(left, right):
 	colors2.append(temp)
 	colors = colors2
 
+# 1st equation
 for h in range(1, N1):
 	for k in range(1, N1):
 		for i in range(1, N1):
@@ -47,25 +50,29 @@ for h in range(1, N1):
 
 for h in range(1, N1):
 	for k in range(1, N1):
+
+		# 2nd equation
 		left = find_index(h,h,h)
 		right = find_index(k,k,k)
 		print(left, "=", right, end=":   ")
 		make_same_color(left, right)
 
+		# 3rd equation
 		left = find_index(h,k,k)
 		right = find_index(k,h,h)
 		print(left, "=", right, end=":   ")
 		make_same_color(left, right)
 
-		left = find_index(k,k,h)
-		right = find_index(k,h,k)
-		print(left, "=", right, end=":   ")
-		make_same_color(left, right)
+		# 4th equation:
+		# left = find_index(k,k,h)
+		# right = find_index(k,h,k)
+		# print(left, "=", right, end=":   ")
+		# make_same_color(left, right)
 
-		left = find_index(h,k,h)
-		right = find_index(h,h,k)
-		print(left, "=", right, end=":   ")
-		make_same_color(left, right)
+		# left = find_index(h,k,h)
+		# right = find_index(h,h,k)
+		# print(left, "=", right, end=":   ")
+		# make_same_color(left, right)
 
 		# left = find_index(k,h,k)
 		# right = find_index(h,h,k)
@@ -73,7 +80,7 @@ for h in range(1, N1):
 
 print("\nresults = ", colors)
 
-print("\n# colors = ", len(colors), end="\n\n")
+print("\n# colors = ", len(colors), "of", N**3, "=", "{:.1f}".format(len(colors) * 100.0 / N**3), end="%\n\n")
 
 # Color-print the matrix A
 for n in range(1, N1):

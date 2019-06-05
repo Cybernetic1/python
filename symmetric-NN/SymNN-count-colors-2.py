@@ -1,7 +1,7 @@
 # Count Colors
 # symmetric linear NN, folded in half
 
-import numpy as np
+# import numpy as np
 
 # equation is of the form y = A x, where y is of dimension 1/2 x
 # we want to count the number of colors in the (2D) matrix A

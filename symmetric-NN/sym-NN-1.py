@@ -6,7 +6,7 @@ import numpy as np
 #	a b c
 #	a b c
 #	a b c
-# This fails the symmetric test
+# This FAILS the symmetric test
 
 Row = np.random.rand(3)
 M2 = np.vstack((Row, Row, Row))
