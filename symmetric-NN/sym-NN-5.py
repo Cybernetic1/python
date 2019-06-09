@@ -1,12 +1,12 @@
-# test 5 -- symmetric quadratic NN
+# test 5 -- symmetric quadratic NN, wrong version
 
 import numpy as np
 
-# The matrix A is 3-dimensional,
+# The matrix A is 3-dimensional
 # consisting of N blocks, each of size (N ⨉ N)
 # satisfying the constraints in my PDF file
 # We want to show that this is EQUIVARIANT
-# ********* Test result is ??? *********
+# ********* Test result is FAIL *********
 
 print("N = ?", end="")
 N = int(input())
