@@ -12,8 +12,6 @@ import numpy as np
 
 print("N = ?", end="")
 N = int(input())
-# N = 4
-N1 = N + 1
 
 A = np.full((N, N), np.random.rand())
 np.fill_diagonal(A, np.random.rand())
