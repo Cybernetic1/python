@@ -8,14 +8,12 @@
 
 print("N = ?", end="")
 N = int(input())
-# N = 4
-N1 = N + 1
 
 # There are N x N x N = N^3 weights in the 3D matrix A
-colors = [[i] for i in range(1, N **3 + 1)]
+colors = [[i] for i in range(0, N **3)]
 
-def find_index(z,x,y):
-	return (z - 1) * N * N + x + (y - 1) * N
+def find_index(z,y,x):
+	return z * N * N + y * N + x
 
 # =================================
 # find the left color in the list
@@ -39,17 +37,17 @@ def make_same_color(left, right):
 	colors = colors2
 
 # 1st equation
-for h in range(1, N1):
-	for k in range(1, N1):
-		for i in range(1, N1):
-			for j in range(1, N1):
+for h in range(0, N):
+	for k in range(0, N):
+		for i in range(0, N):
+			for j in range(0, N):
 				if i != h and i != k and j != h and j != k:
 					left = find_index(h,i,j)
 					right = find_index(k,i,j)
 					make_same_color(left, right)
 
-for h in range(1, N1):
-	for k in range(1, N1):
+for h in range(0, N):
+	for k in range(0, N):
 
 		# diagonal equation #1
 		left = find_index(h,h,h)
@@ -62,9 +60,9 @@ for h in range(1, N1):
 		make_same_color(left, right)
 
 # "missing" equations
-for h in range(1, N1):
-	for k in range(1, N1):
-		for j in range(1, N1):
+for h in range(0, N):
+	for k in range(0, N):
+		for j in range(0, N):
 			if j != h and j != k:
 				# 1
 				left = find_index(h,k,j)
@@ -86,14 +84,15 @@ for h in range(1, N1):
 				right = find_index(k,j,k)
 				make_same_color(left, right)
 
-print("\nresults = ", colors)
+print("\nColors = ", colors)
 
-print("\n# colors = ", len(colors), "of", N**3, "=", "{:.1f}".format(len(colors) * 100.0 / N**3), end="%\n\n")
+print("\n# colors = ", len(colors), "of", N**3, "=", "{:.1f}".format(len(colors) * 100.0 / N**3),\
+	end="%\n\n")
 
 # Color-print the matrix A
-for n in range(1, N1):
-	for j in range(1, N1):
-		for k in range(1, N1):
+for n in range(0, N):
+	for j in range(0, N):
+		for k in range(0, N):
 			idx = find_index(n,j,k)
 			for num, c in enumerate(colors):
 				if idx in c:
