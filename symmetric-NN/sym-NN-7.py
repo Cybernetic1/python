@@ -129,7 +129,7 @@ for h in range(0, N):
 						(z,y,x) = find_zyx(j)
 						A[z,y,x] = β
 
-print("A =\n", A)
+print("\nResult: A =\n", A)
 
 # =========== verifications =============
 
@@ -186,6 +186,7 @@ if errorFlag:
 	print("*** Constraints are not completely satisfied ***")
 	exit(1)
 
+print("\nTesting....")
 debugFlag = False
 
 for i in range(0, 10):				# repeat test 10 times
