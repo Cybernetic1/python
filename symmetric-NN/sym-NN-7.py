@@ -187,7 +187,7 @@ if errorFlag:
 	exit(1)
 
 print("\nTesting....")
-debugFlag = False
+debugFlag = True
 
 for i in range(0, 10):				# repeat test 10 times
 
@@ -222,4 +222,4 @@ for i in range(0, 10):				# repeat test 10 times
 	for j in range(0, N):
 		rms += (Y2[j] - σY[j])**2
 	rms = np.sqrt(rms / N)
-	print("rms = ", rms)
+	print("RMS error = ", rms)
