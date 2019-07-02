@@ -93,11 +93,6 @@ for h in range(0, N):
 				right = find_index(k,j,k)
 				make_same_color(left, right)
 
-print("\nColors = ", colors)
-
-print("\n# colors = ", len(colors), "of", N**3, "=", "{:.1f}".format(len(colors) * 100.0 / N**3),\
-	end="%\n\n")
-
 # ============ fill colors with values =============
 
 A = np.zeros((N, N, N))
@@ -108,18 +103,16 @@ for group in colors:
 		(z,y,x) = find_zyx(index)
 		A[z][y][x] = β
 
-def print_additive(a1,a2,a3, b1,b2,b3, c1,c2,c3, d1,d2,d3):
-	print("{:d},{:d},{:d} + {:d},{:d},{:d} =? {:d},{:d},{:d} + {:d},{:d},{:d}".\
-		format(a1,a2,a3, b1,b2,b3, c1,c2,c3, d1,d2,d3), end="   ")
-	print("{:.5f} =? {:.5f}".format(A[a1,a2,a3] + A[b1,b2,b3], A[c1,c2,c3] + A[d1,d2,d3]))
-
 # ============ enforce additive constraints while respecting colors ===============
 
 print("Enforcing 'additive' constraint while respecting colors....")
+
+additive_colors = 0
 for h in range(0, N):
 	for k in range(0, N):
-		if h != k and h < k:
+		if h < k:			# also excluding h = k
 			β = A[k,k,h] = A[h,k,h] + A[h,h,k] - A[k,h,k]
+			additive_colors += 1
 
 			# all entries of the same color as A[k,k,h] has to be changed as well
 			i = find_index(k,k,h)
@@ -131,49 +124,57 @@ for h in range(0, N):
 
 print("\nResult: A =\n", A)
 
+print("\nColors = ", colors)
+
+print("\n# colors = ", len(colors) - additive_colors, "of", N**3, "=", "{:.1f}".format(len(colors) * 100.0 / N**3),\
+	end="%\n\n")
+
 # =========== verifications =============
 
-errorFlag = False
+num_Errors = 0
 
-def error(typ, a1,a2,a3, b1,b2,b3):
-	errorFlag = True
+print("\nVerifying 'missing' equations....")
+
+def error_missing(typ, a1,a2,a3, b1,b2,b3):
+	num_Errors += 1
 	print("type {:d}  A[{:d}][{:d}][{:d}] ≠ A[{:d}][{:d}][{:d}]".format(typ, a1,a2,a3,b1,b2,b3),\
 		end="   ")
 	print("{:.5f} ≠ {:.5f}".format(A[a1][a2][a3], A[b1][b2][b3]))
 
-print("\nVerifying 'missing' equations....")
 for h in range(0, N):
 	for k in range(0, N):
 		for j in range(0, N):
 			if j != h and j != k:
 				if A[h][k][j] != A[k][h][j]:
-					error(1, h,k,j,   k,h,j)
+					error_missing(1, h,k,j,   k,h,j)
 				if A[h][h][j] != A[k][k][j]:
-					error(2, h,h,j,   k,k,j)
+					error_missing(2, h,h,j,   k,k,j)
 				if A[h][j][k] != A[k][j][h]:
-					error(3, h,j,k,   k,j,h)
+					error_missing(3, h,j,k,   k,j,h)
 				if A[h][j][h] != A[k][j][k]:
-					error(4, h,j,h,   k,j,k)
+					error_missing(4, h,j,h,   k,j,k)
+
+print("\nVerifying 'additive' constraint....")
 
 def error_additive(a1,a2,a3, b1,b2,b3, c1,c2,c3, d1,d2,d3):
-	errorFlag = True
+	num_Errors += 1
 	print("{:d},{:d},{:d} + {:d},{:d},{:d} ≠ {:d},{:d},{:d} + {:d},{:d},{:d}".\
 		format(a1,a2,a3, b1,b2,b3, c1,c2,c3, d1,d2,d3), end="   ")
 	print("{:.5f} ≠ {:.5f}".format(A[a1][a2][a3] + A[b1][b2][b3], A[c1][c2][c3] + A[d1][d2][d3]))
 
-print("\nVerifying 'additive' constraint....")
 for h in range(0, N):
 	for k in range(0, N):
 		if A[k][k][h] + A[k][h][k] != A[h][k][h] + A[h][h][k]:
 			error_additive(k,k,h,  k,h,k,   h,k,h,   h,h,k)
 
+print("\nVerifying 1st equation....")
+
 def error_1st(a1,a2,a3, b1,b2,b3):
-	errorFlag = True
+	num_Errors += 1
 	print("{:d},{:d},{:d} ≠ {:d},{:d},{:d}".\
 		format(a1,a2,a3, b1,b2,b3), end="   ")
 	print("{:.5f} ≠ {:.5f}".format(A[a1][a2][a3], A[b1][b2][b3]))
 
-print("\nVerifying 1st equation....")
 for h in range(0, N):
 	for k in range(0, N):
 		for i in range(0, N):
@@ -182,12 +183,10 @@ for h in range(0, N):
 					if A[k][i][j] != A[h][i][j]:
 						error_1st(k,i,j, h,i,j)
 
-if errorFlag:
-	print("*** Constraints are not completely satisfied ***")
-	exit(1)
+print("Errors detected = ", num_Errors)
 
 print("\nTesting....")
-debugFlag = True
+debugFlag = False
 
 for i in range(0, 10):				# repeat test 10 times
 
