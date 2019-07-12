@@ -11,11 +11,23 @@ import numpy as np
 # 3. The exponent E can be implemented as a list E = [e₁, ..., eₙ]
 #		each eⱼ denotes exponent of j-th variable xⱼ
 # 4. Each coefficient A may be an (integral) polynomial in terms of the weights Wᵢⱼₖₗ.
-#		
-exit(0)
+#		On the 1st layer, every A is just a single W.
+#		But at this point, I don't know what happens when layers are composed.
+#		Let's see... 1 layer consists of all possible terms of degree ≤ 2, in the sense that
+#		each yᵢ is the 'free' deg-2 polynomial.
+#		The 2nd layer would consist of the free polynomial of deg 4?  That seems incorrect...
+#		Because the 1st-layer output is just n free deg-2 polynomials.  
 
 print("N = ?", end="")
 N = int(input())
+
+y = [[] for x in range(N)]
+
+for k in range(0,N)
+	y[k] = 
+
+exit(0)
+
 
 # There are N x N x N = N^3 weights in the 3D matrix A
 colors = [[i] for i in range(0, N **3)]
