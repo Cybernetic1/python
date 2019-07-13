@@ -1,121 +1,21 @@
-# Polynomial algebra -- programmatically compute invariant weight colors
-# ======================================================================
+# TEST 9 -- symmetric quadratic NN, "colorful" version
+# ====================================================
+# This version includes the i<j condition, ie, the commutative xᵢxⱼ = xⱼxᵢ condition is built-in.
+# This reduces the number of weights needed to represent the matrices.
 
 import numpy as np
 
-# The program (this version) computes the output for 1 layer:
-# 1. Each output component is a polynomial given by the single-layer equation,
-#		of the form: A x^E where A = coefficient, E = exponent
-# 2. Single-layer equation:
-#		yₖ = Wₖ x x + Wₖ x + Wₖ
-# 3. The exponent E can be implemented as a list E = [e₁, ..., eₙ]
-#		each eⱼ denotes exponent of j-th variable xⱼ
-# 4. Each coefficient A may be an (integral) polynomial in terms of the weights Wᵢⱼₖₗ.
-#		On the 1st layer, every A is just a single W.
-#		But at this point, I don't know what happens when layers are composed.
-#		Let's see... 1 layer consists of all possible terms of degree ≤ 2, in the sense that
-#		each yᵢ is the 'free' deg-2 polynomial.
-#		The 2nd layer would consist of the free polynomial of deg 4?  That seems incorrect...
-#		Because the 1st-layer output is just n free deg-2 polynomials.  
-
-# We need a representation of polynomials in the weights Wᵢⱼₖₗ
-# but we may also need a representation of polynomials in the variables Xₗₖ
-# the coefficients of the latter are polynomials.
-
-class Poly_in_X:
-	def __init__(self, a): 
-		self.a = a 
-  
-	# adding two objects  
-	def __add__(self, o): 
-		return self.a + o.a
-
-	def __str__(self):
-		return str(self.a)
-
-class Term_in_X:
-	# Each term is a monomial with a coefficient
-	def __init__(self, c, *xs): 
-		self.coefficient = c
-		self.xs = xs
-
-	# **** Adding two monomials (may return polynomial)
-	def __add__(self, other):
-		# check if their exponents are equal
-		if self.xs != other.xs:
-			# return new polynomial
-			return Poly_in_X(None)
-		else:
-			# return new monomial
-			return Term_in_X(self.coefficient + other.coefficient, \
-				*self.xs)
-
-	# **** Multiplying two monomials
-	def __mul__(self, other):
-		return self.coefficient + other.coefficient
-
-	def __str__(self):
-		idx = ""
-		for x in self.xs:
-			idx += "X"
-			idx += "₀₁₂₃₄₅₆₇₈₉"[x[0]]
-			# idx += " "
-			idx += "₀₁₂₃₄₅₆₇₈₉"[x[1]]
-			idx += "⁰¹²³⁴⁵⁶⁷⁸⁹"[x[2]]
-		return str(self.coefficient) + idx
-		# X⁰¹²³⁴⁵⁶⁷⁸⁹ X₀₁₂₃₄₅₆₇₈₉
-
-# Term_in_X( coefficient, (Xₗₖ, exponent), ... )
-mono1 = Term_in_X(1, (1, 1, 2), (2, 1, 2))
-mono2 = Term_in_X(2, (1, 1, 1))
-mono3 = Term_in_X(7, (1, 1, 1))
-print(mono1 + mono2)
-print(mono2 + mono3)
-print(mono1)
-
-class Poly_in_W:
-	def __init__(self, a): 
-		self.a = a 
-  
-	# adding two objects  
-	def __add__(self, o): 
-		return self.a + o.a
-
-	def __str__(self):
-		return self.a
-
-class Term_in_W:
-	def __init__(self, a): 
-		self.a = a 
-  
-	# adding two objects  
-	def __add__(self, o): 
-		return self.a + o.a
-
-	def __str__(self):
-		return self.a
-
-
-exit(0)
+# The matrix A is 3-dimensional
+# consisting of N blocks, each of size (N ⨉  N)
+# satisfying the "colorful" constraints in my PDF file
+# We want to show that this is EQUIVARIANT
+# ********* Test result is ??? *********
 
 print("N = ?", end="")
 N = int(input())
 
-y = [[] for x in range(N)]
-
-for k in range(0, N):
-	# yₖ = Aₖ x x + Bₖ x + Cₖ
-	#    = Σ (Aₖ x)ᵢ xᵢ + Σ Bₖᵢ xᵢ + Cₖ
-	#    = Σⱼ (Σᵢ Aₖᵢⱼ xᵢ)ⱼ xⱼ + Σⱼ Bₖⱼ xⱼ + Cₖ
-	for j in range(0, N):
-		ΣBx += B[k, j] * x[j]
-	y[k] = ΣBx + C[k]
-
-
-
-
-
-# There are N x N x N = N^3 weights in the 3D matrix A
+# There are N x N x N = N^3 weights in the 3D matrix A,
+# but some weights are zero (not used)
 colors = [[i] for i in range(0, N **3)]
 
 def find_index(z,y,x):
