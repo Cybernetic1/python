@@ -1,7 +1,8 @@
 # Polynomial algebra -- programmatically compute invariant weight colors
 # ======================================================================
 
-import numpy as np
+# TO-DO:
+# * 
 
 # The program (this version) computes the output for 1 layer:
 # 1. Each output component is a polynomial given by the single-layer equation,
@@ -18,6 +19,8 @@ import numpy as np
 #		The 2nd layer would consist of the free polynomial of deg 4?  That seems incorrect...
 #		Because the 1st-layer output is just n free deg-2 polynomials.
 
+import numpy as np
+
 def subscript(i):
 	return "₀₁₂₃₄₅₆₇₈₉"[i]
 
@@ -33,7 +36,7 @@ class Poly_in_X:
 	def __init__(self, *monos):
 		self.monos = monos
 
-	# adding two polynomials
+	# **** Adding 2 polynomials
 	def __add__(self, other):
 		return self.monos + other.monos
 
@@ -45,11 +48,13 @@ class Poly_in_X:
 
 class Mono_in_X:
 	# Each monomial is attached with a coefficient
+	# Format:  Mono_in_X( coefficient, ((Xₗₖ), exponent), ... )
+
 	def __init__(self, c, *xs):
 		self.coefficient = c
 		self.xs = xs
 
-	# **** Adding two monomials (may return polynomial)
+	# **** Adding 2 monomials (may return polynomial)
 	def __add__(self, other):
 		# check if their exponents are equal
 		if self.xs != other.xs:
@@ -60,19 +65,36 @@ class Mono_in_X:
 			return Mono_in_X(self.coefficient + other.coefficient, \
 				*self.xs)
 
-	# **** Multiplying two monomials (result is always monomial)
+	# **** Multiplying 2 monomials (result is always monomial)
 	def __mul__(self, other):
+		# collect same variables, assume vars are sorted in lexical order
+		x3 = []
+		L1 = len(self.xs)
+		L2 = len(other.xs)
+		i = j = 0
+		while i < L1 or j < L2:
+			x1 = self.xs[i][0] if i < L1 else (100,100)
+			x2 = other.xs[j][0] if j < L2 else (100,100)
+			if x1 == x2:
+				x3.append((x1, self.xs[i][1] + other.xs[j][1]))
+				i += 1
+				j += 1
+			elif x2 < x1:
+				x3.append(other.xs[j])
+				j += 1
+			elif x1 < (100,100):
+				x3.append(self.xs[i])
+				i += 1
 		return Mono_in_X(self.coefficient * other.coefficient, \
-			*self.xs, *other.xs)
+			*x3)
 
 	def __str__(self):
 		idx = ""
 		for x in self.xs:
-			idx += "X"
-			idx += "₀₁₂₃₄₅₆₇₈₉"[x[0]]
-			# idx += " "
-			idx += "₀₁₂₃₄₅₆₇₈₉"[x[1]]
-			idx += "⁰¹²³⁴⁵⁶⁷⁸⁹"[x[2]]
+			idx += " X"
+			idx += subscript(x[0][0])
+			idx += subscript(x[0][1])
+			idx += superscript(x[1])
 		return str(self.coefficient) + idx
 
 # Same shit, repeated for W:
@@ -82,7 +104,7 @@ class Poly_in_W:
 	def __init__(self, *monos):
 		self.monos = monos
 
-	# adding two polynomials
+	# **** Adding 2 polynomials
 	def __add__(self, other):
 		return self.monos + other.monos
 
@@ -90,17 +112,18 @@ class Poly_in_W:
 		s = ""
 		for m in self.monos:
 			s += str(m) + " + "
-		return s[:-3]
+		return "\u001b[36m{" + s[:-3] + "}\u001b[0m"
 
 class Mono_in_W:
 	# Each monomial is attached with a coefficient
+	# Format:  Mono_in_W( coefficient, ((ₗₖWᵢⱼ), exponent), ... )
 	def __init__(self, c, *ws):
 		self.coefficient = c
 		self.ws = ws
 
-	# **** Adding two monomials (may return polynomial)
+	# **** Adding 2 monomials (may return polynomial)
 	def __add__(self, other):
-		# check if their exponents are equal
+		# check if their vars & exponents are equal
 		if self.ws != other.ws:
 			# return new polynomial
 			return Poly_in_W(self, other)
@@ -109,34 +132,56 @@ class Mono_in_W:
 			return Mono_in_W(self.coefficient + other.coefficient, \
 				*self.ws)
 
-	# **** Multiplying two monomials (result is always monomial)
+	# **** Multiplying 2 monomials (result is always monomial)
 	def __mul__(self, other):
+		# collect same variables, assume vars are sorted in lexical order
+		w3 = []
+		L1 = len(self.ws)
+		L2 = len(other.ws)
+		i = j = 0
+		while i < L1 or j < L2:
+			w1 = self.ws[i][0] if i < L1 else None
+			w2 = other.ws[j][0] if j < L2 else None
+			if w1 == w2:
+				w3.append((w1, self.ws[i][1] + other.ws[j][1]))
+				i += 1
+				j += 1
+			elif w1 > w2:
+				w3.append(other.ws[j])
+				j += 1
+			else:
+				w3.append(self.ws[i])
+				i += 1
 		return Mono_in_W(self.coefficient * other.coefficient, \
-			*self.ws, *other.ws)
+			*w3)
 
 	def __str__(self):
 		idx = ""
 		for w in self.ws:
-			idx += subscript(w[0])
-			idx += subscript(w[1])
+			idx += ' ' + subscript(w[0][0])
+			idx += subscript(w[0][1])
 			idx += "W"
-			idx += subscript(w[2])
-			idx += subscript(w[3])
-			idx += superscript(w[4])
-		return '{' + str(self.coefficient) + idx + '}'
+			idx += subscript(w[0][2])
+			idx += subscript(w[0][3])
+			idx += superscript(w[1])
+		return str(self.coefficient) + idx
 
-# Mono_in_X( coefficient, (Xₗₖ, exponent), ... )
-mono1 = Mono_in_X(3, (1, 1, 2), (2, 1, 2))
-mono2 = Mono_in_X(2, (1, 1, 1))
-mono3 = Mono_in_X(7, (1, 1, 1))
+# **** Format:  Mono_in_X( coefficient, ((Xₗₖ), exponent), ... )
+mono1 = Mono_in_X(3, ((1, 1), 2), ((2, 1), 2))
+mono2 = Mono_in_X(2, ((1, 1), 1))
+mono3 = Mono_in_X(7, ((1, 1), 1))
+print(mono1)
 print(mono1 + mono2)
 print(mono2 + mono3)
-print(mono1)
 print(mono1 * mono2)
 
-# Mono_in_W( coefficient, (ₗₖWᵢⱼ, exponent), ... )
-coeff1 = Mono_in_W(3, (1, 1, 2, 1, 2), (2, 1, 1, 1, 2))
+# **** Format:  Mono_in_W( coefficient, (ₗₖWᵢⱼ, exponent), ... )
+coeff1 = Mono_in_W(3, ((1, 1, 2, 1), 2), ((2, 1, 1, 1), 2))
+coeff2 = Mono_in_W(4, ((1, 1, 2, 1), 3), ((2, 1, 1, 1), 1))
 print(coeff1)
+print(coeff2)
+print(coeff1 * coeff2)
+print(coeff1 + coeff2)
 
 exit(0)
 
