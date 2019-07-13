@@ -16,26 +16,36 @@ import numpy as np
 #		Let's see... 1 layer consists of all possible terms of degree ≤ 2, in the sense that
 #		each yᵢ is the 'free' deg-2 polynomial.
 #		The 2nd layer would consist of the free polynomial of deg 4?  That seems incorrect...
-#		Because the 1st-layer output is just n free deg-2 polynomials.  
+#		Because the 1st-layer output is just n free deg-2 polynomials.
+
+def subscript(i):
+	return "₀₁₂₃₄₅₆₇₈₉"[i]
+
+def superscript(i):
+	return "⁰¹²³⁴⁵⁶⁷⁸⁹"[i]
 
 # We need a representation of polynomials in the weights Wᵢⱼₖₗ
 # but we may also need a representation of polynomials in the variables Xₗₖ
 # the coefficients of the latter are polynomials.
 
 class Poly_in_X:
-	def __init__(self, a): 
-		self.a = a 
-  
-	# adding two objects  
-	def __add__(self, o): 
-		return self.a + o.a
+	# A polynomial is just a sum of monomials
+	def __init__(self, *monos):
+		self.monos = monos
+
+	# adding two polynomials
+	def __add__(self, other):
+		return self.monos + other.monos
 
 	def __str__(self):
-		return str(self.a)
+		s = ""
+		for m in self.monos:
+			s += str(m) + " + "
+		return s[:-3]
 
-class Term_in_X:
-	# Each term is a monomial with a coefficient
-	def __init__(self, c, *xs): 
+class Mono_in_X:
+	# Each monomial is attached with a coefficient
+	def __init__(self, c, *xs):
 		self.coefficient = c
 		self.xs = xs
 
@@ -44,15 +54,16 @@ class Term_in_X:
 		# check if their exponents are equal
 		if self.xs != other.xs:
 			# return new polynomial
-			return Poly_in_X(None)
+			return Poly_in_X(self, other)
 		else:
 			# return new monomial
-			return Term_in_X(self.coefficient + other.coefficient, \
+			return Mono_in_X(self.coefficient + other.coefficient, \
 				*self.xs)
 
-	# **** Multiplying two monomials
+	# **** Multiplying two monomials (result is always monomial)
 	def __mul__(self, other):
-		return self.coefficient + other.coefficient
+		return Mono_in_X(self.coefficient * other.coefficient, \
+			*self.xs, *other.xs)
 
 	def __str__(self):
 		idx = ""
@@ -63,38 +74,69 @@ class Term_in_X:
 			idx += "₀₁₂₃₄₅₆₇₈₉"[x[1]]
 			idx += "⁰¹²³⁴⁵⁶⁷⁸⁹"[x[2]]
 		return str(self.coefficient) + idx
-		# X⁰¹²³⁴⁵⁶⁷⁸⁹ X₀₁₂₃₄₅₆₇₈₉
 
-# Term_in_X( coefficient, (Xₗₖ, exponent), ... )
-mono1 = Term_in_X(1, (1, 1, 2), (2, 1, 2))
-mono2 = Term_in_X(2, (1, 1, 1))
-mono3 = Term_in_X(7, (1, 1, 1))
+# Same shit, repeated for W:
+
+class Poly_in_W:
+	# A polynomial is just a sum of monomials
+	def __init__(self, *monos):
+		self.monos = monos
+
+	# adding two polynomials
+	def __add__(self, other):
+		return self.monos + other.monos
+
+	def __str__(self):
+		s = ""
+		for m in self.monos:
+			s += str(m) + " + "
+		return s[:-3]
+
+class Mono_in_W:
+	# Each monomial is attached with a coefficient
+	def __init__(self, c, *ws):
+		self.coefficient = c
+		self.ws = ws
+
+	# **** Adding two monomials (may return polynomial)
+	def __add__(self, other):
+		# check if their exponents are equal
+		if self.ws != other.ws:
+			# return new polynomial
+			return Poly_in_W(self, other)
+		else:
+			# return new monomial
+			return Mono_in_W(self.coefficient + other.coefficient, \
+				*self.ws)
+
+	# **** Multiplying two monomials (result is always monomial)
+	def __mul__(self, other):
+		return Mono_in_W(self.coefficient * other.coefficient, \
+			*self.ws, *other.ws)
+
+	def __str__(self):
+		idx = ""
+		for w in self.ws:
+			idx += subscript(w[0])
+			idx += subscript(w[1])
+			idx += "W"
+			idx += subscript(w[2])
+			idx += subscript(w[3])
+			idx += superscript(w[4])
+		return '{' + str(self.coefficient) + idx + '}'
+
+# Mono_in_X( coefficient, (Xₗₖ, exponent), ... )
+mono1 = Mono_in_X(3, (1, 1, 2), (2, 1, 2))
+mono2 = Mono_in_X(2, (1, 1, 1))
+mono3 = Mono_in_X(7, (1, 1, 1))
 print(mono1 + mono2)
 print(mono2 + mono3)
 print(mono1)
+print(mono1 * mono2)
 
-class Poly_in_W:
-	def __init__(self, a): 
-		self.a = a 
-  
-	# adding two objects  
-	def __add__(self, o): 
-		return self.a + o.a
-
-	def __str__(self):
-		return self.a
-
-class Term_in_W:
-	def __init__(self, a): 
-		self.a = a 
-  
-	# adding two objects  
-	def __add__(self, o): 
-		return self.a + o.a
-
-	def __str__(self):
-		return self.a
-
+# Mono_in_W( coefficient, (ₗₖWᵢⱼ, exponent), ... )
+coeff1 = Mono_in_W(3, (1, 1, 2, 1, 2), (2, 1, 1, 1, 2))
+print(coeff1)
 
 exit(0)
 
@@ -180,7 +222,7 @@ for h in range(0, N):
 				left = find_index(h,k,j)
 				right = find_index(k,h,j)
 				make_same_color(left, right)
-				
+
 				# 2
 				left = find_index(h,h,j)
 				right = find_index(k,k,j)
@@ -240,7 +282,7 @@ for h in range(0, N):
 				pairs.append(left)
 			if (not right in pairs):
 				pairs.append(right)
-			
+
 			print("{:d} {:d} {:d} ({:2d}) + {:d} {:d} {:d} ({:2d}) = ".format(k,k,h, find_rep(k,k,h), k,h,k, find_rep(k,h,k)),
 				"{:d} {:d} {:d} ({:2d}) + {:d} {:d} {:d} ({:2d})".format(h,k,h, find_rep(h,k,h), h,h,k, find_rep(h,h,k)))
 
