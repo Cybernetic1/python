@@ -38,7 +38,10 @@ class Poly_in_X:
 
 	# **** Adding 2 polynomials
 	def __add__(self, other):
-		return self.monos + other.monos
+		if type(other) == Mono_in_X:
+			return self + Poly_in_X(other)
+		else:
+			return self.monos + other.monos
 
 	def __str__(self):
 		s = ""
@@ -133,27 +136,34 @@ class Mono_in_W:
 				*self.ws)
 
 	# **** Multiplying 2 monomials (result is always monomial)
+	# We always use "left" multiplication of W with X, ie W∙X
 	def __mul__(self, other):
-		# collect same variables, assume vars are sorted in lexical order
-		w3 = []
-		L1 = len(self.ws)
-		L2 = len(other.ws)
-		i = j = 0
-		while i < L1 or j < L2:
-			w1 = self.ws[i][0] if i < L1 else None
-			w2 = other.ws[j][0] if j < L2 else None
-			if w1 == w2:
-				w3.append((w1, self.ws[i][1] + other.ws[j][1]))
-				i += 1
-				j += 1
-			elif w1 > w2:
-				w3.append(other.ws[j])
-				j += 1
-			else:
-				w3.append(self.ws[i])
-				i += 1
-		return Mono_in_W(self.coefficient * other.coefficient, \
-			*w3)
+		if type(other) == Mono_in_X:
+			# Return Mono_in_X, with W appearing in the coefficient
+			return Mono_in_X(Mono_in_W(other.coefficient * self.coefficient, \
+					self.ws), \
+				other.xs)
+		else:
+			# collect same variables, assume vars are sorted in lexical order
+			w3 = []
+			L1 = len(self.ws)
+			L2 = len(other.ws)
+			i = j = 0
+			while i < L1 or j < L2:
+				w1 = self.ws[i][0] if i < L1 else None
+				w2 = other.ws[j][0] if j < L2 else None
+				if w1 == w2:
+					w3.append((w1, self.ws[i][1] + other.ws[j][1]))
+					i += 1
+					j += 1
+				elif w1 > w2:
+					w3.append(other.ws[j])
+					j += 1
+				else:
+					w3.append(self.ws[i])
+					i += 1
+			return Mono_in_W(self.coefficient * other.coefficient, \
+				*w3)
 
 	def __str__(self):
 		idx = ""
@@ -186,7 +196,8 @@ print("A₁ A₂ = ", coeff1 * coeff2)
 print("A₁ + A₂ = ", coeff1 + coeff2)
 
 print("N = ? ", end="")
-N = int(input())
+# N = int(input())
+N = 3
 
 y = [0] * N							# prepare vector y
 
@@ -203,8 +214,10 @@ for k in range(0, N):
 	# yₖ = Aₖ x x + Bₖ x + Cₖ
 	#    = Σ (Aₖ x)ᵢ xᵢ + Σ Bₖᵢ xᵢ + Cₖ
 	#    = Σⱼ (Σᵢ Aₖᵢⱼ xᵢ)ⱼ xⱼ + Σⱼ Bₖⱼ xⱼ + Cₖ
-	ΣBx = 0
+	ΣBX = Poly_in_X(Mono_in_X(0))
 	for j in range(0, N):
-		ΣBx += B[k][j] * x[j]
-	y[k] = ΣBx + C[k]
+		BX = B[k][j] * x[j]
+		print(BX)
+		ΣBX += BX
+	y[k] = ΣBX + C[k]
 	print(y[k])
