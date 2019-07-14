@@ -2,7 +2,7 @@
 # ======================================================================
 
 # TO-DO:
-# * 
+# * multiply monomials in X with monomials in W
 
 # The program (this version) computes the output for 1 layer:
 # 1. Each output component is a polynomial given by the single-layer equation,
@@ -170,29 +170,31 @@ class Mono_in_W:
 mono1 = Mono_in_X(3, ((1, 1), 2), ((2, 1), 2))
 mono2 = Mono_in_X(2, ((1, 1), 1))
 mono3 = Mono_in_X(7, ((1, 1), 1))
-print(mono1)
-print(mono1 + mono2)
-print(mono2 + mono3)
-print(mono1 * mono2)
+print("m₁ = ", mono1)
+print("m₂ = ", mono2)
+print("m₃ = ", mono3)
+print("m₁ + m₂ = ", mono1 + mono2)
+print("m₂ + m₃ = ", mono2 + mono3)
+print("m₁ m₂ = ", mono1 * mono2)
 
 # **** Format:  Mono_in_W( coefficient, (ₗₖWᵢⱼ, exponent), ... )
 coeff1 = Mono_in_W(3, ((1, 1, 2, 1), 2), ((2, 1, 1, 1), 2))
 coeff2 = Mono_in_W(4, ((1, 1, 2, 1), 3), ((2, 1, 1, 1), 1))
-print(coeff1)
-print(coeff2)
-print(coeff1 * coeff2)
-print(coeff1 + coeff2)
+print("A₁ = ", coeff1)
+print("A₂ = ", coeff2)
+print("A₁ A₂ = ", coeff1 * coeff2)
+print("A₁ + A₂ = ", coeff1 + coeff2)
 
 print("N = ? ", end="")
 N = int(input())
 
-y = [0] * N				# prepare vector y
+y = [0] * N							# prepare vector y
 
-x = [0] * N				# prepare vector x
+x = [0] * N							# prepare vector x
 for k in range(0, N):
 	x[k] = Mono_in_X(1, ((1, k), 1))
 
-B = [[0] * N] * N		# prepare 2D array B
+B = [[0] * N for i in range(N)]		# prepare 2D array B
 for k in range(0, N):
 	for j in range(0, N):
 		B[k][j] = Mono_in_W(1, ((1, k, j, 0), 1))
