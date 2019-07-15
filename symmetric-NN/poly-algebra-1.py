@@ -41,7 +41,8 @@ class Poly_in_X:
 		if type(other) == Mono_in_X:
 			return self + Poly_in_X(other)
 		else:
-			return self.monos + other.monos
+			# TO-DO: Collect like terms
+			return Poly_in_X(*self.monos, *other.monos)
 
 	def __str__(self):
 		s = ""
@@ -141,8 +142,11 @@ class Mono_in_W:
 		if type(other) == Mono_in_X:
 			# Return Mono_in_X, with W appearing in the coefficient
 			return Mono_in_X(Mono_in_W(other.coefficient * self.coefficient, \
+					*self.ws), \
+				*other.xs)
+			return Mono_in_X(Mono_in_W(other.coefficient * self.coefficient, \
 					self.ws), \
-				other.xs)
+				*other.xs)
 		else:
 			# collect same variables, assume vars are sorted in lexical order
 			w3 = []
@@ -210,14 +214,24 @@ for k in range(0, N):
 	for j in range(0, N):
 		B[k][j] = Mono_in_W(1, ((1, k, j, 0), 1))
 
+C = [0] * N							# prepare vector C
+for k in range(0, N):
+	C[k] = Mono_in_W(1, ((1, k, 0, 0), 1))
+
 for k in range(0, N):
 	# yₖ = Aₖ x x + Bₖ x + Cₖ
 	#    = Σ (Aₖ x)ᵢ xᵢ + Σ Bₖᵢ xᵢ + Cₖ
 	#    = Σⱼ (Σᵢ Aₖᵢⱼ xᵢ)ⱼ xⱼ + Σⱼ Bₖⱼ xⱼ + Cₖ
 	ΣBX = Poly_in_X(Mono_in_X(0))
 	for j in range(0, N):
+		print(x[j])
+		print(B[k][j])
 		BX = B[k][j] * x[j]
+		print(type(BX))
+		print("BX.xs = ", BX.xs)
+		print("BX.coefficient = ", BX.coefficient)
 		print(BX)
-		ΣBX += BX
+		ΣBX_new = ΣBX + BX
+		ΣBX = ΣBX_new
 	y[k] = ΣBX + C[k]
 	print(y[k])
