@@ -1,8 +1,6 @@
-# Polynomial algebra -- programmatically compute invariant weight colors
-# ======================================================================
-
-# TO-DO:
-# * multiply monomials in X with monomials in W
+# Polynomial algebra (1) -- programmatically compute invariant weight colors
+# ==========================================================================
+# This version succeeds in performing one LINEAR matrix multiplication
 
 # The program (this version) computes the output for 1 layer:
 # 1. Each output component is a polynomial given by the single-layer equation,
@@ -103,11 +101,13 @@ class Mono_in_X:
 	def __str__(self):
 		idx = ""
 		for x in self.xs:
-			idx += " X"
-			idx += subscript(x[0][0])
-			idx += subscript(x[0][1])
-			idx += superscript(x[1])
-		return str(self.coefficient) + idx
+			if x[0] != (0,0):
+				idx += " X"
+				idx += subscript(x[0][0])
+				idx += subscript(x[0][1])
+				idx += superscript(x[1])
+		c = str(self.coefficient) if self.coefficient != 0 else ''
+		return c + idx
 
 # Same shit, repeated for W:
 
@@ -124,7 +124,7 @@ class Poly_in_W:
 		s = ""
 		for m in self.monos:
 			s += str(m) + " + "
-		return "\u001b[36m{" + s[:-3] + "}\u001b[0m"
+		return "{" + s[:-3] + "}"
 
 class Mono_in_W:
 	# Each monomial is attached with a coefficient
@@ -186,7 +186,10 @@ class Mono_in_W:
 			idx += subscript(w[0][2])
 			idx += subscript(w[0][3])
 			idx += superscript(w[1])
-		return str(self.coefficient) + idx
+		c = str(self.coefficient) if self.coefficient != 1 else ''
+		return "\u001b[36m" + c + idx + "\u001b[0m"
+
+print("Testing...")
 
 # **** Format:  Mono_in_X( coefficient, ((Xₗₖ), exponent), ... )
 mono1 = Mono_in_X(3, ((1, 1), 2), ((2, 1), 2))
@@ -207,39 +210,44 @@ print("A₂ = ", coeff2)
 print("A₁ A₂ = ", coeff1 * coeff2)
 print("A₁ + A₂ = ", coeff1 + coeff2)
 
-print("N = ? ", end="")
+print("\nN = ? ", end="")
 # N = int(input())
 N = 3
+print(N)
 
-y = [0] * (N + 1)							# prepare vector y
+y = [None] * (N + 1)							# prepare vector y
 
-x = [0] * (N + 1)							# prepare vector x
+x = [None] * (N + 1)							# prepare vector x
 for k in range(0, N + 1):
 	x[k] = Mono_in_X(1, ((0, k), 1))
 
-B = [[0] * (N + 1) for i in range(N + 1)]	# prepare 2D array B
+# prepare 3D array W (full layers would be 4D)
+W = [[[None for i in range(N + 1)] for j in range(N + 1)] for k in range(N + 1)]
 for k in range(0, N + 1):
 	for j in range(0, N + 1):
-		B[k][j] = Mono_in_W(1, ((0, k, j, 0), 1))
+		for i in range(0, N + 1):
+			W[k][j][i] = Mono_in_W(1, ((0, k, j, i), 1))
 
-C = [0] * N									# prepare vector C
-for k in range(0, N):
-	C[k] = Mono_in_W(1, ((1, k, 0, 0), 1))
+# The 2D array B (which represents the LINEAR part) would have elements B[k][j] = W[k][j][0]
+# 	where k,j ranges from 1...N
 
-for k in range(0, N + 1):
+# The 1D vector C (which represents the CONSTANT term) would be the element C[k] = W[k][0][0]
+#	where k ranges from 1...N
+
+# **** Try calculating the LINEAR part ****
+for k in range(1, N + 1):
 	# yₖ = Aₖ x x + Bₖ x + Cₖ
 	#    = Σ (Aₖ x)ᵢ xᵢ + Σ Bₖᵢ xᵢ + Cₖ
 	#    = Σⱼ (Σᵢ Aₖᵢⱼ xᵢ)ⱼ xⱼ + Σⱼ Bₖⱼ xⱼ + Cₖ
-	ΣBX = Poly_in_X(Mono_in_X(0))
-	for j in range(0, N + 1):
-		print(x[j])
-		print(B[k][j])
-		BX = B[k][j] * x[j]
-		print(type(BX))
-		print("BX.xs = ", BX.xs)
-		print("BX.coefficient = ", BX.coefficient)
-		print(BX)
-		ΣBX_new = ΣBX + BX
-		ΣBX = ΣBX_new
-	y[k] = ΣBX + C[k]
-	print(y[k])
+	ΣBX = Poly_in_X()							# empty polynomial
+	for j in range(0, N + 1):					# this includes the CONSTANT term
+		# print(x[j])
+		# print(W[k][j][0])
+		# BX = W[k][j][0] * x[j]
+		# print(type(BX))
+		# print("BX.xs = ", BX.xs)
+		# print("BX.coefficient = ", BX.coefficient)
+		# print(BX)
+		ΣBX += W[k][j][0] * x[j]
+	y[k] = ΣBX
+	print("y" + subscript(k) + " =", y[k])
