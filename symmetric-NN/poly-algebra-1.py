@@ -19,6 +19,14 @@
 #		The 2nd layer would consist of the free polynomial of deg 4?  That seems incorrect...
 #		Because the 1st-layer output is just n free deg-2 polynomials.
 
+# About matrix indices:
+# let x be x[0...n] where x[0] ≡ 1
+# W[l,k,j,i] where  l = layer 0...L
+#					k = for next layer's k-th component
+#					if k = 0 means IGNORED
+#					if i = 0 means LINEAR term
+#					if j = i = 0 means CONSTANT term
+
 import numpy as np
 
 def subscript(i):
@@ -203,27 +211,27 @@ print("N = ? ", end="")
 # N = int(input())
 N = 3
 
-y = [0] * N							# prepare vector y
+y = [0] * (N + 1)							# prepare vector y
 
-x = [0] * N							# prepare vector x
-for k in range(0, N):
-	x[k] = Mono_in_X(1, ((1, k), 1))
+x = [0] * (N + 1)							# prepare vector x
+for k in range(0, N + 1):
+	x[k] = Mono_in_X(1, ((0, k), 1))
 
-B = [[0] * N for i in range(N)]		# prepare 2D array B
-for k in range(0, N):
-	for j in range(0, N):
-		B[k][j] = Mono_in_W(1, ((1, k, j, 0), 1))
+B = [[0] * (N + 1) for i in range(N + 1)]	# prepare 2D array B
+for k in range(0, N + 1):
+	for j in range(0, N + 1):
+		B[k][j] = Mono_in_W(1, ((0, k, j, 0), 1))
 
-C = [0] * N							# prepare vector C
+C = [0] * N									# prepare vector C
 for k in range(0, N):
 	C[k] = Mono_in_W(1, ((1, k, 0, 0), 1))
 
-for k in range(0, N):
+for k in range(0, N + 1):
 	# yₖ = Aₖ x x + Bₖ x + Cₖ
 	#    = Σ (Aₖ x)ᵢ xᵢ + Σ Bₖᵢ xᵢ + Cₖ
 	#    = Σⱼ (Σᵢ Aₖᵢⱼ xᵢ)ⱼ xⱼ + Σⱼ Bₖⱼ xⱼ + Cₖ
 	ΣBX = Poly_in_X(Mono_in_X(0))
-	for j in range(0, N):
+	for j in range(0, N + 1):
 		print(x[j])
 		print(B[k][j])
 		BX = B[k][j] * x[j]
