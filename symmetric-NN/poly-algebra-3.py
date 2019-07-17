@@ -185,7 +185,8 @@ class Mono_in_X:
 				idx += subscript(x[0][1])
 				if x[1] > 1:			# if superscript == 1, display as nothing
 					idx += superscript(x[1])
-		c = str(self.coefficient) if self.coefficient != 0 else ''
+		# c = str(self.coefficient) if self.coefficient != 0 else ''
+		c = ''							# skip display of coefficients to reduce bulk
 		return c + "\u001b[31;1m" + idx + "\u001b[0m"
 
 # Same shit, repeated for W:
@@ -204,6 +205,21 @@ class Poly_in_W:
 		else:
 			return Poly_in_W(*self.monos, *other.monos)
 
+	# **** Multiplying 2 polynomials
+	def __mul__(self, other):
+		if type(other) == Mono_in_W:
+			ΣmW = Poly_in_W()		# empty
+			for m in self.monos:
+				ΣmW += m * other
+			return ΣmW
+		else:
+			# TO-DO: Collect like terms
+			ΣXY = Poly_in_W()		# empty
+			for x in self.monos:
+				for y in other.monos:
+					ΣXY += x * y
+			return ΣXY
+
 	def __str__(self):
 		s = ""
 		for m in self.monos:
@@ -219,8 +235,11 @@ class Mono_in_W:
 
 	# **** Adding 2 monomials (may return polynomial)
 	def __add__(self, other):
+		if type(other) == Poly_in_W:
+			# self = Mono_in_W,  other = Poly_in_W
+			return other + self
 		# check if their vars & exponents are equal
-		if self.ws != other.ws:
+		elif self.ws != other.ws:
 			# return new polynomial
 			return Poly_in_W(self, other)
 		else:
@@ -245,6 +264,13 @@ class Mono_in_W:
 			for m in other.monos:
 				ΣWX += self * m
 			return ΣWX
+		elif type(other) == Poly_in_W:
+			# self = Mono_in_W,  other = Poly_in_W
+			# distribute multiplication:
+			Σmw = Poly_in_W()		# empty
+			for m2 in other.monos:
+				Σmw += self * m2
+			return Σmw
 		else:
 			# collect same variables, assume vars are sorted in lexical order
 			w3 = []
@@ -355,7 +381,10 @@ for k in range(1, N + 1):
 
 print("\nTry stacking one QUADRATIC layer over another QUADRATIC layer...")
 
-z = [None] * (N + 1)							# prepare vector z
+# set y[0] ≡ 1, y = result from previous step
+y[0] = Mono_in_X(1)
+
+z = [None] * (N + 1)							# prepare new vector z
 
 # prepare 3D array W1
 W1 = [[[None for i in range(N + 1)] for j in range(N + 1)] for k in range(N + 1)]
@@ -363,9 +392,6 @@ for k in range(0, N + 1):
 	for j in range(0, N + 1):
 		for i in range(0, N + 1):
 			W1[k][j][i] = Mono_in_W(1, ((1, k, j, i), 1))
-
-# set y[0] ≡ 1
-y[0] = Mono_in_X(1)
 
 for k in range(1, N + 1):
 	ΣΣWYY = Poly_in_X()
@@ -380,7 +406,40 @@ for k in range(1, N + 1):
 		ΣΣWYY += ΣWYY
 	# print("======================================================================")
 	ΣΣWYY.monos = tuple(sorted(ΣΣWYY.monos))
-	print("pre-collect = ", ΣΣWYY)
+	# print("pre-collect = ", ΣΣWYY)
 	z[k] = ΣΣWYY.collect()
-	print("\nz" + subscript(k) + " =", z[k])
+	if k == 1:
+		print("\nz" + subscript(k) + " =", z[k])
 	print("# terms = ", len(z[k].monos))
+
+print("\nTry adding the 3rd QUADRATIC layer...")
+
+# set z[0] ≡ 1, z = result from previous step
+z[0] = Mono_in_X(1)
+
+u = [None] * (N + 1)							# prepare new vector u
+
+# prepare 3D array W2
+W2 = [[[None for i in range(N + 1)] for j in range(N + 1)] for k in range(N + 1)]
+for k in range(0, N + 1):
+	for j in range(0, N + 1):
+		for i in range(0, N + 1):
+			W2[k][j][i] = Mono_in_W(1, ((2, k, j, i), 1))
+
+for k in [1]:									# to save time, only calculate 1st component
+	ΣΣWZZ = Poly_in_X()
+	for j in range(0, N + 1):
+		ΣWZ = Poly_in_X()
+		for i in range(0, N + 1):
+			if j >= i:
+				ΣWZ += W2[k][j][i] * z[i]
+		# print("ΣWZ = ", ΣWZ)
+		ΣWZZ = ΣWZ * z[j]
+		# print("ΣWZZ = ", ΣWZZ)
+		ΣΣWZZ += ΣWZZ
+	print("======================================================================")
+	ΣΣWZZ.monos = tuple(sorted(ΣΣWZZ.monos))
+	# print("pre-collect = ", ΣΣWZZ)
+	u[k] = ΣΣWZZ.collect()
+	print("\nu" + subscript(k) + " =", u[k])
+	print("# terms = ", len(u[k].monos))
