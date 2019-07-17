@@ -1,6 +1,6 @@
-# Polynomial algebra (2) -- programmatically compute invariant weight colors
+# Polynomial algebra (3) -- programmatically compute invariant weight colors
 # ==========================================================================
-# This version succeeds in composing 2 QUADRATIC layers and printing their overall polynomials
+# ...composing 3 QUADRATIC layers!!
 
 # The program (this version) computes the output for 1 layer:
 # 1. Each output component is a polynomial given by the single-layer equation,
@@ -11,11 +11,6 @@
 #		each eⱼ denotes exponent of j-th variable xⱼ
 # 4. Each coefficient A may be an (integral) polynomial in terms of the weights Wᵢⱼₖₗ.
 #		On the 1st layer, every A is just a single W.
-#		But at this point, I don't know what happens when layers are composed.
-#		Let's see... 1 layer consists of all possible terms of degree ≤ 2, in the sense that
-#		each yᵢ is the 'free' deg-2 polynomial.
-#		The 2nd layer would consist of the free polynomial of deg 4?  That seems incorrect...
-#		Because the 1st-layer output is just n free deg-2 polynomials.
 
 # About matrix indices:
 # let x be x[0...n] where x[0] ≡ 1
@@ -77,7 +72,7 @@ class Poly_in_X:
 			prev = m
 			temp_coefficient += m.coefficient
 		if temp_coefficient.monos != ():			# not empty, empty it
-			# print("expected!")
+			# print("Expected!")
 			thing = Mono_in_X(temp_coefficient, *m.xs)
 			new_poly += thing
 		else:
@@ -178,17 +173,6 @@ class Mono_in_X:
 				# print("other = 0")
 				# print(str(self) + "\u001b[35m>\u001b[0m" + str(other), end='\n')
 				return False
-
-		# ========== old code ===========
-		if other.xs == self.xs:
-			print("\u001b[32m0\u001b[0m", end='')
-			return 0
-		elif other.xs < self.xs:
-			print(str(other) + "\u001b[35m>\u001b[0m" + str(self), end='\n')
-			return 1
-		else:
-			print(str(other) + "\u001b[33m<\u001b[0m" + str(self), end='\n')
-			return -1
 
 	def __str__(self):
 		idx = ""

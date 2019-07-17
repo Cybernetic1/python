@@ -25,8 +25,6 @@
 #					if i = 0 means LINEAR term
 #					if j = i = 0 means CONSTANT term
 
-import numpy as np
-
 def subscript(i):
 	return "₀₁₂₃₄₅₆₇₈₉"[i]
 
