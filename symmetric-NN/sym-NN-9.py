@@ -1,6 +1,6 @@
 # TEST 9 -- symmetric quadratic NN, "colorful" version
 # ====================================================
-# This version includes the i<j condition, ie, the commutative xᵢxⱼ = xⱼxᵢ condition is built-in.
+# This version includes the i ≤ j condition, ie, the commutative xᵢxⱼ = xⱼxᵢ condition is built-in.
 # This reduces the number of weights needed to represent the matrices.
 
 import numpy as np
