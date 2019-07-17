@@ -1,5 +1,6 @@
 # Polynomial algebra (2) -- programmatically compute invariant weight colors
 # ==========================================================================
+# This version succeeds in composing 2 QUADRATIC layers and printing their overall polynomials
 
 # The program (this version) computes the output for 1 layer:
 # 1. Each output component is a polynomial given by the single-layer equation,
