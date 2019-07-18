@@ -17,7 +17,7 @@ N = int(input())
 def find_index(z,x,y):
 	return z * N * N + y * N + x
 
-def find_zyx(index):
+def find_zxy(index):
 	z = index // (N * N)
 	y = (index % (N * N)) // N
 	x = index % N
@@ -192,14 +192,14 @@ for group in colors:
 	group.sort()					# sort the colors as well
 	β = np.random.rand()
 	for index in group:
-		(z,y,x) = find_zyx(index)
-		A[z][y][x] = β
+		(z,x,y) = find_zxy(index)
+		A[z][x][y] = β
 
 for group in removed_colors:
 	group.sort()					# sort the colors as well
 	for index in group:
-		(z,y,x) = find_zyx(index)
-		A[z][y][x] = 0
+		(z,x,y) = find_zxy(index)
+		A[z][x][y] = 0
 
 print("\nColors = ", colors)
 
