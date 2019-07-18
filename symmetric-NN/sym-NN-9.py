@@ -21,7 +21,7 @@ def find_zyx(index):
 	z = index // (N * N)
 	y = (index % (N * N)) // N
 	x = index % N
-	return (z,y,x)
+	return (z,x,y)
 
 # There are N x N x N = N^3 weights in the 3D matrix A,
 # but some weights are not used (those for which i ≤ j)
@@ -234,7 +234,7 @@ num_Errors = 0
 print("\nTesting....")
 debugFlag = False
 
-for i in range(0, 10):				# repeat test 10 times
+for t in range(0, 10):				# repeat test 10 times
 
 	x = np.random.rand(N)
 
@@ -246,12 +246,19 @@ for i in range(0, 10):				# repeat test 10 times
 	Y2 = np.zeros(N)
 
 	for k in range(0, N):
-		B_k = A[k].dot(x)
-		# print("B_k = ", B_k)
-		Y[k] = B_k.dot(x)
+		Σ = 0.0
+		for j in range(0, N):
+			for i in range(0, N):
+				if i <= j:
+					Σ += A[k][j][i] * x[i] * x[j]
+		Y[k] = Σ
 
-		C_k = A[k].dot(σx)
-		Y2[k] = C_k.dot(σx)
+		Σ = 0.0
+		for j in range(0, N):
+			for i in range(0, N):
+				if i <= j:
+					Σ += A[k][j][i] * σx[i] * σx[j]
+		Y2[k] = Σ
 
 	σY = Y[σ]					# real answer
 
