@@ -104,74 +104,85 @@ for h in range(0, N):
 		make_same_color(left, right)
 print("so far: ", colors)
 
-print("CYAN & OLIVE equations, 1st pair...")
-for h in range(0, N):
-	for k in range(0, N):
-		for j in range(0, N):
-			if j > max(h, k):
-				# 1 (CYAN)
-				left = find_index(h,h,j)
-				right = find_index(k,k,j)
-				make_same_color(left, right)
-
-				# 2 (OLIVE)
-				left = find_index(h,k,j)
-				right = find_index(k,h,j)
-				make_same_color(left, right)
-print("so far: ", colors)
-
-print("RED & BLUE equations, 1st pair...")
+print("Colorful equations...")
 for h in range(0, N):
 	for k in range(0, N):
 		for i in range(0, N):
-			# (RED)
-			if i <= k and i < h:
-				left = find_index(h,i,h)
-				right = find_index(k,i,k)
-				make_same_color(left, right)
 
-			# (BLUE)
-			if i <= h and i < k:
-				left = find_index(h,i,k)
-				right = find_index(k,i,h)
-				make_same_color(left, right)
+			if h < k:
+				# 1 (CYAN in CYAN)
+				if i > k:
+					left = find_index(k,k,i)
+					right = find_index(h,h,i)
+					make_same_color(left, right)
+
+				# 2 (OLIVE in OLIVE)
+				if i > k:
+					left = find_index(k,h,i)
+					right = find_index(h,k,i)
+					make_same_color(left, right)
+
+				# 3 (RED in RED)
+				if i < h:
+					left = find_index(k,i,k)
+					right = find_index(h,i,h)
+					make_same_color(left, right)
+
+				# 4 (BLUE in BLUE)
+				if i < h:
+					left = find_index(k,i,h)
+					right = find_index(h,i,k)
+					make_same_color(left, right)
+
+				# 5 (RED in CYAN)
+				if h < i and i < k:
+					left = find_index(k,i,k)
+					right = find_index(h,h,i)
+					make_same_color(left, right)
+
+				# 6 (OLIVE in BLUE)
+				if h < i and i < k:
+					left = find_index(k,h,i)
+					right = find_index(h,i,k)
+					make_same_color(left, right)
+
+			elif k < h:
+				# 1 (CYAN in CYAN)
+				if i > h:
+					left = find_index(k,k,i)
+					right = find_index(h,h,i)
+					make_same_color(left, right)
+
+				# 2 (OLIVE in OLIVE)
+				if i > h:
+					left = find_index(k,h,i)
+					right = find_index(h,k,i)
+					make_same_color(left, right)
+
+				# 3 (RED in RED)
+				if i < k:
+					left = find_index(k,i,k)
+					right = find_index(h,i,h)
+					make_same_color(left, right)
+
+				# 4 (BLUE in BLUE)
+				if i < k:
+					left = find_index(k,i,h)
+					right = find_index(h,i,k)
+					make_same_color(left, right)
+
+				# 5 (CYAN in RED)
+				if k < i and i < h:
+					left = find_index(k,k,i)
+					right = find_index(h,i,h)
+					make_same_color(left, right)
+
+				# 6 (BLUE in OLIVE)
+				if k < i and i < h:
+					left = find_index(k,i,h)
+					right = find_index(h,k,i)
+					make_same_color(left, right)
 print("so far: ", colors)
-
-print("RED & BLUE equations, 2nd pair...")
-for h in range(0, N):
-	for k in range(0, N):
-		# (RED)
-		if k <= h:
-			left = find_index(h,k,h)
-			right = find_index(k,k,h)
-			make_same_color(left, right)
-
-		# (BLUE)
-		if h <= k:
-			left = find_index(h,h,k)
-			right = find_index(k,h,k)
-			make_same_color(left, right)
-print("so far: ", colors)
-
-print("======= pre-removal ======")
-
-print("CYAN & OLIVE equations, 2nd pair...")
-for h in range(0, N):
-	for k in range(0, N):
-		for j in range(0, N):
-			# 1 (CYAN = OLIVE = 0)
-			if k >= j and j > h:
-				c = find_index(h,h,j)
-				remove_color(c)
-				c = find_index(k,h,j)
-				remove_color(c)
-
-			# 2 (OLIVE = CYAN = 0)
-			if h >= j and j > k:
-				c = find_index(h,k,j)
-				remove_color(c)
-				c = find_index(k,k,j)
-				remove_color(c)
 
 # ============ fill colors with values =============
 
@@ -191,17 +202,15 @@ for group in removed_colors:
 		A[z][y][x] = 0
 
 print("\nColors = ", colors)
-print("\nRemoved colors = ", removed_colors)
 
 print("\nResult: A =\n", A)
 
-print("\n# colors = ", len(colors), " - removed = ", len(removed_colors))
+print("\n# colors = ", len(colors))
 
-num_colors = len(colors) - len(removed_colors)
+num_colors = len(colors)
 print("\n# colors = ", num_colors, "of", N**3, "=", "{:.1f}".format(num_colors * 100.0 / N**3),\
 	end="%\n")
 
-exit(0)
 # =========== verifications =============
 
 print("\nNumerically counting # colors = ", end="")
@@ -221,58 +230,6 @@ print(len(numeric_colors))
 print(numeric_colors)
 
 num_Errors = 0
-
-print("\nVerifying 'missing' equations....")
-def error_missing(typ, a1,a2,a3, b1,b2,b3):
-	num_Errors += 1
-	print("type {:d}  A[{:d}][{:d}][{:d}] ≠ A[{:d}][{:d}][{:d}]".format(typ, a1,a2,a3,b1,b2,b3),\
-		end="   ")
-	print("{:.5f} ≠ {:.5f}".format(A[a1][a2][a3], A[b1][b2][b3]))
-
-for h in range(0, N):
-	for k in range(0, N):
-		for j in range(0, N):
-			if j != h and j != k:
-				if A[h][k][j] != A[k][h][j]:
-					error_missing(1, h,k,j,   k,h,j)
-				if A[h][h][j] != A[k][k][j]:
-					error_missing(2, h,h,j,   k,k,j)
-				if A[h][j][k] != A[k][j][h]:
-					error_missing(3, h,j,k,   k,j,h)
-				if A[h][j][h] != A[k][j][k]:
-					error_missing(4, h,j,h,   k,j,k)
-
-print("\nVerifying 'additive' constraint....")
-
-def error_additive(a1,a2,a3, b1,b2,b3, c1,c2,c3, d1,d2,d3):
-	global num_Errors
-	num_Errors += 1
-	print("{:d},{:d},{:d} + {:d},{:d},{:d} ≠ {:d},{:d},{:d} + {:d},{:d},{:d}".\
-		format(a1,a2,a3, b1,b2,b3, c1,c2,c3, d1,d2,d3), end="   ")
-	print("{:.5f} ≠ {:.5f}".format(A[a1][a2][a3] + A[b1][b2][b3], A[c1][c2][c3] + A[d1][d2][d3]))
-
-for h in range(0, N):
-	for k in range(0, N):
-		if A[k][k][h] + A[k][h][k] != A[h][k][h] + A[h][h][k]:
-			error_additive(k,k,h,  k,h,k,   h,k,h,   h,h,k)
-
-print("\nVerifying 1st equation....")
-
-def error_1st(a1,a2,a3, b1,b2,b3):
-	num_Errors += 1
-	print("{:d},{:d},{:d} ≠ {:d},{:d},{:d}".\
-		format(a1,a2,a3, b1,b2,b3), end="   ")
-	print("{:.5f} ≠ {:.5f}".format(A[a1][a2][a3], A[b1][b2][b3]))
-
-for h in range(0, N):
-	for k in range(0, N):
-		for i in range(0, N):
-			for j in range(0,  N):
-				if i != h and i != k and j != h and j != k:
-					if A[k][i][j] != A[h][i][j]:
-						error_1st(k,i,j, h,i,j)
-
-print("\nErrors detected = ", num_Errors)
 
 print("\nTesting....")
 debugFlag = False
