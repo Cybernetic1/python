@@ -1,5 +1,5 @@
-# TEST 9 -- symmetric quadratic NN, "colorful" version
-# ====================================================
+# TEST 9 -- symmetric quadratic NN, "colorful" i ≤ j version
+# ==========================================================
 # This version includes the i ≤ j condition, ie, the commutative xᵢxⱼ = xⱼxᵢ condition is built-in.
 # This reduces the number of weights needed to represent the matrices.
 
@@ -14,10 +14,6 @@ import numpy as np
 print("N = ?", end="")
 N = int(input())
 
-# There are N x N x N = N^3 weights in the 3D matrix A,
-# but some weights are zero (not used)
-colors = [[i] for i in range(0, N **3)]
-
 def find_index(z,y,x):
 	return z * N * N + y * N + x
 
@@ -26,6 +22,18 @@ def find_zyx(index):
 	y = (index % (N * N)) // N
 	x = index % N
 	return (z,y,x)
+
+# There are N x N x N = N^3 weights in the 3D matrix A,
+# but some weights are not used (those for which i ≤ j)
+colors = []
+for k in range(0, N):
+	for j in range(0, N):
+		for i in range(0, N):
+			if i <= j:
+				c = find_index(k,j,i)
+				colors.append([c])
+
+print(len(colors), "colors out of", N**3)
 
 # =================================
 # find the left color in the list
@@ -48,16 +56,38 @@ def make_same_color(left, right):
 	colors2.append(temp)
 	colors = colors2
 
-# 1st equation
+# =================================
+# Remove a color from the 'colors' list
+# this means the entire group should be removed
+removed_colors = []
+
+def remove_color(c):
+	print("remove ", c)
+	global colors
+
+	def check(g):
+		global removed_colors
+		if c in g:
+			removed_colors.append(g)
+			return False
+		else:
+			return True
+
+	colors2 = [group for group in colors if check(group)]
+	print("colors2 = ", colors2)
+	colors = colors2
+
+# 1st equation (BLACK)
 for h in range(0, N):
 	for k in range(0, N):
 		for i in range(0, N):
 			for j in range(0, N):
-				if i != h and i != k and j != h and j != k:
+				if i <= j and i != h and i != k and j != h and j != k:
 					left = find_index(h,i,j)
 					right = find_index(k,i,j)
 					make_same_color(left, right)
 
+# diagonal equations (BLACK)
 for h in range(0, N):
 	for k in range(0, N):
 
@@ -71,30 +101,69 @@ for h in range(0, N):
 		right = find_index(k,h,h)
 		make_same_color(left, right)
 
-# "missing" equations
+# CYAN & OLIVE equations, 1st pair:
 for h in range(0, N):
 	for k in range(0, N):
 		for j in range(0, N):
-			if j != h and j != k:
-				# 1
-				left = find_index(h,k,j)
-				right = find_index(k,h,j)
-				make_same_color(left, right)
-				
-				# 2
+			if j > max(h, k):
+				# 1 (CYAN)
 				left = find_index(h,h,j)
 				right = find_index(k,k,j)
 				make_same_color(left, right)
 
-				# 3
-				left = find_index(h,j,k)
-				right = find_index(k,j,h)
+				# 2 (OLIVE)
+				left = find_index(h,k,j)
+				right = find_index(k,h,j)
 				make_same_color(left, right)
 
-				# 4
-				left = find_index(h,j,h)
-				right = find_index(k,j,k)
+# CYAN & OLIVE equations, 2nd pair:
+for h in range(0, N):
+	for k in range(0, N):
+		for j in range(0, N):
+			# 1 (CYAN = OLIVE = 0)
+			if k >= j and j > h:
+				c = find_index(h,h,j)
+				remove_color(c)
+				c = find_index(k,h,j)
+				remove_color(c)
+
+			# 2 (OLIVE = CYAN = 0)
+			if h >= j and j > k:
+				c = find_index(h,k,j)
+				remove_color(c)
+				c = find_index(k,k,j)
+				remove_color(c)
+
+# RED & BLUE equations, 1st pair:
+for h in range(0, N):
+	for k in range(0, N):
+		for i in range(0, N):
+			# (RED)
+			if i <= k and i != h:
+				left = find_index(h,i,h)
+				right = find_index(k,i,k)
 				make_same_color(left, right)
+
+			# (BLUE)
+			if i <= h and i != k:
+				left = find_index(h,i,k)
+				right = find_index(k,i,h)
+				make_same_color(left, right)
+
+# RED & BLUE equations, 2nd pair:
+for h in range(0, N):
+	for k in range(0, N):
+		# (RED)
+		if k <= h:
+			left = find_index(h,k,h)
+			right = find_index(k,k,h)
+			make_same_color(left, right)
+
+		# (BLUE)
+		if h <= k:
+			left = find_index(h,h,k)
+			right = find_index(k,h,k)
+			make_same_color(left, right)
 
 # ============ fill colors with values =============
 
@@ -107,72 +176,20 @@ for group in colors:
 		(z,y,x) = find_zyx(index)
 		A[z][y][x] = β
 
+for group in removed_colors:
+	group.sort()					# sort the colors as well
+	for index in group:
+		(z,y,x) = find_zyx(index)
+		A[z][y][x] = 0
+
 print("\nColors = ", colors)
-
-# ============ enforce additive constraints while respecting colors ===============
-
-print("\nEnforcing 'additive' constraint while respecting colors:")
-
-# Find representative in equivalence class (ie, smallest member)
-def find_rep(z,y,x):
-	idx = find_index(z,y,x)
-	for group in colors:
-		if idx in group:
-			return group[0]			# assume colors are sorted
-	return -1						# this indicates an error
-
-print("Finding pairs....")
-pairs = []
-for h in range(0, N):
-	for k in range(0, N):
-		if h < k:					# also excluding h = k
-			# a + b = c + d
-			a = find_rep(k,k,h)
-			b = find_rep(k,h,k)
-			c = find_rep(h,k,h)
-			d = find_rep(h,h,k)
-			# sort order within each pair:
-			left =  [a,b] if a < b else [b,a]
-			right = [c,d] if c < d else [d,c]
-			if pairs != [] and (not left in pairs) and (not right in pairs):
-				print("ERROR:  additive constraints not a chain")
-			if (not left in pairs):
-				pairs.append(left)
-			if (not right in pairs):
-				pairs.append(right)
-			
-			print("{:d} {:d} {:d} ({:2d}) + {:d} {:d} {:d} ({:2d}) = ".format(k,k,h, find_rep(k,k,h), k,h,k, find_rep(k,h,k)),
-				"{:d} {:d} {:d} ({:2d}) + {:d} {:d} {:d} ({:2d})".format(h,k,h, find_rep(h,k,h), h,h,k, find_rep(h,h,k)))
-
-print("pairs = ", pairs)
-
-print("Setting pairs....")
-β = np.random.rand()
-additive_colors = 0
-for pair in pairs:
-	additive_colors += 1
-	α = np.random.rand()
-	i = pair[0]
-	# all entries of the same color as i = A[?,?,?] has to be changed as well
-	for group in colors:
-		if i in group:
-			for j in group:
-				(z,y,x) = find_zyx(j)
-				A[z,y,x] = α
-
-	i = pair[1]
-	# all entries of the same color as i = A[?,?,?] has to be changed as well
-	for group in colors:
-		if i in group:
-			for j in group:
-				(z,y,x) = find_zyx(j)
-				A[z,y,x] = 2 * β - α
+print("\nRemoved colors = ", removed_colors)
 
 print("\nResult: A =\n", A)
 
-print("\n# colors = ", len(colors), " - additive constraint = ", additive_colors)
+print("\n# colors = ", len(colors), " - removed = ", len(removed_colors))
 
-num_colors = len(colors) - additive_colors
+num_colors = len(colors) - len(removed_colors)
 print("\n# colors = ", num_colors, "of", N**3, "=", "{:.1f}".format(num_colors * 100.0 / N**3),\
 	end="%\n")
 
