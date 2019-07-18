@@ -87,6 +87,7 @@ for h in range(0, N):
 					left = find_index(h,i,j)
 					right = find_index(k,i,j)
 					make_same_color(left, right)
+print("so far: ", colors)
 
 print("diagonal equations (BLACK)...")
 for h in range(0, N):
@@ -101,6 +102,7 @@ for h in range(0, N):
 		left = find_index(h,k,k)
 		right = find_index(k,h,h)
 		make_same_color(left, right)
+print("so far: ", colors)
 
 print("CYAN & OLIVE equations, 1st pair...")
 for h in range(0, N):
@@ -116,6 +118,7 @@ for h in range(0, N):
 				left = find_index(h,k,j)
 				right = find_index(k,h,j)
 				make_same_color(left, right)
+print("so far: ", colors)
 
 print("RED & BLUE equations, 1st pair...")
 for h in range(0, N):
@@ -132,6 +135,7 @@ for h in range(0, N):
 				left = find_index(h,i,k)
 				right = find_index(k,i,h)
 				make_same_color(left, right)
+print("so far: ", colors)
 
 print("RED & BLUE equations, 2nd pair...")
 for h in range(0, N):
@@ -147,8 +151,9 @@ for h in range(0, N):
 			left = find_index(h,h,k)
 			right = find_index(k,h,k)
 			make_same_color(left, right)
+print("so far: ", colors)
 
-print("pre-removal: ", colors)
+print("======= pre-removal ======")
 
 print("CYAN & OLIVE equations, 2nd pair...")
 for h in range(0, N):
