@@ -9,7 +9,7 @@ import numpy as np
 # consisting of N blocks, each of size (N ⨉  N)
 # satisfying the "colorful" constraints in my PDF file
 # We want to show that this is EQUIVARIANT
-# ********* Test result is ??? *********
+# ********* Test result is SUCCESS *********
 
 print("N = ?", end="")
 N = int(input())
@@ -182,6 +182,7 @@ for h in range(0, N):
 					left = find_index(k,i,h)
 					right = find_index(h,k,i)
 					make_same_color(left, right)
+
 print("so far: ", colors)
 
 # ============ fill colors with values =============
@@ -234,7 +235,7 @@ num_Errors = 0
 print("\nTesting....")
 debugFlag = False
 
-for t in range(0, 10):				# repeat test 10 times
+for t in range(0, 30):				# repeat test 10 times
 
 	x = np.random.rand(N)
 
