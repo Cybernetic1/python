@@ -14,7 +14,7 @@ import numpy as np
 print("N = ?", end="")
 N = int(input())
 
-def find_index(z,y,x):
+def find_index(z,x,y):
 	return z * N * N + y * N + x
 
 def find_zyx(index):
@@ -30,10 +30,11 @@ for k in range(0, N):
 	for j in range(0, N):
 		for i in range(0, N):
 			if i <= j:
-				c = find_index(k,j,i)
+				c = find_index(k,i,j)
 				colors.append([c])
 
 print(len(colors), "colors out of", N**3)
+print("original colors = ", colors)
 
 # =================================
 # find the left color in the list
@@ -77,17 +78,17 @@ def remove_color(c):
 	print("colors2 = ", colors2)
 	colors = colors2
 
-# 1st equation (BLACK)
+print("1st equation (BLACK)...")
 for h in range(0, N):
 	for k in range(0, N):
-		for i in range(0, N):
-			for j in range(0, N):
+		for j in range(0, N):
+			for i in range(0, N):
 				if i <= j and i != h and i != k and j != h and j != k:
 					left = find_index(h,i,j)
 					right = find_index(k,i,j)
 					make_same_color(left, right)
 
-# diagonal equations (BLACK)
+print("diagonal equations (BLACK)...")
 for h in range(0, N):
 	for k in range(0, N):
 
@@ -101,7 +102,7 @@ for h in range(0, N):
 		right = find_index(k,h,h)
 		make_same_color(left, right)
 
-# CYAN & OLIVE equations, 1st pair:
+print("CYAN & OLIVE equations, 1st pair...")
 for h in range(0, N):
 	for k in range(0, N):
 		for j in range(0, N):
@@ -116,7 +117,40 @@ for h in range(0, N):
 				right = find_index(k,h,j)
 				make_same_color(left, right)
 
-# CYAN & OLIVE equations, 2nd pair:
+print("RED & BLUE equations, 1st pair...")
+for h in range(0, N):
+	for k in range(0, N):
+		for i in range(0, N):
+			# (RED)
+			if i <= k and i < h:
+				left = find_index(h,i,h)
+				right = find_index(k,i,k)
+				make_same_color(left, right)
+
+			# (BLUE)
+			if i <= h and i < k:
+				left = find_index(h,i,k)
+				right = find_index(k,i,h)
+				make_same_color(left, right)
+
+print("RED & BLUE equations, 2nd pair...")
+for h in range(0, N):
+	for k in range(0, N):
+		# (RED)
+		if k <= h:
+			left = find_index(h,k,h)
+			right = find_index(k,k,h)
+			make_same_color(left, right)
+
+		# (BLUE)
+		if h <= k:
+			left = find_index(h,h,k)
+			right = find_index(k,h,k)
+			make_same_color(left, right)
+
+print("pre-removal: ", colors)
+
+print("CYAN & OLIVE equations, 2nd pair...")
 for h in range(0, N):
 	for k in range(0, N):
 		for j in range(0, N):
@@ -133,37 +167,6 @@ for h in range(0, N):
 				remove_color(c)
 				c = find_index(k,k,j)
 				remove_color(c)
-
-# RED & BLUE equations, 1st pair:
-for h in range(0, N):
-	for k in range(0, N):
-		for i in range(0, N):
-			# (RED)
-			if i <= k and i != h:
-				left = find_index(h,i,h)
-				right = find_index(k,i,k)
-				make_same_color(left, right)
-
-			# (BLUE)
-			if i <= h and i != k:
-				left = find_index(h,i,k)
-				right = find_index(k,i,h)
-				make_same_color(left, right)
-
-# RED & BLUE equations, 2nd pair:
-for h in range(0, N):
-	for k in range(0, N):
-		# (RED)
-		if k <= h:
-			left = find_index(h,k,h)
-			right = find_index(k,k,h)
-			make_same_color(left, right)
-
-		# (BLUE)
-		if h <= k:
-			left = find_index(h,h,k)
-			right = find_index(k,h,k)
-			make_same_color(left, right)
 
 # ============ fill colors with values =============
 
@@ -193,6 +196,7 @@ num_colors = len(colors) - len(removed_colors)
 print("\n# colors = ", num_colors, "of", N**3, "=", "{:.1f}".format(num_colors * 100.0 / N**3),\
 	end="%\n")
 
+exit(0)
 # =========== verifications =============
 
 print("\nNumerically counting # colors = ", end="")
