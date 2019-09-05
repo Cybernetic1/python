@@ -1,0 +1,26 @@
+
+[32m——`—,—{[31;1m@[0m
+
+digraph {
+    subgraph cluster_1 {
+    label = beta
+    BetaNode 140514165071952 -> BetaMemory 140514164985744;
+    BetaMemory 140514164985744 -> JoinNode 140514164985680;
+    ┌─ amem: <rete.alpha.AlphaMemory instance at 0x7fcc00e3bdd0>
+    ├─ has: ($x loves $y)
+    JoinNode 140514164985680 -> BetaMemory 140514164985616;
+    BetaMemory 140514164985616 -> JoinNode 140514165422096;
+    ┌─ amem: <rete.alpha.AlphaMemory instance at 0x7fcc00e3bdd0>
+    ├─ has: ($y loves $x)
+    ├─ test: <TestAtJoinNode WME.identifier=Condition0.value?>
+    ├─ test: <TestAtJoinNode WME.value=Condition0.identifier?>
+    JoinNode 140514165422096 -> PNode 140514164985808;
+    }
+    subgraph cluster_0 {
+    label = alpha
+    no-test=None? -> attribute=loves?;
+    }
+    label = alpha2beta
+    attribute=loves? -> JoinNode 140514164985680;
+    attribute=loves? -> JoinNode 140514165422096;
+}

@@ -23,6 +23,7 @@ class PNode(BetaNode):
         """
         new_token = Token(token, wme, node=self, binding=binding)
         self.items.append(new_token)
+        print "**** firing, new token = %s\n" % new_token
 
     def execute(self, *args, **kwargs):
         raise NotImplementedError
