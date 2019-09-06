@@ -3,22 +3,22 @@ from rete.common import FIELDS
 
 class ConstantTestNode:
 
-    def __init__(self, field_to_test, field_must_equal=None, amem=None, children=None):
+    def __init__(self, field_to_test, thing_the_field_must_equal=None, amem=None, children=None):
         """
         :type field_to_test: str
         :type children: list of ConstantTestNode
         :type amem: AlphaMemory
         """
         self.field_to_test = field_to_test
-        self.field_must_equal = field_must_equal
+        self.thing_the_field_must_equal = thing_the_field_must_equal
         self.amem = amem
         self.children = children if children else []
 
     def __repr__(self):
-        return "<ConstantTestNode %s=%s?>" % (self.field_to_test, self.field_must_equal)
+        return "<ConstantTestNode %s=%s?>" % (self.field_to_test, self.thing_the_field_must_equal)
 
     def dump(self):
-        return "%s=%s?" % (self.field_to_test, self.field_must_equal)
+        return "%s=%s?" % (self.field_to_test, self.thing_the_field_must_equal)
 
     def activation(self, wme):
         """
@@ -26,8 +26,8 @@ class ConstantTestNode:
         """
         if self.field_to_test != 'no-test':
             v = getattr(wme, self.field_to_test)
-            if v != self.field_must_equal:
-                return False
+            if v != self.thing_the_field_must_equal:
+                return False		# failed the test; don't propagate any further
         if self.amem:
             self.amem.activation(wme)
         for child in self.children:
@@ -61,7 +61,7 @@ class ConstantTestNode:
         :type parent: ConstantTestNode
         """
         for child in parent.children:
-            if child.field_to_test == field and child.field_must_equal == symbol:
+            if child.field_to_test == field and child.thing_the_field_must_equal == symbol:
                 return child
         new_node = ConstantTestNode(field, symbol, children=[])
         parent.children.append(new_node)
