@@ -51,11 +51,11 @@ class Network:
 
     def dump(self):
         self.buf = cStringIO.StringIO()
-        self.buf.write('digraph {\n')
+        self.buf.write('===== Rete Network =====\n\n')
         self.dump_beta(self.beta_root)
         self.dump_alpha(self.alpha_root)
+        self.buf.write("Alpha-to-beta links: \n")
         self.dump_alpha2beta(self.alpha_root)
-        self.buf.write('}')
         return self.buf.getvalue()
 
     def dump_alpha(self, node):
@@ -63,13 +63,12 @@ class Network:
         :type node: ConstantTestNode
         """
         if node == self.alpha_root:
-            self.buf.write("    subgraph cluster_0 {\n")
-            self.buf.write("    label = alpha\n")
+            self.buf.write("Alpha network:\n")
         for child in node.children:
-            self.buf.write('    "%s" -> "%s";\n' % (node.dump(), child.dump()))
+            self.buf.write("    %s -> %s;\n" % (node.dump(), child.dump()))
             self.dump_alpha(child)
         if node == self.alpha_root:
-            self.buf.write("    }\n")
+            self.buf.write("\n")
 
     def dump_alpha2beta(self, node):
         """
@@ -77,7 +76,7 @@ class Network:
         """
         if node.amem:
             for child in node.amem.successors:
-                self.buf.write('    "%s" -> "%s";\n' % (node.dump(), child.dump()))
+                self.buf.write("    %s -> %s;\n" % (node.dump(), child.dump()))
         for child in node.children:
             self.dump_alpha2beta(child)
 
@@ -86,15 +85,20 @@ class Network:
         :type node: BetaNode
         """
         if node == self.beta_root:
-            self.buf.write("    subgraph cluster_1 {\n")
-            self.buf.write("    label = beta\n")
+            self.buf.write("Beta network:\n")
         if isinstance(node, NccPartnerNode):
-            self.buf.write('    "%s" -> "%s";\n' % (node.dump(), node.ncc_node.dump()))
+            self.buf.write("    %s -> %s;\n" % (node.dump(), node.ncc_node.dump()))
+        if isinstance(node, JoinNode):
+            # dump details of node
+            self.buf.write("    ┌─ amem: %s\n" % repr(node.amem))
+            self.buf.write("    ├─ has: %s\n" % repr(node.has))
+            for t in node.tests:
+                self.buf.write("    ├─ test: %s\n" % repr(t))
         for child in node.children:
-            self.buf.write('    "%s" -> "%s";\n' % (node.dump(), child.dump()))
+            self.buf.write("    %s -> %s;\n" % (node.dump(), child.dump()))
             self.dump_beta(child)
         if node == self.beta_root:
-            self.buf.write("    }\n")
+            self.buf.write("\n")
 
     def build_or_share_alpha_memory(self, condition):
         """

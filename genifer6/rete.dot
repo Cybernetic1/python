@@ -1,0 +1,17 @@
+digraph {
+    subgraph cluster_1 {
+    label = beta
+    "BetaNode 140549223025488" -> "BetaMemory 140549223025616";
+    "BetaMemory 140549223025616" -> "JoinNode 140549223025680";
+    "JoinNode 140549223025680" -> "BetaMemory 140549223025744";
+    "BetaMemory 140549223025744" -> "JoinNode 140549223025808";
+    "JoinNode 140549223025808" -> "PNode 140549223025552";
+    }
+    subgraph cluster_0 {
+    label = alpha
+    "no-test=None?" -> "identifier=□?";
+    "no-test=None?" -> "identifier=X?";
+    }
+    "identifier=□?" -> "JoinNode 140549223025680";
+    "identifier=X?" -> "JoinNode 140549223025808";
+}
