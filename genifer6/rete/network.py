@@ -90,6 +90,14 @@ class Network:
             self.buf.write("    label = beta\n")
         if isinstance(node, NccPartnerNode):
             self.buf.write('    "%s" -> "%s";\n' % (node.dump(), node.ncc_node.dump()))
+        if isinstance(node, JoinNode):
+            # dump details of node
+            self.buf.write('    "%s" -> "amem:%s"\n' % (node.dump(), repr(node.amem)))
+            self.buf.write('    "amem:%s" [label="amem"];\n' % repr(node.amem))
+            self.buf.write('    "%s" [shape=box, color=red];\n' % node.dump())
+            self.buf.write('    "%s" -> "has:%s"\n' % (node.dump(), repr(node.has)))
+            for t in node.tests:
+                self.buf.write('    "%s" -> "test:%s"\n' % (node,dump(), repr(t)))
         for child in node.children:
             self.buf.write('    "%s" -> "%s";\n' % (node.dump(), child.dump()))
             self.dump_beta(child)

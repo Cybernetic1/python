@@ -1,17 +1,25 @@
 digraph {
     subgraph cluster_1 {
     label = beta
-    "BetaNode 140549223025488" -> "BetaMemory 140549223025616";
-    "BetaMemory 140549223025616" -> "JoinNode 140549223025680";
-    "JoinNode 140549223025680" -> "BetaMemory 140549223025744";
-    "BetaMemory 140549223025744" -> "JoinNode 140549223025808";
-    "JoinNode 140549223025808" -> "PNode 140549223025552";
+    "BetaNode 140063595876304" -> "BetaMemory 140063595958416";
+    "BetaMemory 140063595958416" -> "JoinNode 140063595958480";
+    "JoinNode 140063595958480" -> "amem:<rete.alpha.AlphaMemory instance at 0x7f6318e0ac68>"
+    "amem:<rete.alpha.AlphaMemory instance at 0x7f6318e0ac68>" [label="amem"];
+    "JoinNode 140063595958480" [shape=box, color=red];
+    "JoinNode 140063595958480" -> "has:(□ $x $x)"
+    "JoinNode 140063595958480" -> "BetaMemory 140063595958544";
+    "BetaMemory 140063595958544" -> "JoinNode 140063595958608";
+    "JoinNode 140063595958608" -> "amem:<rete.alpha.AlphaMemory instance at 0x7f6318e0acf8>"
+    "amem:<rete.alpha.AlphaMemory instance at 0x7f6318e0acf8>" [label="amem"];
+    "JoinNode 140063595958608" [shape=box, color=red];
+    "JoinNode 140063595958608" -> "has:(X $y $y)"
+    "JoinNode 140063595958608" -> "PNode 140063595958352";
     }
     subgraph cluster_0 {
     label = alpha
     "no-test=None?" -> "identifier=□?";
     "no-test=None?" -> "identifier=X?";
     }
-    "identifier=□?" -> "JoinNode 140549223025680";
-    "identifier=X?" -> "JoinNode 140549223025808";
+    "identifier=□?" -> "JoinNode 140063595958480";
+    "identifier=X?" -> "JoinNode 140063595958608";
 }
