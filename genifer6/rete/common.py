@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-FIELDS = ['identifier', 'attribute', 'value']
-#FIELDS = ['F1', 'F2', 'F3']
+#FIELDS = ['identifier', 'attribute', 'value']
+FIELDS = ['F1', 'F2', 'F3']
 
 class BetaNode(object):
 
@@ -15,7 +15,7 @@ class BetaNode(object):
 
 class Has:
 
-    def __init__(self, identifier=None, attribute=None, value=None):
+    def __init__(self, F1=None, F2=None, F3=None):
         """
         (<x> ^self <y>)
         repr as:
@@ -25,18 +25,18 @@ class Has:
         :type attribute: Var or str
         :type identifier: Var or str
         """
-        self.identifier = identifier
-        self.attribute = attribute
-        self.value = value
+        self.F1 = F1
+        self.F2 = F2
+        self.F3 = F3
 
     def __repr__(self):
-        return "(%s %s %s)" % (self.identifier, self.attribute, self.value)
+        return "(%s %s %s)" % (self.F1, self.F2, self.F3)
 
     def __eq__(self, other):
         return self.__class__ == other.__class__ \
-               and self.identifier == other.identifier \
-               and self.attribute == other.attribute \
-               and self.value == other.value
+               and self.F1 == other.F1 \
+               and self.F2 == other.F2 \
+               and self.F3 == other.F3
 
     @property
     def vars(self):
@@ -77,7 +77,7 @@ class Has:
 class Neg(Has):
 
     def __repr__(self):
-        return "-(%s %s %s)" % (self.identifier, self.attribute, self.value)
+        return "-(%s %s %s)" % (self.F1, self.F2, self.F3)
 
 
 class Rule(list):
@@ -116,16 +116,16 @@ class Bind:
 
 class WME:
 
-    def __init__(self, identifier, attribute, value):
-        self.identifier = identifier
-        self.attribute = attribute
-        self.value = value
+    def __init__(self, F1, F2, F3):
+        self.F1 = F1
+        self.F2 = F2
+        self.F3 = F3
         self.amems = []  # the ones containing this WME
         self.tokens = []  # the ones containing this WME
         self.negative_join_result = []
 
     def __repr__(self):
-        return "(%s ^%s %s)" % (self.identifier, self.attribute, self.value)
+        return "(%s ^%s %s)" % (self.F1, self.F2, self.F3)
 
     def __eq__(self, other):
         """
@@ -133,9 +133,9 @@ class WME:
         """
         if not isinstance(other, WME):
             return False
-        return self.identifier == other.identifier and \
-            self.attribute == other.attribute and \
-            self.value == other.value
+        return self.F1 == other.F1 and \
+            self.F2 == other.F2 and \
+            self.F3 == other.F3
 
 
 class Token:
