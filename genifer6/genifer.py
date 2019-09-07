@@ -1,6 +1,7 @@
 #!/usr/bin/python2.7
 # -*- coding: utf-8 -*-
 import sys
+import os
 
 from rete.common import Has, Rule, WME
 from rete.network import Network
@@ -27,9 +28,15 @@ def add_wmes():
     ]
     for wme in wmes:
         net.add_wme(wme)
-    print(net.dump())
 
 print(u"\n\u001b[32m——`—,—{\u001b[31;1m@\u001b[0m\n".encode("utf-8"))   # Genifer logo ——`—,—{@
 
-init_network()
+rete_net = init_network()
+
+f = open("rete.dot", "w+")
+f.write(rete_net.dump())
+f.close()
+os.system("dot -Tpng rete.dot -orete.png")
+print("Rete graph saved as rete.png\n")
+
 add_wmes()

@@ -1,25 +1,29 @@
 digraph {
     subgraph cluster_1 {
     label = beta
-    "BetaNode 140063595876304" -> "BetaMemory 140063595958416";
-    "BetaMemory 140063595958416" -> "JoinNode 140063595958480";
-    "JoinNode 140063595958480" -> "amem:<rete.alpha.AlphaMemory instance at 0x7f6318e0ac68>"
-    "amem:<rete.alpha.AlphaMemory instance at 0x7f6318e0ac68>" [label="amem"];
-    "JoinNode 140063595958480" [shape=box, color=red];
-    "JoinNode 140063595958480" -> "has:(□ $x $x)"
-    "JoinNode 140063595958480" -> "BetaMemory 140063595958544";
-    "BetaMemory 140063595958544" -> "JoinNode 140063595958608";
-    "JoinNode 140063595958608" -> "amem:<rete.alpha.AlphaMemory instance at 0x7f6318e0acf8>"
-    "amem:<rete.alpha.AlphaMemory instance at 0x7f6318e0acf8>" [label="amem"];
-    "JoinNode 140063595958608" [shape=box, color=red];
-    "JoinNode 140063595958608" -> "has:(X $y $y)"
-    "JoinNode 140063595958608" -> "PNode 140063595958352";
+    "BetaNode 139790192195920" -> "BetaMemory 139790191529744";
+    "BetaMemory 139790191529744" -> "JoinNode 139790191529808";
+    "JoinNode 139790191529808" -> "amem:<rete.alpha.AlphaMemory instance at 0x7f2370b56bd8>"
+    "JoinNode 139790191529808" [shape=box, color=red];
+    "JoinNode 139790191529808" -> "has:(□ $x $x)"
+    "JoinNode 139790191529808" -> "BetaMemory 139790191529872";
+    "BetaMemory 139790191529872" -> "JoinNode 139790191529936";
+    "JoinNode 139790191529936" -> "amem:<rete.alpha.AlphaMemory instance at 0x7f2370b56c68>"
+    "JoinNode 139790191529936" [shape=box, color=red];
+    "JoinNode 139790191529936" -> "has:(X $y $y)"
+    "JoinNode 139790191529936" -> "PNode 139790191529680";
     }
     subgraph cluster_0 {
     label = alpha
     "no-test=None?" -> "identifier=□?";
+    "identifier=□?" -> "amem:<rete.alpha.AlphaMemory instance at 0x7f2370b56bd8>";
+    "amem:<rete.alpha.AlphaMemory instance at 0x7f2370b56bd8>" [shape=box, style="rounded,filled", label="amem", fillcolor=gray];
     "no-test=None?" -> "identifier=X?";
+    "identifier=X?" -> "amem:<rete.alpha.AlphaMemory instance at 0x7f2370b56c68>";
+    "amem:<rete.alpha.AlphaMemory instance at 0x7f2370b56c68>" [shape=box, style="rounded,filled", label="amem", fillcolor=gray];
+    "no-test=None?" -> "amem:<rete.alpha.AlphaMemory instance at 0x7f2370b56a28>";
+    "amem:<rete.alpha.AlphaMemory instance at 0x7f2370b56a28>" [shape=box, style="rounded,filled", label="amem", fillcolor=gray];
     }
-    "identifier=□?" -> "JoinNode 140063595958480";
-    "identifier=X?" -> "JoinNode 140063595958608";
+    "identifier=□?" -> "JoinNode 139790191529808";
+    "identifier=X?" -> "JoinNode 139790191529936";
 }

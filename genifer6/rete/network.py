@@ -68,6 +68,9 @@ class Network:
         for child in node.children:
             self.buf.write('    "%s" -> "%s";\n' % (node.dump(), child.dump()))
             self.dump_alpha(child)
+        if node.amem:
+            self.buf.write('    "%s" -> "amem:%s";\n' % (node.dump(), repr(node.amem)))
+            self.buf.write('    "amem:%s" [shape=box, style="rounded,filled", label="amem", fillcolor=gray];\n' % repr(node.amem))
         if node == self.alpha_root:
             self.buf.write("    }\n")
 
@@ -93,7 +96,7 @@ class Network:
         if isinstance(node, JoinNode):
             # dump details of node
             self.buf.write('    "%s" -> "amem:%s"\n' % (node.dump(), repr(node.amem)))
-            self.buf.write('    "amem:%s" [label="amem"];\n' % repr(node.amem))
+            # self.buf.write('    "amem:%s" [label="amem"];\n' % repr(node.amem))
             self.buf.write('    "%s" [shape=box, color=red];\n' % node.dump())
             self.buf.write('    "%s" -> "has:%s"\n' % (node.dump(), repr(node.has)))
             for t in node.tests:
