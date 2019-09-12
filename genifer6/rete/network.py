@@ -139,6 +139,7 @@ class Network:
 		:rtype: list of TestAtJoinNode
 		"""
 		result = []
+		print("condition = ", c)
 		for field_of_v, v in c.vars:
 			for idx, cond in enumerate(earlier_conds):
 				if isinstance(cond, Ncc) or isinstance(cond, Neg):
@@ -146,7 +147,7 @@ class Network:
 				field_of_v2 = cond.contain(v)
 				if not field_of_v2:
 					continue
-				t = TestAtJoinNode(field_of_v, idx, field_of_v2, op)
+				t = TestAtJoinNode(field_of_v, idx, field_of_v2)
 				result.append(t)
 		return result
 
