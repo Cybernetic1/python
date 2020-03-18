@@ -203,8 +203,8 @@ class Token:
 		from rete.negative_node import NegativeNode
 		from rete.ncc_node import NccPartnerNode, NccNode
 
-		for child in token.children:
-			cls.delete_token_and_descendents(child)
+		while token.children != []:
+			cls.delete_token_and_descendents(token.children[0])
 		if not isinstance(token.node, NccPartnerNode):
 			token.node.items.remove(token)
 		if token.wme:
