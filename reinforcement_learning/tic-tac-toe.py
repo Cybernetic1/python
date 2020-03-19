@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
 
+# **************************
+# This is just a Tic-Tac-Toe interface
+# The AI is called externally
+# Code is unfinished, refer to GILR (genetic inductive rule-learning) for a working version
+
 import time
 import random
 import shelve		# for object persistence
