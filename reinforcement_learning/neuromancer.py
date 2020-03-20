@@ -13,12 +13,31 @@ N = 2
 L = 3
 
 def layer_1_z(x, W):
-	return W * x + W[N + 1]
+	return np.insert(W, 1.0) * x
 
 def layer_1_activation(x, W):
 	z = layer_1_z(x, W)
 	return np.sin(z)
 
+# ==============================
+
+def layer_2_z(x, W):
+	return W * x + W[N + 1]
+
+def layer_2_activation(x, W):
+	z = layer_1_z(x, W)
+	return np.sin(z)
+
+# ==============================
+
+def layer_3_z(x, W):
+	return W * x + W[N + 1]
+
+def layer_3_activation(x, W):
+	z = layer_3_z(x, W)
+	return np.sin(z)
+
+# ==============================
 
 def layer_2(x, W):
 	y_hat = layer_1_activation(x, W)
