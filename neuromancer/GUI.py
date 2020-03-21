@@ -2,8 +2,9 @@
 
 import sys
 import pygame
+import math
 
-import plotly.plotly as py	# communicate with external plotly server
+import chart_studio.plotly as py	# communicate with external plotly server
 import plotly.graph_objs as go
 
 cache = []
@@ -16,20 +17,23 @@ def plot_population(screen, pop):
 	dx = 999.0 / len(pop)
 	# dn = int(math.ceil(dx))
 	dn = int(dx)
-	ymax = abs(pop[-1]['fitness'])
-	print(ymax)
+	ymax = max(pop, key = lambda x: x['fitness'])['fitness']
+	print("ymax =", ymax)
 	for child in pop:
 		z = child['fitness']
 		x += dx
 		if z < 0.0:
 			pygame.draw.line(screen, (0xFF,0x00,0x00), [int(x),H], [int(x),H+int(z*1.0)], dn)
 		else:
-			y = h / (1.0 + math.exp(-0.001*z))
-			# y = int(z * h / ymax)
-			# if math.isnan(y):
-			#	y = H - 3
-			# elif y > H - 3:
-			#	y = H - 3
+			if math.isnan(z):
+				y = H - 3
+			elif math.isinf(z):
+				y = H - 3
+			# y = h / (1.0 + math.exp(-0.001*z))
+			else:
+				y = int(z * h / ymax)
+			if y > H - 3:
+				y = H - 3
 			pygame.draw.line(screen, (0x00,0x00,0xFF), [int(x),H], [int(x),H-y], dn)
 	pygame.display.flip()
 

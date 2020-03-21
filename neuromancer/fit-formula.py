@@ -3,10 +3,16 @@
 import random
 import operator
 import math
-import GUI
+import pygame
 
-def rand_in_bounds(min, max):
-	return random.uniform(min, max)
+# algorithm configuration
+max_gens = 3000
+max_depth = 6
+pop_size = 200
+bouts = 5
+p_repro = 0.08
+p_cross = 0.80
+p_mut = 0.02
 
 op_map = {
 	operator.add : '+',
@@ -40,6 +46,9 @@ arity = {
 	math.sqrt: 1,
 	operator.pow: 2
 	}
+
+def rand_in_bounds(min, max):
+	return random.uniform(min, max)
 
 def print_program(node):
 	if not isinstance(node, list):
@@ -191,7 +200,7 @@ def mutation(parent, max_depth):
 	child = prune(child, max_depth)
 	return child
 
-def search(max_gens, pop_size, max_depth, bouts, p_repro, p_cross, p_mut):
+def search():
 	pygame.init()
 	screen = pygame.display.set_mode((1000, 500))
 	pygame.display.set_caption("Population fitness")
@@ -206,7 +215,7 @@ def search(max_gens, pop_size, max_depth, bouts, p_repro, p_cross, p_mut):
 
 	pop2 = sorted(population, key = lambda x : x['fitness'], reverse = False)
 	best = pop2[0]
-	plot_population(screen, pop2)
+	GUI.plot_population(screen, pop2)
 	input("Press any key to continue....")
 
 	for gen in range(0, max_gens):
@@ -232,7 +241,7 @@ def search(max_gens, pop_size, max_depth, bouts, p_repro, p_cross, p_mut):
 		population = children
 		population = sorted(population, key = lambda x : x['fitness'])
 
-		plot_population(screen, population)
+		GUI.plot_population(screen, population)
 		quitting = False
 		pausing = False
 		for event in pygame.event.get():
@@ -258,18 +267,13 @@ def search(max_gens, pop_size, max_depth, bouts, p_repro, p_cross, p_mut):
 			break
 	return best
 
+import GUI
+
 def main():
-	# algorithm configuration
-	max_gens = 3000
-	max_depth = 6
-	pop_size = 200
-	bouts = 5
-	p_repro = 0.08
-	p_cross = 0.80
-	p_mut = 0.02
 	# execute the algorithm
+	GUI.search = search
 	GUI.start_GUI(max_gens, max_depth, pop_size, bouts, p_repro, p_cross, p_mut)
-	best = search(max_gens, pop_size, max_depth, bouts, p_repro, p_cross, p_mut)
+	best = search()
 	print("Done!")
 	print("best fitness = ", round(best['fitness'],4))
 	# print(best['prog'])
