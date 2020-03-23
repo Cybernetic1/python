@@ -8,10 +8,11 @@ import time
 # Genetic algorithm parameters:
 soln_per_pop = 12				# mating pool size (= # parents)
 num_parents_mating = 6			# population size
-num_generations = 100
+num_generations = 1000
 mutation_percent = 1			# mutation rate
 
 method = "ReLU"					# neuron's activation function
+# method = "sigmoid"
 
 numpy.random.seed(int(time.time()))
 

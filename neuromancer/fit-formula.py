@@ -1,28 +1,46 @@
 # -*- coding: utf8 -*-
 
+# TO-DO:
+# * ability to add custom formula to population
+# * GUI params not passed back to main module
+# * stop the search, restart
+# * output text explanation of formula files
+# * able to browse formulas in GUI
+# * cache? What's that?
+
+# SOLVED:
+# * the best formula may not be present in the latest population, but some of his "look-alikes" will
+# * appearance of complex numbers was due to (-1)**fraction
+# * can print formulas while running
+# * now able to re-insert 'best' guy back to population
+
 import random
 import operator
 import math
 import pygame
+import pickle
+import os			# for beep
 
-# algorithm configuration
-max_gens = 3000
+import sys
+sys.setrecursionlimit(8000)
+
+# Algorithm configuration; These numbers should be copied to GUI
+max_gens = 200
 max_depth = 6
-pop_size = 200
+pop_size = 300
 bouts = 5
-p_repro = 0.08
+p_repro = 0.02
 p_cross = 0.80
-p_mut = 0.02
+p_mut = 0.06
 
-op_map = {
-	operator.add : '+',
-	operator.sub : '-',
-	operator.mul : '*',
-	operator.truediv : '÷',
-	math.exp : 'e^',
-	math.sqrt : '√',
-	operator.pow : '^',
-	}
+population = []
+best = {'fitness': float('inf')}
+
+def op_squared(x):
+	return x*x
+
+def op_cubed(x, n):
+	return x**3
 
 # problem configuration
 terms = ['x', 'y', 'R']
@@ -34,7 +52,7 @@ funcs = [
 	operator.truediv,
 	math.exp,
 	math.sqrt,
-	operator.pow
+	op_squared
 	]
 
 arity = {
@@ -44,11 +62,71 @@ arity = {
 	operator.truediv: 2,
 	math.exp: 1,
 	math.sqrt: 1,
-	operator.pow: 2
+	op_squared: 1,
+	op_cubed: 1
+	}
+
+symbol = {
+	operator.add: '+',
+	operator.sub: '-',
+	operator.mul: '*',
+	operator.truediv: '/',
+	math.exp: 'e^',
+	math.sqrt: 'sqrt',
+	op_squared: '^2',
+	op_cubed: '^3'
 	}
 
 def rand_in_bounds(min, max):
 	return random.uniform(min, max)
+
+def export_tree_as_graph(node, fname):
+	f = open(fname, 'w')
+	f.write("digraph {\n")
+	# f.write("fontname=\"times-bold\";")
+	print_tree_as_graph(f, node)
+	f.write("}\n")
+	f.close()
+
+def print_tree_as_graph(f, node, index = 0):
+	if not isinstance(node, list):
+		if isinstance(node, float):
+			f.write("node" + str(index) + "[label=\"" + str(round(node, 2)) + "\",style=\"filled\",fillcolor=\"yellow\"];\n")
+		elif node == "E20" or node == "E100" or node == "Avg":
+			f.write("node" + str(index) + "[label=\"" + str(node) + "\",style=\"filled\",fillcolor=\"#FFCCCC\"];\n")
+		else:
+			f.write("node" + str(index) + "[label=\"" + str(node) + "\"];\n")
+		return 1
+	op = node[0]
+	color = "\"];\n"
+	if op == operator.and_ or op == operator.or_:
+		color = "\",color=\"red\"];\n"
+	elif op == operator.gt or op == operator.lt:
+		color = "\",color=\"green\"];\n"
+	else:
+		color = "\",color=\"red\"];\n"
+	f.write("node" + str(index) + "[label=\"" + symbol[node[0]] + color)
+	f.write("node" + str(index) + " -> node" + str(index + 1) + ";\n")
+	count1 = print_tree_as_graph(f, node[1], index + 1)
+	if arity[node[0]] == 2:
+		f.write("node" + str(index) + " -> node" + str(index + count1 + 1) + ";\n")
+		count2 = print_tree_as_graph(f, node[2], index + count1 + 1)
+		return count1 + count2 + 1
+	return count1 + 1
+
+def save_population(fname):
+	global population
+	f = open(fname, 'wb')
+	pickle.dump(population, f, pickle.HIGHEST_PROTOCOL)
+	f.close()
+	print("Population saved")
+
+def load_population(fname):
+	global population
+	f = open(fname, 'rb')
+	population = pickle.load(f)
+	f.close()
+	print("Population loaded")
 
 def print_program(node):
 	if not isinstance(node, list):
@@ -57,8 +135,10 @@ def print_program(node):
 		else:
 			return node
 	if arity[node[0]] == 1:
-		return "(" + op_map[node[0]] + print_program(node[1]) + ")"
-	return "(" + print_program(node[1]) + op_map[node[0]] + print_program(node[2]) + ")"
+		if symbol[node[0]][0] == '^':
+			return "(" + print_program(node[1]) + symbol[node[0]] + ")"
+		return symbol[node[0]] + "(" +  print_program(node[1]) + ")"
+	return "(" + print_program(node[1]) + symbol[node[0]] + print_program(node[2]) + ")"
 
 def eval_program(node, dict):
 	if not isinstance(node, list):
@@ -72,14 +152,14 @@ def eval_program(node, dict):
 		try:
 			return node[0](arg1)
 		except:
-			return 0.0
+			return float('nan')
 	arg2 = eval_program(node[2], dict)
 	if node[0] == operator.truediv and arg2 == 0.0:
-		return 0.0
+		return float('nan')
 	try:
 		return node[0](arg1, arg2)
 	except:
-		return 0.0
+		return float('nan')
 
 def generate_random_program(max, depth = 0):
 	if (depth == max - 1) or (depth > 1 and random.uniform(0.0,1.0) < 0.1):
@@ -104,22 +184,6 @@ def count_nodes(node):
 		a2 = count_nodes(node[2])
 		return a1 + a2 + 1
 	return a1 + 1
-
-def fitness(program, num_trials = 10):
-	# print("prog=", print_program(program))
-	sum_error = 0.0
-	for i in range(1, num_trials):
-		x = rand_in_bounds(0.0, 2.0)
-		# diagonal value:
-		error = eval_program(program, {'x' : x, 'y' : x}) - 0.5
-		sum_error += abs(error)
-		# x- and y- axis value:
-		z = 1.0 / (1.0 + math.exp(x)) - 0.5
-		error = eval_program(program, {'x' : x, 'y' : 0.0}) - z
-		sum_error += abs(error)
-		error = eval_program(program, {'x' : 0.0, 'y' : x}) - z
-		sum_error += abs(error)
-	return sum_error / num_trials
 
 def tournament_selection(pop, bouts):
 	selected = []
@@ -200,25 +264,53 @@ def mutation(parent, max_depth):
 	child = prune(child, max_depth)
 	return child
 
-def search():
-	pygame.init()
-	screen = pygame.display.set_mode((1000, 500))
-	pygame.display.set_caption("Population fitness")
+def fitness(program, num_trials = 30):
+	# print("prog=", print_program(program))
+	sum_error = 0.0
+	for i in range(1, num_trials):
+		x = rand_in_bounds(0.0, 2.0)
+		# diagonal value:
+		error = eval_program(program, {'x': x, 'y': x}) - 1.0
+		sum_error += abs(error)
+		# x- and y- axis value:
+		z = 2.0 / (1.0 + math.exp(80.0 * (x - 0.05))) - 1.0
+		error = eval_program(program, {'x': x, 'y': 0.0}) - z
+		sum_error += abs(error)
+		error = eval_program(program, {'x': 0.0, 'y': x}) - z
+		sum_error += abs(error)
+	return sum_error / num_trials
 
-	population = []
-	for i in range(0, pop_size):
-		prog = generate_random_program(max_depth)
-		population.append({'prog' : \
-			prog, \
-			'fitness' : \
-			fitness(prog)})
+def search(again=False):
+	global population, best
 
-	pop2 = sorted(population, key = lambda x : x['fitness'], reverse = False)
-	best = pop2[0]
-	GUI.plot_population(screen, pop2)
-	input("Press any key to continue....")
+	if (not again):
+		print("Initializing population...")
+
+		population = []
+		for i in range(0, pop_size):
+			prog = generate_random_program(max_depth)
+			population.append({'prog' : \
+				prog, \
+				'fitness' : \
+				fitness(prog)})
+
+		population.sort(key = lambda x: 1e99 if math.isnan(x['fitness']) else x['fitness'])
+		GUI.best = best = population[0]
+		GUI.plot_population(population)
+		# input("Press any key to continue....")
+	else:
+		print("Retaining population...")
+		print("size =", len(population))
+		# print("\tlast best formula =", end='')
+		# print(print_program(best['prog']))
+		# print("\tbest fitness =", best['fitness'])
+		p0 = population[0]
+		print("\tbest population formula =", end='')
+		print(print_program(p0['prog']))
+		print("\tbest population fitness =", p0['fitness'])
 
 	for gen in range(0, max_gens):
+		# print "\nGenerating children..."
 		children = []
 		while len(children) < pop_size:
 			operation = random.uniform(0.0, 1.0)
@@ -234,52 +326,55 @@ def search():
 			elif operation < p_repro + p_cross + p_mut:
 				c1['prog'] = mutation(p1['prog'], max_depth)
 
+		# print "Evaluating children..."
 		if len(children) < pop_size:
 			children.append(c1)
 		for c in children:
 			c['fitness'] = fitness(c['prog'])
 		population = children
-		population = sorted(population, key = lambda x : x['fitness'])
+		population.sort(key = lambda x: 1e99 if math.isnan(x['fitness']) else x['fitness'])
 
-		GUI.plot_population(screen, population)
-		quitting = False
-		pausing = False
-		for event in pygame.event.get():
-			if event.type == pygame.QUIT:
-				quitting = True
-			elif event.type == pygame.KEYDOWN:
-				pausing = True
-			elif event.type == pygame.KEYUP:
-				pausing = False
-		while pausing:
-			for event in pygame.event.get():
-				if event.type == pygame.QUIT:
-					quitting = True
-					pausing = False
-				elif event.type == pygame.KEYUP:
-					pausing = False
+		GUI.plot_population(population)
 
 		if population[0]['fitness'] <= best['fitness']:
-			best = population[0]
-		print("gen", gen, end=' ')
-		print("fitness =", best['fitness'])
-		if best['fitness'] == 0:
-			break
+			GUI.best = best = population[0]
+			os.system("beep -f 400 -l 50")
+			s = print_program(best['prog'])
+			GUI.show_formula(s)
+			print("new best =", s)
+		print("Gen%03d" % gen, end=' ')
+		print("error =", round(best['fitness'],7))
 	return best
+
+def reinsert_best():
+	if population[0] == best:
+		print("Best candidate already in population")
+	else:
+		i = random.randint(0, len(population))
+		population[i] = best
+		print("Best candidate re-inserted into population")
 
 import GUI
 
 def main():
-	# execute the algorithm
+	# These allow the GUI module to access our constants and functions:
 	GUI.search = search
-	GUI.start_GUI(max_gens, max_depth, pop_size, bouts, p_repro, p_cross, p_mut)
-	best = search()
-	print("Done!")
-	print("best fitness = ", round(best['fitness'],4))
-	# print(best['prog'])
-	print("formula = ", end='\t')
-	print(print_program(best['prog']))
+	GUI.export_tree_as_graph = export_tree_as_graph
+	GUI.print_program = print_program
+	GUI.save_population = save_population
+	GUI.load_population = load_population
+	GUI.reinsert_best = reinsert_best
 
-print("Genetic programming test")
+	GUI.max_gens = max_gens
+	GUI.max_depth = max_depth
+	GUI.pop_size = pop_size
+	GUI.bouts = bouts
+	GUI.p_repro = p_repro
+	GUI.p_cross = p_cross
+	GUI.p_mut = p_mut
+
+	GUI.start_GUI()
+
+print("Function Fitting by Genetic Programming\n")
 main()
 exit(0)

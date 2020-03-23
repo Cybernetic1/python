@@ -4,7 +4,7 @@ from itertools import permutations
 import time
 numpy.random.seed(int(time.time()))
 
-N = 3			# dimension of input X
+N = 2			# dimension of input X
 
 def sigmoid(x):
 	return 1.0 / (1.0 + numpy.exp(-3.0 * x))
@@ -41,6 +41,8 @@ def distance(y1, y2):
 		Σ += (y1[i] - y2[i])**2
 	return numpy.sqrt(Σ)
 
+# ***** Old functions, no longer useful *****
+
 def threshold1(r):
 	return 1.0 / (numpy.exp(1.0 - r)) - 1.0
 
@@ -56,6 +58,11 @@ def threshold2(y):
 	"""
 	return 1e-6 / (numpy.exp(y) - 1.0)
 	"""
+
+# ***** This miraculously good-looking function was found by serendipity
+def joint_penalty(x, y):
+	k = 1.0			# "Steepness"
+	return numpy.exp(-k * (x**2 + y**2)) - numpy.exp(-2.0 * k * x * y)
 
 def perturb(x):
 	if numpy.random.randint(2) > 0:
@@ -93,9 +100,7 @@ def predict_outputs(weights_mat, activation="ReLU"):
 				y = sigmoid(y)
 		dx = set_distance(x, x0)
 		dy = distance(y, y0)
-		penalty = threshold1(dx / dy) * threshold2(dy)
-		if isnan(penalty):
-			penalty = 0.0
+		penalty = joint_penalty(dy, dx)
 		# print("dx=", dx)
 		# print("y=", y)
 		# print("y0=", y0)
