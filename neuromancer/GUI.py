@@ -176,7 +176,7 @@ def butt_stop_train():
 	return
 
 def butt_export_graph():
-	s = text2.get("1.0", tk.END)
+	s = text3.get("1.0", tk.END)
 	if s == "\n":
 		fname = "formula.dot"
 	else:
