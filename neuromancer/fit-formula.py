@@ -8,6 +8,11 @@
 # * able to browse formulas in GUI
 # * cache? What's that?
 
+# NOTES on Sage usage:
+# sage: plot3d(exp(-15*(x^2+y^2)),(x,-1,1),(y,-1,1), viewer='tachyon')
+# sage: a = -e^(-2*x*y) + e^(-(x^2+y^2))
+# sage: a.full_simplify()
+
 # SOLVED:
 # * the best formula may not be present in the latest population, but some of his "look-alikes" will
 # * appearance of complex numbers was due to (-1)**fraction
