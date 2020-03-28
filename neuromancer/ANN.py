@@ -90,7 +90,7 @@ def perturb(x):
 		return numpy.random.rand(N) * 2.0 - 1.0
 
 def predict_outputs(weights_mat, activation="ReLU"):
-	# generate random X, find all permutions, variance should tend to zero
+	# generate random X, generate random permutions, variance should tend to zero
 	penalties = 0.0
 	x0 = numpy.random.rand(N) * 2.0 - 1.0
 	y0 = x0
