@@ -15,31 +15,48 @@ def relu(x):
 	return x
 
 def set_distance(x1, x2):
-	Σ = 0.0
+	Σ, Σ1, Σ2 = 0.0, 0.0, 0.0
+
 	for i in range(N):
 		for j in range(N):
-			Σ += numpy.abs(x1[i] - x2[j]) * 2 \
-			   - numpy.abs(x1[i] - x1[j]) \
-			   - numpy.abs(x2[i] - x2[j])
-	dx = Σ / (N**2)
-	if dx < -1e-10:
+			Σ += (x1[i] - x2[j]) **2
+
+	for i in range(N):
+		for j in range(N):
+			Σ1 += (x1[i] - x1[j]) **2
+
+	for i in range(N):
+		for j in range(N):
+			Σ2 += (x2[i] - x2[j]) **2
+
+	dx = (2 * numpy.sqrt(Σ / N) - numpy.sqrt(Σ1 / N) - numpy.sqrt(Σ2 / N)) / 2
+
+	if dx < 0.0:
 		print("x1=", x1)
 		print("x2=", x2)
+		print("Σ=", Σ)
 		print("Σ1=", Σ1)
 		print("Σ2=", Σ2)
-		print("Σ3=", Σ3)
 		print("dx=", dx)
-		raise ValueError("distance < 0")
-	# else:
-		# print("dx=", dx)
-		# print(".", end='')
+		# raise ValueError("distance < 0")
 	return dx
 
 def distance(y1, y2):
 	Σ = 0.0
 	for i in range(N):
-		Σ += (y1[i] - y2[i])**2
+		Σ += (y1[i] - y2[i]) ** 2
 	return numpy.sqrt(Σ)
+
+"""
+import ast
+
+while(True):
+	x1 = ast.literal_eval(input("x1=? "))
+	x2 = ast.literal_eval(input("x2=? "))
+	print(set_distance(x1, x2))
+
+exit(0)
+"""	
 
 # ***** Old functions, no longer useful *****
 
@@ -61,8 +78,8 @@ def threshold2(y):
 
 # ***** This miraculously good-looking function was found by serendipity
 def joint_penalty(x, y):
-	k = 1.0			# "Steepness"
-	return numpy.exp(-k * (x**2 + y**2)) - numpy.exp(-2.0 * k * x * y)
+	k = 30.0			# "Steepness"
+	return numpy.exp(-k * (x **2 + y **2)) - numpy.exp(-2.0 * k * x * y)
 
 def perturb(x):
 	if numpy.random.randint(2) > 0:
@@ -73,7 +90,7 @@ def perturb(x):
 		return numpy.random.rand(N) * 2.0 - 1.0
 
 def predict_outputs(weights_mat, activation="ReLU"):
-	# generate random X, find all permutions, variance should tend to zero
+	# generate random X, generate random permutions, variance should tend to zero
 	penalties = 0.0
 	x0 = numpy.random.rand(N) * 2.0 - 1.0
 	y0 = x0
