@@ -1,1 +1,0 @@
-[<built-in function sub>, [<built-in function truediv>, [<built-in function add>, [<function op_cubed at 0x7f817db81d90>, 'y'], 'x'], [<built-in function add>, [<function op_cubed at 0x7f817db81d90>, [<built-in function truediv>, 'x', 0.421787805046411]], 'y']], [<function op_squared at 0x7f81951e6ea0>, 0.7064986479470035]]
