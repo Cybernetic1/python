@@ -1,5 +1,5 @@
 import numpy
-import ga
+import genetic_algorithm
 import pickle
 import ANN
 import matplotlib.pyplot
@@ -8,7 +8,7 @@ import time
 # Genetic algorithm parameters:
 soln_per_pop = 12				# mating pool size (= # parents)
 num_parents_mating = 6			# population size
-num_generations = 1000
+num_generations = 200
 mutation_percent = 1			# mutation rate
 
 method = "ReLU"					# neuron's activation function
@@ -21,7 +21,7 @@ import os
 
 if input("Read old weights file? (enter for yes, 'n' to start new)") != 'n':
 	# open the latest weights file:
-	list_of_files = glob.glob('/home/yky/python/neuromancer/W_*')
+	list_of_files = glob.glob('/home/yky/python/neuromancer/weights_*')
 	latest_file = max(list_of_files, key=os.path.getctime)
 	print("Loading file:", latest_file)
 	f = open(latest_file, "rb")
@@ -52,7 +52,7 @@ else:
 	pop_weights_mat = numpy.array(initial_pop_weights)
 
 print("pop weights mat shape=", pop_weights_mat.shape)
-pop_weights_vector = ga.mat_to_vector(pop_weights_mat)
+pop_weights_vector = genetic_algorithm.mat_to_vector(pop_weights_mat)
 
 accuracies = numpy.empty(shape=(num_generations))
 
@@ -60,7 +60,7 @@ for generation in range(num_generations):
 	print("Generation : ", generation)
 
 	# converting the solutions from being vectors to matrices.
-	pop_weights_mat = ga.vector_to_mat(pop_weights_vector, 
+	pop_weights_mat = genetic_algorithm.vector_to_mat(pop_weights_vector, 
 									   pop_weights_mat)
 
 	# Measuring the fitness of each chromosome in the population.
@@ -71,20 +71,20 @@ for generation in range(num_generations):
 	print(fitness)
 
 	# Selecting the best parents in the population for mating.
-	parents = ga.select_mating_pool(pop_weights_vector, 
+	parents = genetic_algorithm.select_mating_pool(pop_weights_vector, 
 									fitness.copy(), 
 									num_parents_mating)
 	# print("Parents")
 	# print(parents)
 
 	# Generating next generation using crossover.
-	offspring_crossover = ga.crossover(parents,
+	offspring_crossover = genetic_algorithm.crossover(parents,
 									   offspring_size=(pop_weights_vector.shape[0]-parents.shape[0], pop_weights_vector.shape[1]))
 	# print("Crossover")
 	# print(offspring_crossover)
 
 	# Adding some variations to the offsrping using mutation.
-	offspring_mutation = ga.mutation(offspring_crossover, 
+	offspring_mutation = genetic_algorithm.mutation(offspring_crossover, 
 									 mutation_percent=mutation_percent)
 	# print("Mutation")
 	# print(offspring_mutation)
@@ -93,7 +93,7 @@ for generation in range(num_generations):
 	pop_weights_vector[0:parents.shape[0], :] = parents
 	pop_weights_vector[parents.shape[0]:, :] = offspring_mutation
 
-pop_weights_mat = ga.vector_to_mat(pop_weights_vector, pop_weights_mat)
+pop_weights_mat = genetic_algorithm.vector_to_mat(pop_weights_vector, pop_weights_mat)
 best_weights = pop_weights_mat [0, :]
 acc = ANN.predict_outputs(best_weights, activation = method)
 print("Accuracy of the best solution is:", acc)
@@ -102,7 +102,7 @@ print("Accuracy of the best solution is:", acc)
 
 name = str(ANN.N) + "D_10x10x8_" + method
 print("Saving file:", name)
-f = open("W_" + name + ".pkl", "wb")
+f = open("weights_" + name + ".pkl", "wb")
 pickle.dump(pop_weights_mat, f)
 f.close()
 
