@@ -15,8 +15,8 @@ import time
 import re
 import pyperclip
 
-f1 = open("../latex/2018/categorical-unification-old.tex", 'r')
-f2 = open("../latex/2018/categorical-unification.tex", 'w')
+f1 = open("../latex/2020/logic-tutorial.tex", 'r')
+f2 = open("../latex/2021/logic-tutorial-2.tex", 'w')
 
 line_num = 0
 in_eqn = False
