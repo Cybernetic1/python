@@ -21,7 +21,7 @@ for root, dirs, files in os.walk(".", topdown=False):
         bodystr+=sttmp  
         bodystr+=lst  
   
-file = open("Managed.plist", "w")  
+file = open("/home/yky/Books.plist", "w")  
 file.write(header);  
 file.write(bodystr);  
 file.write(footer);  

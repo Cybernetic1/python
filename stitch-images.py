@@ -6,8 +6,9 @@ from matplotlib import pyplot as plt
 
 # **** Print list of screenshot files sorted by time
 import glob
-prefix = 'home/yky/Pictures/Screenshots/'
-files = glob.glob(prefix + "*.png")
+path = '/home/yky/Pictures/'
+prefix = 'DeepinScreenshot_'
+files = glob.glob(path + prefix + "*.png")
 files.sort()
 for i, fname in enumerate(files):
 	if i % 2:
@@ -64,7 +65,7 @@ for i in seq:
 	cv2.rectangle(img, top_left, bottom_right, 255, 2)		# draw the found region in red
 	bottom = bottom_right[1]
 	print("\tFound: bottom location =", bottom)
-	if bottom >= 200:
+	if bottom >= 100:
 		bottom = 0
 		print("\t**** Position too low, bottom assumed = 0")
 	bottoms.append(bottom)									# keep a record of it
@@ -90,5 +91,5 @@ for (i, rows, bottom) in zip(seq, rowses, bottoms):
 	scroll[rows1 : rows1 + rows - bottom, :cols1, :3] = img[bottom : rows, 0 : cols1]
 	rows1 += rows - bottom
 
-cv2.imwrite("scroll.png", scroll)
+cv2.imwrite(path + "scroll.png", scroll)
 print("\nResult written to `scroll.png`, bye.")
