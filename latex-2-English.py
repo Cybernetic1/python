@@ -10,31 +10,71 @@
 # * use \cc{}{} format
 # * the last line \end{document} always missing
 
-from subprocess import call
+from subprocess import call, check_output, getoutput
 import time
 import re
 import pyperclip
+import sys
+from os import path
 
-f1 = open("../latex/2020/logic-tutorial.tex", 'r')
-f2 = open("../latex/2021/logic-tutorial-2.tex", 'w')
+if len(sys.argv) < 2:
+	print("usage: latex-2-English in-file [out-file]")
+	exit(0)
+elif len(sys.argv) == 2:
+	f1 = open(sys.argv[1], 'r')
+	path = path.dirname(sys.argv[1])
+	outfile = path + '/english.tex'
+	print("outfile =", outfile)
+	f2 = open(outfile, 'w')
+else:
+	f1 = open(sys.argv[1], 'r')
+	f2 = open(sys.argv[2], 'w')
+
+print("\n**** 建议你先将 terminal set 做 always on top！")
+print("**** 而且你一定要去 Google Translate 的正式网站！\n")
+
+# **** Read mouse positions
+input("郁燃隻 mouse屎 去 clear text 果度，然後噤 enter！")
+out = check_output(["xdotool", "getmouselocation"]).decode('utf-8')
+x_clear = out[out.index('x:') +2 : out.index(' y:')]
+y_clear = out[out.index('y:') +2 : out.index(' screen:')]
+print("X, Y =", x_clear, y_clear)
+
+input("郁燃隻 mouse屎 去 paste 嘅位置，然後噤 enter！")
+out = check_output(["xdotool", "getmouselocation"]).decode('utf-8')
+x_paste = out[out.index('x:') +2 : out.index(' y:')]
+y_paste = out[out.index('y:') +2 : out.index(' screen:')]
+print("X, Y =", x_paste, y_paste)
+
+input("郁燃隻 mouse屎 去右邊 window（但並不是 copy 的位置，因爲佢會變），然後噤 enter！")
+out = check_output(["xdotool", "getmouselocation"]).decode('utf-8')
+x_copy = out[out.index('x:') +2 : out.index(' y:')]
+y_copy = out[out.index('y:') +2 : out.index(' screen:')]
+print("X, Y =", x_copy, y_copy)
+
+print("\n開始 翻譯！！ --- 注意： 可以噤 Num Lock = off 停止！！\n")
 
 line_num = 0
 in_eqn = False
 last_line = ""
 
 for line in f1:
+	line_num += 1
+
+	# skip beginning lines, comment out if not needed
+	# if line_num <= 164 or \
+	  # line_num >= 178:
+		# continue
 
 	f2.write(last_line)
 	last_line = line
 
-	line_num += 1
-	if line_num <= 33:
+	if len(line) <= 2:			# line too short
+		continue
+	if line[0] == '%':			# line starts with comment
 		continue
 
-	if len(line) <= 2:
-		continue
-	if line[0] == '%':
-		continue
+	# **** Skip inside of equations
 
 	if line.startswith("\\end{eq") or \
 			line.startswith("\\end{verbatim}"):
@@ -49,27 +89,37 @@ for line in f1:
 		in_eqn = True
 		continue
 
-	if line[0] == '\\' and \
-			not (line.startswith("\\textbf{") or \
-				line.startswith("\\textit{") or \
-				line.startswith("\\uline{")):
+	# **** Skip possibly latex commands
+
+	line2 = line.lstrip()
+	if len(line2) < 3:
+		continue
+	if line2[0] == '\\' and not ( \
+			line2.startswith("\\textbf{") or \
+			line2.startswith("\\textit{") or \
+			line2.startswith("\\item") or \
+			line2.startswith("\\uline{") ):
 		continue
 
-	# pass the line to Google
+	# **** Skip lines that have no Chinese
+	if not re.search(u'[\u4e00-\u9fff]', line):
+		continue
+
+	# **** Pass the line to Google
 
 	# clear text
-	call(["xdotool", "mousemove", "504", "283", "click", "3"])
+	call(["xdotool", "mousemove", x_clear, y_clear, "click", "1"])
 	time.sleep(0.5)
 
 	# paste 上去!
 	pyperclip.copy(line)
-	call(["xdotool", "mousemove", "60", "301", "click", "3", "key", "ctrl+v"])
+	call(["xdotool", "mousemove", x_paste, y_paste, "click", "1", "key", "ctrl+v"])
 
 	# translate 佢!
 	time.sleep(2)
 
 	# copy text
-	call(["xdotool", "mousemove", "553", "287", "click", "3", "key", "Tab", "Tab", "Return"])
+	call(["xdotool", "mousemove", x_copy, y_copy, "click", "1", "key", "Tab", "Tab", "Return"])
 	time.sleep(1.5)
 
 	# 写鸠佢落file佬!
@@ -77,18 +127,23 @@ for line in f1:
 
 	# 如果好似唔撚掂，停低一阵：
 	if re.search(u'[\u4e00-\u9fff]', translated):
-		call(["beep"])
+		call(["beep", "-l", "500", "-f", "512"])
 		print("Error in this line:")
 		print('**** ' + last_line)
-		input()
+		input("你可以自己手動翻譯....")
 		translated = pyperclip.paste()
 
 	last_line = "\\cc{" + line + "}{\n" + translated + "\n}\n"
 
 	print('● ' + translated)
+	call(["beep", "-l", "50", "-f", "3000", "-n", "-l", "50", "-f", "2500"])
+
+	numLock = getoutput("xset q | grep Caps | tr -s ' ' | cut -d ' ' -f 9")
+	if numLock == 'off':
+		break
 
 f2.write(last_line)
 f1.close()
 f2.close()
 
-call(["beep"])
+call(["beep", "-l", "500", "-f", "512"])
