@@ -24,14 +24,17 @@ elif len(sys.argv) == 2:
 	f1 = open(sys.argv[1], 'r')
 	path = path.dirname(sys.argv[1])
 	outfile = path + '/english.tex'
-	print("outfile =", outfile)
+	print("NOTE: output file =", outfile)
 	f2 = open(outfile, 'w')
 else:
 	f1 = open(sys.argv[1], 'r')
 	f2 = open(sys.argv[2], 'w')
 
-print("\n**** 建议你先将 terminal set 做 always on top！")
-print("**** 而且你一定要去 Google Translate 的正式网站！\n")
+print("\nSetting terminal to be always on top...")
+call(['wmctrl', '-r', ':ACTIVE:', '-b', 'add,above'])
+
+print("\n**** 建议你一定要去 Google Translate 的正式网站！")
+print("**** Edit near the beginning of 'for' loop to skip lines!\n")
 
 # **** Read mouse positions
 input("郁燃隻 mouse屎 去 clear text 果度，然後噤 enter！")
@@ -62,9 +65,9 @@ for line in f1:
 	line_num += 1
 
 	# skip beginning lines, comment out if not needed
-	# if line_num <= 164 or \
-	  # line_num >= 178:
-		# continue
+	if line_num < 610 or \
+	   line_num > 634:
+		continue
 
 	f2.write(last_line)
 	last_line = line
@@ -135,7 +138,8 @@ for line in f1:
 
 	last_line = "\\cc{" + line + "}{\n" + translated + "\n}\n"
 
-	print('● ' + translated)
+	print('\x1b[31m⏹ ' + line, end='\x1b[0m\n')
+	print('\x1b[32m● ' + translated, end='\n\x1b[0m\n')
 	call(["beep", "-l", "50", "-f", "3000", "-n", "-l", "50", "-f", "2500"])
 
 	numLock = getoutput("xset q | grep Caps | tr -s ' ' | cut -d ' ' -f 9")
@@ -147,3 +151,6 @@ f1.close()
 f2.close()
 
 call(["beep", "-l", "500", "-f", "512"])
+
+print("\nSetting terminal to be normal...")
+call(['wmctrl', '-r', ':ACTIVE:', '-b', 'remove,above'])
