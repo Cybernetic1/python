@@ -14,13 +14,12 @@ TO-DO:
 #include <X11/cursorfont.h>
 #include <unistd.h> // added for sleep/usleep
 #define XK_MISCELLANY
+#define XK_LATIN1
 #include <X11/keysymdef.h>
-//#include <X11/Intrinsic.h>
-//#include <X11/extensions/XTest.h>
-//#include <xdo.h>
-#include <fcntl.h>
-#include <errno.h>
-#include <linux/input.h>
+//#include <fcntl.h>
+//#include <errno.h>
+//#include <linux/input.h>
+//#include <QX11Info> // from qt q11extras
 
 int main(void)
 {
@@ -28,16 +27,21 @@ int main(void)
 	int rect_x = 0, rect_y = 0, rect_w = 0, rect_h = 0;
 	int btn_pressed = 0, done = 0, key = 0;
 
-	int fd, bytes;
-	struct input_event data;
-	const char *pDevice = "/dev/input/event3";
-    // Open Keyboard
-    fd = open(pDevice, O_RDONLY | O_NONBLOCK);
-    if (fd == -1)
-		{
-        printf("ERROR Opening %s\n", pDevice);
-        return -1;
-		}
+	system("beep -f 500 -l 100");
+
+	//key = getchar();
+	//printf("key = %x\n", key);
+
+	//int fd, bytes;
+	//struct input_event data;
+	//const char *pDevice = "/dev/input/event3";
+	//// Open Keyboard
+	//fd = open(pDevice, O_RDONLY | O_NONBLOCK);
+	//if (fd == -1)
+		//{
+		//printf("ERROR Opening %s\n", pDevice);
+		//return -1;
+		//}
 
 	// xdo_t *xdoer = xdo_new(":0.0");
 
@@ -51,7 +55,8 @@ int main(void)
 	scr = ScreenOfDisplay(disp, DefaultScreen(disp));
 
 	Window root = 0;
-	root = RootWindow(disp, XScreenNumberOfScreen(scr));
+	// root = RootWindow(disp, XScreenNumberOfScreen(scr));
+	root = DefaultRootWindow(disp);
 
 	Cursor cursor, cursor2;
 	cursor = XCreateFontCursor(disp, XC_left_ptr);
@@ -74,32 +79,46 @@ int main(void)
 	GC gc;
 	gc = XCreateGC(disp, root, GCFunction | GCForeground | GCBackground | GCSubwindowMode | GCLineWidth, &gcval);
 
-	/* this XGrab* stuff makes XPending true ? */
+	/* does XGrab* stuff makes XPending true ? */
+
+	int keycode = 0;
+
+	keycode = XKeysymToKeycode(disp, XK_backslash);
+	XGrabKey(disp, AnyKey, AnyModifier, root, True, GrabModeAsync, GrabModeAsync);
+	printf("just grabbed the key '%x'\n", keycode);
+
+	XSelectInput(disp, root, KeyPressMask);
+
 	int pointerGrabbed = 0;
-	if ((XGrabPointer(disp, root, False, ButtonMotionMask | ButtonPressMask | ButtonReleaseMask, GrabModeAsync, GrabModeSync, root, cursor, CurrentTime) != GrabSuccess))
-		printf("couldn't grab pointer:");
-	else
-		pointerGrabbed = 1;
+	// **** XGrabPointer should not be used as it seems to disable keyboard
+	//if ((XGrabPointer(disp, root, False, ButtonMotionMask | ButtonPressMask | ButtonReleaseMask, GrabModeAsync, GrabModeSync, None, cursor, CurrentTime) != GrabSuccess))
+	//	printf("couldn't grab pointer:");
+	XGrabButton(disp, AnyButton, AnyModifier, root, True, ButtonMotionMask | ButtonPressMask | ButtonReleaseMask, GrabModeAsync, GrabModeSync, None, cursor);
+	pointerGrabbed = 1;
+	printf("grabbed the mouse\n");
 
 	//if ((XGrabKeyboard(disp, root, True, GrabModeAsync, GrabModeAsync,	CurrentTime) != GrabSuccess))
 	//	printf("couldn't grab keyboard:");
 
 	// see also: http://stackoverflow.com/questions/19659486/xpending-cycle-is-making-cpu-100
+	printf("entering while-loop....\n");
 	while (!done) {
 		//~ while (!done && XPending(disp)) {
 			//~ XNextEvent(disp, &ev);
 		// fixes the 100% CPU hog issue in original code:
-		// if (!XPending(disp)) { usleep(1000); continue; }
+		if (!XPending(disp)) { usleep(1000); continue; }
 
-		bytes = read(fd, &data, sizeof(data));
-		if (bytes > 0)
-			{
-			printf("Keypress value=%x, type=%x, code=%x\n", data.value, data.type, data.code);
-			}
+		//bytes = read(fd, &data, sizeof(data));
+		//if (bytes > 0)
+			//{
+			//printf("Keypress value=%x, type=%x, code=%x\n", data.value, data.type, data.code);
+			//}
 
-		// key = getchar_unlocked();
-		// if (key > 0)
-		//	printf("key = %x\n", key);
+		//key = getchar();
+		//if (key != 0)
+		//printf("key = %x\n", key);
+		//else
+			//printf("!\n");
 
 		if ( (XNextEvent(disp, &ev) >= 0) ) {
 			switch (ev.type) {
@@ -137,8 +156,9 @@ int main(void)
 					ry = ev.xbutton.y;
 					break;
 				case ButtonRelease:
-					if (rect_w > 0 && rect_h > 0)
-						done = 1;
+					btn_pressed = 0;
+					//if (rect_w > 0 && rect_h > 0)
+					//	done = 1;
 					break;
 				case KeyPress:
 					printf("key pressed\n");
@@ -173,6 +193,7 @@ int main(void)
 	}
 
 	XUngrabPointer(disp, CurrentTime);
+	XUngrabKey(disp, AnyKey, AnyModifier, root);
 	return EXIT_SUCCESS;
 
 	/* Now the rectangle is on display
