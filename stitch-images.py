@@ -20,6 +20,8 @@ print(end="\x1b[0m")
 seq = list(map(int, input("Enter file sequence [eg. 4,5,6,7]: ").split(',')))
 print()
 
+margin = int(input("# of rows to match at margin [15] ?") or "15")
+
 # **** Find the positions to stitch the images
 rowses = []				# the heights of each image
 bottoms = []			# the "skipped" amount for each image
@@ -46,7 +48,7 @@ for i in seq:
 	# **** This is the "matching template"
 	# which is created from the last 15 rows of img1
 	# the left and right 10 pixels are cut off to allow for edge align error
-	tmp = img1[(rows1 - 15) : rows1, 10 : cols1 - 10]		# format: [y1:y2, x1:x2]
+	tmp = img1[(rows1 - margin) : rows1, 10 : cols1 - 10]		# format: [y1:y2, x1:x2]
 	h, w, _ = tmp.shape
 	print("\tmatching template size = %d x %d"% (h, w))
 
