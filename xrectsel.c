@@ -1,10 +1,11 @@
-/* original from [https://bbs.archlinux.org/viewtopic.php?id=85378 Select a screen area with mouse and return the geometry of this area? / Programming & Scripting / Arch Linux Forums]
-
+/* Originally from https://askubuntu.com/a/763708/179725
 To build with (Ubuntu 14.04):
 	gcc -Wall xrectsel.c -o xrectsel -lX11
 
 TO-DO:
-* cannot use mouse at beginning of program
+* gittering of mouse leaves residue dots at upper left corner
+
+FIXED:
 * cannot use PageDown after rectangle is drawn
 */
 
@@ -16,18 +17,103 @@ TO-DO:
 #define XK_MISCELLANY
 #define XK_LATIN1
 #include <X11/keysymdef.h>
+// #include <X11/extensions/XTest.h>
+#include <xdo.h>
 //#include <fcntl.h>
 //#include <errno.h>
 //#include <linux/input.h>
 //#include <QX11Info> // from qt q11extras
 
+Display *disp;
+Window root;
+Cursor cursor, cursor2;
+XGCValues gcval;
+GC gc;
+const int d = 1;			// 1/2 line width of rectangle
+
+void enterX(void)
+	{
+	disp = XOpenDisplay(NULL);
+	if(!disp)
+		exit(EXIT_FAILURE);
+
+	Screen *scr = NULL;
+	scr = ScreenOfDisplay(disp, DefaultScreen(disp));
+	root = RootWindow(disp, XScreenNumberOfScreen(scr));
+	//root = DefaultRootWindow(disp);
+
+	cursor = XCreateFontCursor(disp, XC_left_ptr);
+	cursor2 = XCreateFontCursor(disp, XC_lr_angle);
+
+	gcval.foreground = XWhitePixel(disp, 0);
+	// gcval.foreground = color.pixel;
+	gcval.function = GXxor;
+	gcval.line_width = d*2;
+	gcval.background = XBlackPixel(disp, 0);
+	gcval.plane_mask = gcval.background ^ gcval.foreground;
+	gcval.subwindow_mode = IncludeInferiors;
+
+	gc = XCreateGC(disp, root, GCFunction | GCForeground | GCBackground | GCSubwindowMode | GCLineWidth, &gcval);
+
+	if (XGrabPointer(disp, root, True, ButtonMotionMask | ButtonPressMask | ButtonReleaseMask, GrabModeAsync, GrabModeSync, None, cursor, CurrentTime) != GrabSuccess)
+		printf("Couldn't grab Pointer\n");
+	else
+		printf("Grab Pointer success\n");	
+
+	//XSelectInput(disp, root, KeyPressMask | ButtonPressMask);
+
+	/*int err = XGrabButton(disp, AnyButton, AnyModifier, root, True, ButtonMotionMask | ButtonPressMask | ButtonReleaseMask, GrabModeAsync, GrabModeAsync, None, cursor);
+	switch (err) {
+		case GrabSuccess:
+			printf("GrabButton success!\n");
+			break;
+		case BadCursor:
+			printf("BadCursor\n");
+			break;
+		case BadWindow:
+			printf("BadWindow\n");
+			break;
+		case BadValue:
+			printf("BadValue\n");
+			break;
+		default:
+			printf("GrabButton failed\n");
+			break;
+		} */
+
+	if (XGrabKeyboard(disp, root, True, GrabModeAsync, GrabModeAsync,CurrentTime) != GrabSuccess)
+		printf("Couldn't grab Keyboard\n");
+	else
+		printf("Grab Keyboard success\n");
+
+	//XSelectInput(disp, root, KeyPressMask);
+	}
+
+void leaveX(void)
+	{
+	// extern Display *disp;
+	XUngrabKeyboard(disp, CurrentTime);
+	//XUngrabButton(disp, AnyButton, AnyModifier, root);
+	XUngrabPointer(disp, CurrentTime);
+	XCloseDisplay(disp);
+	}
+
 int main(void)
-{
+	{
+	void enterX(void), leaveX(void);
+
 	int rx = 0, ry = 0, rw = 0, rh = 0;
 	int rect_x = 0, rect_y = 0, rect_w = 0, rect_h = 0;
-	int btn_pressed = 0, done = 0, key = 0;
+	int btn_pressed = 0, done = 0;
+	int c;
+	KeySym key = 0;
+	XEvent ev;
+	int pointerGrabbed = 0;
+	int keysound = 0;
+	char cmd[256];		// for 'scrot' shell command
 
 	system("beep -f 500 -l 100");
+	//system("xdotool key Page_Down");
 
 	//key = getchar();
 	//printf("key = %x\n", key);
@@ -43,70 +129,37 @@ int main(void)
 		//return -1;
 		//}
 
-	// xdo_t *xdoer = xdo_new(":0.0");
+	xdo_t *xdoer = xdo_new(":0.0");
 
-	XEvent ev;
-	Display *disp = XOpenDisplay(NULL);
+	//XColor color, dummy;
+	//XAllocNamedColor(disp, DefaultColormap(disp, 0), "blue",
+	//								&color, &dummy);
 
-	if(!disp)
-		return EXIT_FAILURE;
-
-	Screen *scr = NULL;
-	scr = ScreenOfDisplay(disp, DefaultScreen(disp));
-
-	Window root = 0;
-	// root = RootWindow(disp, XScreenNumberOfScreen(scr));
-	root = DefaultRootWindow(disp);
-
-	Cursor cursor, cursor2;
-	cursor = XCreateFontCursor(disp, XC_left_ptr);
-	cursor2 = XCreateFontCursor(disp, XC_lr_angle);
-
-	XColor color, dummy;
-	XAllocNamedColor(disp, DefaultColormap(disp, 0), "blue",
-									&color, &dummy);
-
-	XGCValues gcval;
-	gcval.foreground = XWhitePixel(disp, 0);
-	// gcval.foreground = color.pixel;
-	gcval.function = GXxor;
-	int d = 2;
-	gcval.line_width = d*2;
-	gcval.background = XBlackPixel(disp, 0);
-	gcval.plane_mask = gcval.background ^ gcval.foreground;
-	gcval.subwindow_mode = IncludeInferiors;
-
-	GC gc;
-	gc = XCreateGC(disp, root, GCFunction | GCForeground | GCBackground | GCSubwindowMode | GCLineWidth, &gcval);
+	enterX();
 
 	/* does XGrab* stuff makes XPending true ? */
 
-	int keycode = 0;
+	//int keycode = 0;
+	//keycode = XKeysymToKeycode(disp, XK_backslash);
+	//XGrabKey(disp, keycode, AnyModifier, root, True, GrabModeAsync, GrabModeAsync);
+	//printf("just grabbed the key '%x'\n", keycode);
 
-	keycode = XKeysymToKeycode(disp, XK_backslash);
-	XGrabKey(disp, AnyKey, AnyModifier, root, True, GrabModeAsync, GrabModeAsync);
-	printf("just grabbed the key '%x'\n", keycode);
-
-	XSelectInput(disp, root, KeyPressMask);
-
-	int pointerGrabbed = 0;
 	// **** XGrabPointer should not be used as it seems to disable keyboard
 	//if ((XGrabPointer(disp, root, False, ButtonMotionMask | ButtonPressMask | ButtonReleaseMask, GrabModeAsync, GrabModeSync, None, cursor, CurrentTime) != GrabSuccess))
 	//	printf("couldn't grab pointer:");
-	XGrabButton(disp, AnyButton, AnyModifier, root, True, ButtonMotionMask | ButtonPressMask | ButtonReleaseMask, GrabModeAsync, GrabModeSync, None, cursor);
-	pointerGrabbed = 1;
-	printf("grabbed the mouse\n");
-
-	//if ((XGrabKeyboard(disp, root, True, GrabModeAsync, GrabModeAsync,	CurrentTime) != GrabSuccess))
-	//	printf("couldn't grab keyboard:");
+	// pointerGrabbed = 1;
+	// printf("grabbed the mouse\n");
 
 	// see also: http://stackoverflow.com/questions/19659486/xpending-cycle-is-making-cpu-100
-	printf("entering while-loop....\n");
+	printf("Entering while-loop....\n");
 	while (!done) {
 		//~ while (!done && XPending(disp)) {
 			//~ XNextEvent(disp, &ev);
 		// fixes the 100% CPU hog issue in original code:
-		if (!XPending(disp)) { usleep(1000); continue; }
+		if (!XPending(disp)) {
+			usleep(1000);
+			continue;
+			}
 
 		//bytes = read(fd, &data, sizeof(data));
 		//if (bytes > 0)
@@ -120,50 +173,56 @@ int main(void)
 		//else
 			//printf("!\n");
 
-		if ( (XNextEvent(disp, &ev) >= 0) ) {
-			switch (ev.type) {
-				case MotionNotify:
-				/* this case is purely for drawing rect on screen */
-					if (btn_pressed) {
-						if (rect_w) {
-							/* re-draw the last rect to clear it */
-							XDrawRectangle(disp, root, gc, rect_x, rect_y, rect_w, rect_h);
-						} else {
-							/* Change the cursor to show we're selecting a region */
-							XChangeActivePointerGrab(disp, ButtonMotionMask | ButtonReleaseMask, cursor2, CurrentTime);
-						}
-						rect_x = rx;
-						rect_y = ry;
-						rect_w = ev.xmotion.x - rect_x;
-						rect_h = ev.xmotion.y - rect_y;
-
-						if (rect_w < 0) {
-							rect_x += rect_w;
-							rect_w = 0 - rect_w;
-						}
-						if (rect_h < 0) {
-							rect_y += rect_h;
-							rect_h = 0 - rect_h;
-						}
-						/* draw rectangle */
+		if (XNextEvent(disp, &ev) >= 0) {
+		switch (ev.type) {
+			case MotionNotify:
+			/* this case is purely for drawing rect on screen */
+				if (btn_pressed) {
+					if (rect_w) {
+						/* re-draw the last rect to clear it */
 						XDrawRectangle(disp, root, gc, rect_x, rect_y, rect_w, rect_h);
-						XFlush(disp);
+					} else {
+						/* Change the cursor to show we're selecting a region */
+						XChangeActivePointerGrab(disp, ButtonMotionMask | ButtonReleaseMask, cursor2, CurrentTime);
 					}
-					break;
-				case ButtonPress:
-					btn_pressed = 1;
-					rx = ev.xbutton.x;
-					ry = ev.xbutton.y;
-					break;
-				case ButtonRelease:
-					btn_pressed = 0;
-					//if (rect_w > 0 && rect_h > 0)
-					//	done = 1;
-					break;
-				case KeyPress:
-					printf("key pressed\n");
-					key = XLookupKeysym(&ev.xkey, 0);
-					if (key == 'm') {
+					rect_x = rx;
+					rect_y = ry;
+					rect_w = ev.xmotion.x - rect_x;
+					rect_h = ev.xmotion.y - rect_y;
+
+					if (rect_w < 0) {
+						rect_x += rect_w;
+						rect_w = 0 - rect_w;
+					}
+					if (rect_h < 0) {
+						rect_y += rect_h;
+						rect_h = 0 - rect_h;
+					}
+					/* draw rectangle */
+					XDrawRectangle(disp, root, gc, rect_x, rect_y, rect_w, rect_h);
+					XFlush(disp);
+				}
+				break;
+			case ButtonPress:
+				printf("button # = %d\n", ev.xbutton.button);
+				btn_pressed = 1;
+				rx = ev.xbutton.x;
+				ry = ev.xbutton.y;
+				break;
+			case ButtonRelease:
+				btn_pressed = 0;
+				XChangeActivePointerGrab(disp, ButtonMotionMask | ButtonReleaseMask | ButtonPressMask, cursor, CurrentTime);
+				//if (rect_w > 0 && rect_h > 0)
+				//	done = 1;
+				break;
+			case KeyPress:
+				//printf("key pressed\n");
+				//system("beep -f 1000 -l 100");
+				keysound = 1;
+				key = XLookupKeysym(&ev.xkey, 0);
+				printf("key = %lx\n", key);
+				switch (key) {
+					case XK_m:
 						if (pointerGrabbed) {
 							XUngrabPointer(disp, CurrentTime);
 							pointerGrabbed = 0;
@@ -172,87 +231,77 @@ int main(void)
 							XGrabPointer(disp, root, False,ButtonMotionMask | ButtonPressMask | ButtonReleaseMask, GrabModeAsync, GrabModeAsync, root, cursor, CurrentTime);
 							pointerGrabbed = 1;
 							}
-						}
-					if (key == XK_Escape)
+						break;
+					case XK_Escape:
+					case XK_q:
 						done = 1;
-					if (key == 'k')
-						XAllowEvents(disp, AsyncKeyboard, CurrentTime);
-					if (key == 'd') {
-							//XTestGrabControl(disp, True);
-							//XTestFakeKeyEvent(disp, XK_Page_Down, True, 0);
-							//XTestFakeKeyEvent(disp, XK_Page_Down, False, 0);
-							//XSync (disp, False);
-							//XTestGrabControl(disp, False);
-							//XAllowEvents(disp, AsyncKeyboard, CurrentTime);
-							//xdo_send_keysequence_window(xdoer, CURRENTWINDOW, "Page_Down", 0);
-						}
+						break;
+					//case XK_K:
+					//	XAllowEvents(disp, AsyncKeyboard, CurrentTime);
+					//break;
+					case XK_Page_Down:
+						system("beep -f 700 -l 300");
+					case XK_d:
+					case XK_bracketright:
+						printf("Trying page down...\n");
+						leaveX();
+						//sleep(0.5);
+						//XTestGrabControl(disp, True);
+						//XTestFakeKeyEvent(disp, XK_Page_Down, True, 0);
+						//XTestFakeKeyEvent(disp, XK_Page_Down, False, 0);
+						//XSync(disp, False);
+						//XTestGrabControl(disp, False);
+						//XAllowEvents(disp, AsyncKeyboard, CurrentTime);
+						xdo_send_keysequence_window(xdoer, CURRENTWINDOW, "Page_Down", 0);
+						//system("xdotool key Page_Down");
+						//sleep(1);
+						enterX();
+						break;
+					case XK_Page_Up:
+						system("beep -f 700 -l 300");
+					case XK_u:
+					case XK_bracketleft:
+						printf("Trying page up...\n");
+						leaveX();
+						xdo_send_keysequence_window(xdoer, CURRENTWINDOW, "Page_Up", 0);
+						//system("xdotool key Page_Up");
+						enterX();
+						break;
+					case XK_c:
+					case XK_Return:
+						printf("Trying Capture...\n");
+						sprintf(cmd, "scrot -a \'%d,%d,%d,%d\' ; beep -f 1000 -l 200 -f 1500 -l 200", rect_x+d, rect_y+d, rect_w-d-d, rect_h-d-d);
+						system(cmd);
+						break;
+					case XK_r:
+						printf("Trying redraw rectangle...\n");
+						XDrawRectangle(disp, root, gc, rect_x, rect_y, rect_w, rect_h);
+						XFlush(disp);
+						break;
+					case XK_space:
+						printf("Flush display\n");
+						XFlush(disp);
+						break;
+					default:
+						keysound = 0;
+						break;
+						}	// end keys switch statement
+				// still within case KeyPress
+				if (keysound)
 					system("beep -f 1000 -l 100");
-					break;
-			}
-		}
-	}
-
-	XUngrabPointer(disp, CurrentTime);
-	XUngrabKey(disp, AnyKey, AnyModifier, root);
-	return EXIT_SUCCESS;
-
-	/* Now the rectangle is on display
-	 * Wait for key to capture the screen
-	 * 
-	 *  */
-
-	done = 0;
-	char cmd[256];
-
-	while (!done) {
-		//~ while (!done && XPending(disp)) {
-			//~ XNextEvent(disp, &ev);
-		if (!XPending(disp)) { usleep(1000); continue; } // fixes the 100% CPU hog issue in original code
-		if ( (XNextEvent(disp, &ev) >= 0) ) {
-			if (ev.type == KeyPress) {
-		key = XLookupKeysym(&ev.xkey, 0);
-		switch (key) {
-			case XK_Escape:
-				done = 1;
-				break;
-			case 'c':
-				sprintf(cmd, "scrot -a \'%d,%d,%d,%d\' ; beep -f 1000 -l 200 -f 1500 -l 200", rect_x+d, rect_y+d, rect_w-d-d, rect_h-d-d);
-				system(cmd);
-			case 'r':
-				XDrawRectangle(disp, root, gc, rect_x, rect_y, rect_w, rect_h);
-				XFlush(disp);
-				system("beep -f 1000 -l 100");
-				break;
+				break;	// end case KeyPress
 			default:
-				printf("key = %c\n", key);
 				break;
-			}
-			}
-		}
-	}
+				}	// end ev.type switch statement
+			}	// end if ev.type not Null
+		}	// end while
 
 	/* clear the drawn rectangle */
 	if (rect_w) {
 		XDrawRectangle(disp, root, gc, rect_x, rect_y, rect_w, rect_h);
 		XFlush(disp);
-	}
+		}
 
-	rw = ev.xbutton.x - rx;
-	rh = ev.xbutton.y - ry;
-	/* cursor moves backwards */
-	if (rw < 0) {
-		rx += rw;
-		rw = 0 - rw;
-	}
-	if (rh < 0) {
-		ry += rh;
-		rh = 0 - rh;
-	}
-
-	XCloseDisplay(disp);
-
-	printf("r = %dx%d+%d+%d\n",rw,rh,rx,ry);
-	printf("rect = %dx%d+%d+%d\n",rect_w,rect_h,rect_x,rect_y);
-	
+	leaveX();
 	return EXIT_SUCCESS;
-}
+	}
