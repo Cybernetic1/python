@@ -6,8 +6,8 @@ from matplotlib import pyplot as plt
 
 # **** Print list of screenshot files sorted by time
 import glob
-path = '/home/yky/Pictures/'
-prefix = 'DeepinScreenshot_'
+path = input("Image path [/home/yky/Pictures/]: ") or '/home/yky/Pictures/'
+prefix = input("Image prefix [Screenshot from ]: ") or 'Screenshot from '
 files = glob.glob(path + prefix + "*.png")
 files.sort()
 for i, fname in enumerate(files):

@@ -1,12 +1,18 @@
 /* Originally from https://askubuntu.com/a/763708/179725
+
 To build with (Ubuntu 14.04):
-	gcc -Wall xrectsel.c -o xrectsel -lX11
+	gcc -Wall xrectsel.c -o xrectsel -lX11 -lxdo [-lXtst]
+
+To execute in terminal:
+    $ xdotool getactivewindow windowminimize; ./xrectsel ; beep
 
 TO-DO:
 * gittering of mouse leaves residue dots at upper left corner
 
 FIXED:
+* use up and down arrows
 * cannot use PageDown after rectangle is drawn
+* keep rect while PageUp/PageDown
 */
 
 #include <stdio.h>
@@ -98,12 +104,19 @@ void leaveX(void)
 	XCloseDisplay(disp);
 	}
 
+int rx = 0, ry = 0, rw = 0, rh = 0;
+int rect_x = 0, rect_y = 0, rect_w = 0, rect_h = 0;
+
+void redrawRect(void)
+	{
+	XDrawRectangle(disp, root, gc, rect_x, rect_y, rect_w, rect_h);
+	XFlush(disp);
+	}
+
 int main(void)
 	{
 	void enterX(void), leaveX(void);
 
-	int rx = 0, ry = 0, rw = 0, rh = 0;
-	int rect_x = 0, rect_y = 0, rect_w = 0, rect_h = 0;
 	int btn_pressed = 0, done = 0;
 	int c;
 	KeySym key = 0;
@@ -180,7 +193,7 @@ int main(void)
 				if (btn_pressed) {
 					if (rect_w) {
 						/* re-draw the last rect to clear it */
-						XDrawRectangle(disp, root, gc, rect_x, rect_y, rect_w, rect_h);
+						redrawRect();
 					} else {
 						/* Change the cursor to show we're selecting a region */
 						XChangeActivePointerGrab(disp, ButtonMotionMask | ButtonReleaseMask, cursor2, CurrentTime);
@@ -199,8 +212,7 @@ int main(void)
 						rect_h = 0 - rect_h;
 					}
 					/* draw rectangle */
-					XDrawRectangle(disp, root, gc, rect_x, rect_y, rect_w, rect_h);
-					XFlush(disp);
+					redrawRect();
 				}
 				break;
 			case ButtonPress:
@@ -240,7 +252,8 @@ int main(void)
 					//	XAllowEvents(disp, AsyncKeyboard, CurrentTime);
 					//break;
 					case XK_Page_Down:
-						system("beep -f 700 -l 300");
+						system("beep -f 100 -l 300");
+						keysound = 0;
 					case XK_d:
 					case XK_bracketright:
 						printf("Trying page down...\n");
@@ -256,27 +269,51 @@ int main(void)
 						//system("xdotool key Page_Down");
 						//sleep(1);
 						enterX();
+						sleep(1.5);
+						redrawRect();
 						break;
 					case XK_Page_Up:
-						system("beep -f 700 -l 300");
+						system("beep -f 100 -l 300");
+						keysound = 0;
 					case XK_u:
 					case XK_bracketleft:
 						printf("Trying page up...\n");
 						leaveX();
 						xdo_send_keysequence_window(xdoer, CURRENTWINDOW, "Page_Up", 0);
-						//system("xdotool key Page_Up");
 						enterX();
+						sleep(1.5);
+						redrawRect();
+						break;
+					case XK_Up:
+						system("beep -f 100 -l 300");
+						keysound = 0;
+						printf("Trying arrow up...\n");
+						leaveX();
+						xdo_send_keysequence_window(xdoer, CURRENTWINDOW, "Up", 0);
+						enterX();
+						sleep(1.5);
+						redrawRect();
+						break;
+					case XK_Down:
+						system("beep -f 100 -l 300");
+						keysound = 0;
+						printf("Trying arrow down...\n");
+						leaveX();
+						xdo_send_keysequence_window(xdoer, CURRENTWINDOW, "Down", 0);
+						enterX();
+						sleep(1.5);
+						redrawRect();
 						break;
 					case XK_c:
 					case XK_Return:
 						printf("Trying Capture...\n");
-						sprintf(cmd, "scrot -a \'%d,%d,%d,%d\' ; beep -f 1000 -l 200 -f 1500 -l 200", rect_x+d, rect_y+d, rect_w-d-d, rect_h-d-d);
+						sprintf(cmd, "scrot -a \'%d,%d,%d,%d\' ; beep -f 1500 -l 500", rect_x+d, rect_y+d, rect_w-d-d, rect_h-d-d);
 						system(cmd);
+						keysound = 0;
 						break;
 					case XK_r:
 						printf("Trying redraw rectangle...\n");
-						XDrawRectangle(disp, root, gc, rect_x, rect_y, rect_w, rect_h);
-						XFlush(disp);
+						redrawRect();
 						break;
 					case XK_space:
 						printf("Flush display\n");
