@@ -17,6 +17,11 @@ import pyperclip
 import sys
 from os import path
 
+print("\n**** 建议你一定要去 Google Translate 的正式网站！")
+print("**** 注意 terminal window 不要遮住 Translation column")
+print("**** Your NumLock will be automatically set to ON.")
+print("**** Edit near the beginning of 'for' loop to skip lines!\n")
+
 if len(sys.argv) < 2:
 	print("usage: latex-2-English in-file [out-file]")
 	exit(0)
@@ -33,28 +38,26 @@ else:
 print("\nSetting terminal to be always on top...")
 call(['wmctrl', '-r', ':ACTIVE:', '-b', 'add,above'])
 
-print("\n**** 建议你一定要去 Google Translate 的正式网站！")
-print("**** Edit near the beginning of 'for' loop to skip lines!\n")
-
 # **** Read mouse positions
-input("郁燃隻 mouse屎 去 clear text 果度，然後噤 enter！")
+input("郁燃隻 mouse屎 去左边 clear text ❎ 果度，然後噤 enter！")
 out = check_output(["xdotool", "getmouselocation"]).decode('utf-8')
 x_clear = out[out.index('x:') +2 : out.index(' y:')]
 y_clear = out[out.index('y:') +2 : out.index(' screen:')]
 print("X, Y =", x_clear, y_clear)
 
-input("郁燃隻 mouse屎 去 paste 嘅位置，然後噤 enter！")
+input("郁燃隻 mouse屎 去左边 paste 嘅位置，然後噤 enter！")
 out = check_output(["xdotool", "getmouselocation"]).decode('utf-8')
 x_paste = out[out.index('x:') +2 : out.index(' y:')]
 y_paste = out[out.index('y:') +2 : out.index(' screen:')]
 print("X, Y =", x_paste, y_paste)
 
-input("郁燃隻 mouse屎 去右邊 window（但並不是 copy 的位置，因爲佢會變），然後噤 enter！")
+input("郁燃隻 mouse屎 去右邊 window 嘅邊緣（但並不是 “copy” icon 的位置，因爲佢會變），然後噤 enter！")
 out = check_output(["xdotool", "getmouselocation"]).decode('utf-8')
 x_copy = out[out.index('x:') +2 : out.index(' y:')]
 y_copy = out[out.index('y:') +2 : out.index(' screen:')]
 print("X, Y =", x_copy, y_copy)
 
+call(["numlockx", "on"])
 print("\n開始 翻譯！！ --- 注意： 可以噤 Num Lock = off 停止！！\n")
 
 line_num = 0
@@ -65,8 +68,8 @@ for line in f1:
 	line_num += 1
 
 	# skip beginning lines, comment out if not needed
-	if line_num < 610 or \
-	   line_num > 634:
+	if line_num < 90 or \
+	   line_num > 10000:
 		continue
 
 	f2.write(last_line)
@@ -122,7 +125,7 @@ for line in f1:
 	time.sleep(2)
 
 	# copy text
-	call(["xdotool", "mousemove", x_copy, y_copy, "click", "1", "key", "Tab", "Tab", "Return"])
+	call(["xdotool", "mousemove", x_copy, y_copy, "click", "1", "key", "Tab", "Tab", "Tab", "Return"])
 	time.sleep(1.5)
 
 	# 写鸠佢落file佬!
@@ -133,7 +136,7 @@ for line in f1:
 		call(["beep", "-l", "500", "-f", "512"])
 		print("Error in this line:")
 		print('**** ' + last_line)
-		input("你可以自己手動翻譯....")
+		input("你可以自己手動翻譯，将文本放在剪贴板内 ....")
 		translated = pyperclip.paste()
 
 	last_line = "\\cc{" + line + "}{\n" + translated + "\n}\n"
@@ -142,7 +145,7 @@ for line in f1:
 	print('\x1b[32m● ' + translated, end='\n\x1b[0m\n')
 	call(["beep", "-l", "50", "-f", "3000", "-n", "-l", "50", "-f", "2500"])
 
-	numLock = getoutput("xset q | grep Caps | tr -s ' ' | cut -d ' ' -f 9")
+	numLock = getoutput("xset q | grep 'Num Lock' | tr -s ' ' | cut -d ' ' -f 9")
 	if numLock == 'off':
 		break
 
@@ -152,5 +155,8 @@ f2.close()
 
 call(["beep", "-l", "500", "-f", "512"])
 
-print("\nSetting terminal to be normal...")
+print("\nSetting terminal window to be normal...")
 call(['wmctrl', '-r', ':ACTIVE:', '-b', 'remove,above'])
+
+print("\nSetting Num Lock back to OFF...")
+call(["numlockx", "on"])
