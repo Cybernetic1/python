@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<timeline>
+  <version>2.9.0 (385f17ad49c8 2023-09-01)</version>
+  <timetype>gregoriantime</timetype>
+  <categories>
+  </categories>
+  <events>
+    <event>
+      <start>1789-05-05 00:00:00</start>
+      <end>1799-11-05 00:00:00</end>
+      <text>French revolution</text>
+      <progress>0</progress>
+      <fuzzy>False</fuzzy>
+      <fuzzy_start>False</fuzzy_start>
+      <fuzzy_end>False</fuzzy_end>
+      <locked>False</locked>
+      <ends_today>False</ends_today>
+      <default_color>255,127,127</default_color>
+    </event>
+    <event>
+      <start>1799-11-05 00:00:00</start>
+      <end>1815-06-22 00:00:00</end>
+      <text>Napoleon Bonaparte</text>
+      <progress>0</progress>
+      <fuzzy>False</fuzzy>
+      <fuzzy_start>False</fuzzy_start>
+      <fuzzy_end>False</fuzzy_end>
+      <locked>False</locked>
+      <ends_today>False</ends_today>
+      <default_color>127,127,255</default_color>
+    </event>
+    <event>
+      <start>1815-06-22 00:00:00</start>
+      <end>1848-02-24 00:00:00</end>
+      <text>Louis Philippe (Bourbon)</text>
+      <progress>0</progress>
+      <fuzzy>False</fuzzy>
+      <fuzzy_start>False</fuzzy_start>
+      <fuzzy_end>False</fuzzy_end>
+      <locked>False</locked>
+      <ends_today>False</ends_today>
+      <default_color>255,255,0</default_color>
+    </event>
+    <event>
+      <start>1852-12-02 00:00:00</start>
+      <end>1870-09-04 00:00:00</end>
+      <text>Napoleon III</text>
+      <progress>0</progress>
+      <fuzzy>False</fuzzy>
+      <fuzzy_start>False</fuzzy_start>
+      <fuzzy_end>False</fuzzy_end>
+      <locked>False</locked>
+      <ends_today>False</ends_today>
+      <default_color>127,127,255</default_color>
+    </event>
+    <event>
+      <start>1848-02-24 00:00:00</start>
+      <end>1852-12-01 00:00:00</end>
+      <text>1848 revolution</text>
+      <progress>0</progress>
+      <fuzzy>False</fuzzy>
+      <fuzzy_start>False</fuzzy_start>
+      <fuzzy_end>False</fuzzy_end>
+      <locked>False</locked>
+      <ends_today>False</ends_today>
+      <default_color>255,127,127</default_color>
+    </event>
+    <event>
+      <start>1870-09-04 00:00:00</start>
+      <end>1940-07-10 00:00:00</end>
+      <text>French 3rd Republic</text>
+      <progress>0</progress>
+      <fuzzy>False</fuzzy>
+      <fuzzy_start>False</fuzzy_start>
+      <fuzzy_end>False</fuzzy_end>
+      <locked>False</locked>
+      <ends_today>False</ends_today>
+      <default_color>255,255,255</default_color>
+    </event>
+    <event>
+      <start>1272-01-01 00:00:00</start>
+      <end>1789-05-05 00:00:00</end>
+      <text>ancien régime</text>
+      <progress>0</progress>
+      <fuzzy>False</fuzzy>
+      <fuzzy_start>False</fuzzy_start>
+      <fuzzy_end>False</fuzzy_end>
+      <locked>False</locked>
+      <ends_today>False</ends_today>
+      <default_color>255,255,0</default_color>
+    </event>
+    <event>
+      <start>1870-09-04 00:00:00</start>
+      <end>1870-09-04 00:00:00</end>
+      <text>1870</text>
+      <progress>0</progress>
+      <fuzzy>False</fuzzy>
+      <fuzzy_start>False</fuzzy_start>
+      <fuzzy_end>False</fuzzy_end>
+      <locked>False</locked>
+      <ends_today>False</ends_today>
+      <default_color>255,255,255</default_color>
+    </event>
+    <event>
+      <start>1789-05-05 00:00:00</start>
+      <end>1789-05-05 00:00:00</end>
+      <text>1789</text>
+      <progress>0</progress>
+      <fuzzy>False</fuzzy>
+      <fuzzy_start>False</fuzzy_start>
+      <fuzzy_end>False</fuzzy_end>
+      <locked>False</locked>
+      <ends_today>False</ends_today>
+      <default_color>255,255,255</default_color>
+    </event>
+    <event>
+      <start>1799-11-05 00:00:00</start>
+      <end>1799-11-05 00:00:00</end>
+      <text>1799</text>
+      <progress>0</progress>
+      <fuzzy>False</fuzzy>
+      <fuzzy_start>False</fuzzy_start>
+      <fuzzy_end>False</fuzzy_end>
+      <locked>False</locked>
+      <ends_today>False</ends_today>
+      <default_color>255,255,255</default_color>
+    </event>
+    <event>
+      <start>1815-07-21 15:55:44</start>
+      <end>1815-07-21 15:55:44</end>
+      <text>1815</text>
+      <progress>0</progress>
+      <fuzzy>False</fuzzy>
+      <fuzzy_start>False</fuzzy_start>
+      <fuzzy_end>False</fuzzy_end>
+      <locked>False</locked>
+      <ends_today>False</ends_today>
+      <default_color>255,255,255</default_color>
+    </event>
+    <event>
+      <start>1848-02-24 00:00:00</start>
+      <end>1848-02-24 00:00:00</end>
+      <text>1848</text>
+      <progress>0</progress>
+      <fuzzy>False</fuzzy>
+      <fuzzy_start>False</fuzzy_start>
+      <fuzzy_end>False</fuzzy_end>
+      <locked>False</locked>
+      <ends_today>False</ends_today>
+      <default_color>255,255,255</default_color>
+    </event>
+    <event>
+      <start>1852-12-02 00:00:00</start>
+      <end>1852-12-02 00:00:00</end>
+      <text>1852</text>
+      <progress>0</progress>
+      <fuzzy>False</fuzzy>
+      <fuzzy_start>False</fuzzy_start>
+      <fuzzy_end>False</fuzzy_end>
+      <locked>False</locked>
+      <ends_today>False</ends_today>
+      <default_color>255,255,255</default_color>
+    </event>
+  </events>
+  <view>
+    <displayed_period>
+      <start>1770-09-13 21:32:47</start>
+      <end>1898-11-14 18:20:18</end>
+    </displayed_period>
+    <hidden_categories>
+    </hidden_categories>
+  </view>
+</timeline>
