@@ -14,7 +14,7 @@ import sys
 from os import path
 import mss			# for screen capture
 import numpy		# for analyzing image
-from bs4 import BeautifulSoup
+# from bs4 import BeautifulSoup
 
 if len(sys.argv) < 2:
 	print("usage: translate-plain in-file [out-file]")
@@ -66,9 +66,22 @@ for line in f1:
 
 	# **** skip empty lines
 	if re.search("^[\ ]*$", line):
+		# print(line, end='')
+		# f2.write(line)
+		continue
+
+	# **** skip '--'
+	if re.search("^--$", line):
 		print(line, end='')
 		f2.write(line)
 		continue
+
+	# **** skip "0c 0a" where 0c = form feed = '\f'
+	if re.search("^\f$", line):
+		# print(line, end='')
+		# f2.write(line)
+		continue
+
 
 	# non-English texts
 	# if re.search(u'[\u4e00-\u9fff]', line):
