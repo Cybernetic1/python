@@ -14,11 +14,8 @@
 from subprocess import call, check_output, getoutput
 import time
 import re
-import pyperclip
 import sys
 from os import path
-import mss			# for screen capture
-import numpy		# for analyzing image
 from bs4 import BeautifulSoup
 
 if len(sys.argv) < 2:
@@ -41,6 +38,7 @@ number = None
 span = None
 inside = False
 last_line = ""
+previous1 = { 'number': None, 'span': None }
 
 """  Skip HTML tags
 """
@@ -65,13 +63,13 @@ for line in f1:
 		f2.write(line)
 		continue
 
-	previous = { 'number': number, 'span': span }
+	previous2 = previous1
+	previous1 = { 'number': number, 'span': span }
 
+	number = None
 	# check if p is a pure number
 	if re.fullmatch("[0-9]+", p.text):
 		number = int(p.text)
-	else:
-		number = None
 
 	# check if p is a pure <span>
 	span = None
@@ -94,25 +92,25 @@ for line in f1:
 			span = None
 			number = None
 
-	if previous['number'] and span:
-		if span == 'The Angel of Grozny' and (previous['number'] != 6 or line_num < 200):
-			print('\x1b[31m' + str(line_num), previous['number'], span, '\x1b[0m')
+	if previous1['number'] and span:
+		if span == 'The Angel of Grozny' and (previous1['number'] != 6 or line_num < 200):
+			print('\x1b[31m' + str(line_num), previous1['number'], span, '\x1b[0m')
 		else:
-			print('\x1b[33m' + str(line_num), "****", previous['number'], span, '\x1b[0m')
-			f2.write("<p class='Ch'>" + str(previous['number']) + "</p>\n")
+			print('\x1b[33m' + str(line_num), "****", previous1['number'], span, '\x1b[0m')
+			f2.write("<p class='Ch'>" + str(previous1['number']) + "</p>\n")
 			f2.write("<p><span class='Title'>" + span + "</span></p>")
 		continue
 
-	if previous['span'] and number:
-		print('\x1b[32m' + str(line_num), previous['span'], number, '\x1b[0m')
+	if previous1['span'] and number:
+		print('\x1b[32m' + str(line_num), previous1['span'], number, '\x1b[0m')
 		continue
 
 	if span and number:
 		print('\x1b[32m' + str(line_num), span, number, '\x1b[0m')
 		continue
 
-	if previous['span'] and number is None:
-		f2.write("<p><span class='italic'>" + previous['span'] + "</span></p>")
+	if previous2['number'] is None and previous1['span'] and number is None:
+		f2.write("<p><span class='bold'>" + previous1['span'] + "</span></p>")
 
 	if not number and not span:
 		f2.write(line)
